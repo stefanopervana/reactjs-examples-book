@@ -1,0 +1,825 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<ncx:ncx xmlns:ncx="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+  <ncx:head>
+    <ncx:meta name="cover" content="cover"/>
+    <ncx:meta name="dtb:depth" content="-1"/>
+    <ncx:meta name="dtb:totalPageCount" content="0"/>
+    <ncx:meta name="dtb:maxPageNumber" content="0"/>
+    <ncx:meta name="dtb:uid" content="9781785289644"/>
+  </ncx:head>
+  <ncx:docTitle>
+    <ncx:text>ReactJS by Example - Building Modern Web Applications with React</ncx:text>
+  </ncx:docTitle>
+  <ncx:navMap>
+    <ncx:navPoint id="id286448480" playOrder="1">
+      <ncx:navLabel>
+        <ncx:text>ReactJS by Example - Building Modern Web Applications with React</ncx:text>
+      </ncx:navLabel>
+      <ncx:content src="index.html"/>
+      <ncx:navPoint playOrder="2" id="toc">
+        <ncx:navLabel>
+          <ncx:text>Table of Contents</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="toc.html"/>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286448496" playOrder="3">
+        <ncx:navLabel>
+          <ncx:text>ReactJS by Example - Building Modern Web Applications with React</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="pr01.html"/>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286691987" playOrder="4">
+        <ncx:navLabel>
+          <ncx:text>Credits</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="pr02.html"/>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286697265" playOrder="5">
+        <ncx:navLabel>
+          <ncx:text>About the Authors</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="pr03.html"/>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286697308" playOrder="6">
+        <ncx:navLabel>
+          <ncx:text>About the Reviewers</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="pr04.html"/>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286697363" playOrder="7">
+        <ncx:navLabel>
+          <ncx:text>www.PacktPub.com</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="pr05.html"/>
+        <ncx:navPoint id="id286697370" playOrder="8">
+          <ncx:navLabel>
+            <ncx:text>Support files, eBooks, discount offers, and more</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr05.html#ch00lvl1sec01"/>
+          <ncx:navPoint id="id286697425" playOrder="9">
+            <ncx:navLabel>
+              <ncx:text>Why subscribe?</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="pr05.html#ch00lvl2sec01"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286697458" playOrder="10">
+            <ncx:navLabel>
+              <ncx:text>Free access for Packt account holders</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="pr05.html#ch00lvl2sec02"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286697475" playOrder="11">
+        <ncx:navLabel>
+          <ncx:text>Preface</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="pr06.html"/>
+        <ncx:navPoint id="id286697491" playOrder="12">
+          <ncx:navLabel>
+            <ncx:text>What this book covers</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr06.html#ch00lvl1sec02"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286697640" playOrder="13">
+          <ncx:navLabel>
+            <ncx:text>What you need for this book</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr06s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286697660" playOrder="14">
+          <ncx:navLabel>
+            <ncx:text>Who this book is for</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr06s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286697671" playOrder="15">
+          <ncx:navLabel>
+            <ncx:text>Conventions</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr06s04.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286697819" playOrder="16">
+          <ncx:navLabel>
+            <ncx:text>Reader feedback</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr06s05.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286697844" playOrder="17">
+          <ncx:navLabel>
+            <ncx:text>Customer support</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr06s06.html"/>
+          <ncx:navPoint id="id286697854" playOrder="18">
+            <ncx:navLabel>
+              <ncx:text>Downloading the example code</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="pr06s06.html#ch00lvl2sec04"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286698010" playOrder="19">
+            <ncx:navLabel>
+              <ncx:text>Errata</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="pr06s06.html#ch00lvl2sec05"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286698041" playOrder="20">
+            <ncx:navLabel>
+              <ncx:text>Piracy</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="pr06s06.html#ch00lvl2sec06"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286698062" playOrder="21">
+            <ncx:navLabel>
+              <ncx:text>Questions</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="pr06s06.html#ch00lvl2sec07"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286698078" playOrder="22">
+        <ncx:navLabel>
+          <ncx:text>1. Getting Started with React</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch01.html"/>
+        <ncx:navPoint id="id286722309" playOrder="23">
+          <ncx:navLabel>
+            <ncx:text>What is React?</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch01.html#ch01lvl1sec07"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286722387" playOrder="24">
+          <ncx:navLabel>
+            <ncx:text>When Shawn meets Mike and ReactJS</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch01s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286722601" playOrder="25">
+          <ncx:navLabel>
+            <ncx:text>Requiring React library</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch01s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286722708" playOrder="26">
+          <ncx:navLabel>
+            <ncx:text>Building our first component</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch01s04.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286723079" playOrder="27">
+          <ncx:navLabel>
+            <ncx:text>Back to work</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch01s05.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286723274" playOrder="28">
+          <ncx:navLabel>
+            <ncx:text>Displaying static data</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch01s06.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286723420" playOrder="29">
+          <ncx:navLabel>
+            <ncx:text>Passing data to components</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch01s07.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286723956" playOrder="30">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch01s08.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286723972" playOrder="31">
+        <ncx:navLabel>
+          <ncx:text>2. JSX in Depth</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch02.html"/>
+        <ncx:navPoint id="id286724140" playOrder="32">
+          <ncx:navLabel>
+            <ncx:text>Why JSX?</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02.html#ch02lvl1sec15"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286724235" playOrder="33">
+          <ncx:navLabel>
+            <ncx:text>Transforming JSX into JavaScript</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286750994" playOrder="34">
+          <ncx:navLabel>
+            <ncx:text>HTML tags vs React components</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286751109" playOrder="35">
+          <ncx:navLabel>
+            <ncx:text>Self closing tag</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02s04.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286751156" playOrder="36">
+          <ncx:navLabel>
+            <ncx:text>Multiple components</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02s05.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286751575" playOrder="37">
+          <ncx:navLabel>
+            <ncx:text>JavaScript expressions</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02s06.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286752101" playOrder="38">
+          <ncx:navLabel>
+            <ncx:text>Namespaced components</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02s07.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286752354" playOrder="39">
+          <ncx:navLabel>
+            <ncx:text>Spread attributes</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02s08.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286752604" playOrder="40">
+          <ncx:navLabel>
+            <ncx:text>Styles in JSX</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02s09.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286752798" playOrder="41">
+          <ncx:navLabel>
+            <ncx:text>JSX Gotchas</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02s10.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286752976" playOrder="42">
+          <ncx:navLabel>
+            <ncx:text>Conditionals in JSX</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02s11.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286753042" playOrder="43">
+          <ncx:navLabel>
+            <ncx:text>Non-DOM attributes</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02s12.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286753208" playOrder="44">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02s13.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286753224" playOrder="45">
+        <ncx:navLabel>
+          <ncx:text>3. Data Flow and Life Cycle Events</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch03.html"/>
+        <ncx:navPoint id="id286753303" playOrder="46">
+          <ncx:navLabel>
+            <ncx:text>Data flow in React</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03.html#ch03lvl1sec28"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286753542" playOrder="47">
+          <ncx:navLabel>
+            <ncx:text>Props validation</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286753653" playOrder="48">
+          <ncx:navLabel>
+            <ncx:text>Specifying default props</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286753735" playOrder="49">
+          <ncx:navLabel>
+            <ncx:text>Modifying this.props.children</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s04.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286753911" playOrder="50">
+          <ncx:navLabel>
+            <ncx:text>State</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s05.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286753972" playOrder="51">
+          <ncx:navLabel>
+            <ncx:text>Setting initial state</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s06.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286754038" playOrder="52">
+          <ncx:navLabel>
+            <ncx:text>Setting state</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s07.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286754078" playOrder="53">
+          <ncx:navLabel>
+            <ncx:text>Avoiding state</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s08.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286754118" playOrder="54">
+          <ncx:navLabel>
+            <ncx:text>State versus props</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s09.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286754234" playOrder="55">
+          <ncx:navLabel>
+            <ncx:text>Component life cycle overview</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s10.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286754426" playOrder="56">
+          <ncx:navLabel>
+            <ncx:text>Component life cycle methods</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s11.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286754987" playOrder="57">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s12.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286755002" playOrder="58">
+        <ncx:navLabel>
+          <ncx:text>4. Composite Dynamic Components and Forms</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch04.html"/>
+        <ncx:navPoint id="id286755058" playOrder="59">
+          <ncx:navLabel>
+            <ncx:text>Forms in React</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04.html#ch04lvl1sec40"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286755111" playOrder="60">
+          <ncx:navLabel>
+            <ncx:text>Setting up the application</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286755385" playOrder="61">
+          <ncx:navLabel>
+            <ncx:text>Getting started with forms</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286755714" playOrder="62">
+          <ncx:navLabel>
+            <ncx:text>Interactive props</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s04.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286755784" playOrder="63">
+          <ncx:navLabel>
+            <ncx:text>Controlled components</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s05.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286755863" playOrder="64">
+          <ncx:navLabel>
+            <ncx:text>Uncontrolled components</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s06.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286755923" playOrder="65">
+          <ncx:navLabel>
+            <ncx:text>Getting started with form wizard</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s07.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286756206" playOrder="66">
+          <ncx:navLabel>
+            <ncx:text>Form events</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s08.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286756332" playOrder="67">
+          <ncx:navLabel>
+            <ncx:text>Parent Child relationship</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s09.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286756768" playOrder="68">
+          <ncx:navLabel>
+            <ncx:text>Form validation</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s10.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286756908" playOrder="69">
+          <ncx:navLabel>
+            <ncx:text>Shipping details step</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s11.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286757029" playOrder="70">
+          <ncx:navLabel>
+            <ncx:text>Delivery details step</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s12.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286757357" playOrder="71">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s13.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286757373" playOrder="72">
+        <ncx:navLabel>
+          <ncx:text>5. Mixins and the DOM</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch05.html"/>
+        <ncx:navPoint id="id286757426" playOrder="73">
+          <ncx:navLabel>
+            <ncx:text>Back at the office</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch05.html#ch05lvl1sec53"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286758192" playOrder="74">
+          <ncx:navLabel>
+            <ncx:text>Adding a modal</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch05s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286758345" playOrder="75">
+          <ncx:navLabel>
+            <ncx:text>Refs</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch05s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286758643" playOrder="76">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch05s04.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286758658" playOrder="77">
+        <ncx:navLabel>
+          <ncx:text>6. React on the Server</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch06.html"/>
+        <ncx:navPoint id="id286758702" playOrder="78">
+          <ncx:navLabel>
+            <ncx:text>Getting React to render on server</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch06.html#ch06lvl1sec57"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286760119" playOrder="79">
+          <ncx:navLabel>
+            <ncx:text>On the server</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch06s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286760338" playOrder="80">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch06s03.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286760357" playOrder="81">
+        <ncx:navLabel>
+          <ncx:text>7. React Addons</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch07.html"/>
+        <ncx:navPoint id="id286760552" playOrder="82">
+          <ncx:navLabel>
+            <ncx:text>Getting started with Addons</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch07.html#ch07lvl1sec60"/>
+          <ncx:navPoint id="id286760669" playOrder="83">
+            <ncx:navLabel>
+              <ncx:text>Immutability helpers</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch07.html#ch07lvl2sec08"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286761261" playOrder="84">
+            <ncx:navLabel>
+              <ncx:text>Available commands</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch07.html#ch07lvl2sec09"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286761376" playOrder="85">
+          <ncx:navLabel>
+            <ncx:text>Cloning components</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch07s02.html"/>
+          <ncx:navPoint id="id286762128" playOrder="86">
+            <ncx:navLabel>
+              <ncx:text>Helpers for testing React apps</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch07s02.html#ch07lvl2sec10"/>
+            <ncx:navPoint id="id286762160" playOrder="87">
+              <ncx:navLabel>
+                <ncx:text>Setting up Jest</ncx:text>
+              </ncx:navLabel>
+              <ncx:content src="ch07s02.html#ch07lvl3sec01"/>
+            </ncx:navPoint>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286762542" playOrder="88">
+            <ncx:navLabel>
+              <ncx:text>Testing structure of React components</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch07s02.html#ch07lvl2sec11"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286762747" playOrder="89">
+            <ncx:navLabel>
+              <ncx:text>Testing behavior of React components</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch07s02.html#ch07lvl2sec12"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286762977" playOrder="90">
+            <ncx:navLabel>
+              <ncx:text>Shallow rendering</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch07s02.html#ch07lvl2sec13"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286763083" playOrder="91">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch07s03.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286763101" playOrder="92">
+        <ncx:navLabel>
+          <ncx:text>8. Performance of React Apps</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch08.html"/>
+        <ncx:navPoint id="id286763124" playOrder="93">
+          <ncx:navLabel>
+            <ncx:text>Performance of React apps</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch08.html#ch08lvl1sec63"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286763169" playOrder="94">
+          <ncx:navLabel>
+            <ncx:text>Virtual DOM</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch08s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286763214" playOrder="95">
+          <ncx:navLabel>
+            <ncx:text>The PERF addon</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch08s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286763425" playOrder="96">
+          <ncx:navLabel>
+            <ncx:text>DOM operations performed by React</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch08s04.html"/>
+          <ncx:navPoint id="id286763540" playOrder="97">
+            <ncx:navLabel>
+              <ncx:text>Time taken to render all the components</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch08s04.html#ch08lvl2sec14"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286763774" playOrder="98">
+            <ncx:navLabel>
+              <ncx:text>Time wasted by React</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch08s04.html#ch08lvl2sec15"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286764114" playOrder="99">
+            <ncx:navLabel>
+              <ncx:text>The shouldComponentUpdate hook</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch08s04.html#ch08lvl2sec16"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286764588" playOrder="100">
+          <ncx:navLabel>
+            <ncx:text>PureRenderMixin</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch08s05.html"/>
+          <ncx:navPoint id="id286764884" playOrder="101">
+            <ncx:navLabel>
+              <ncx:text>The PureRenderMixin anti pattern</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch08s05.html#ch08lvl2sec17"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286765128" playOrder="102">
+          <ncx:navLabel>
+            <ncx:text>Immutable data</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch08s06.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286765283" playOrder="103">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch08s07.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286765308" playOrder="104">
+        <ncx:navLabel>
+          <ncx:text>9. React Router and Data Models</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch09.html"/>
+        <ncx:navPoint id="id286765373" playOrder="105">
+          <ncx:navLabel>
+            <ncx:text>A new adventure</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch09.html#ch09lvl1sec70"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286765490" playOrder="106">
+          <ncx:navLabel>
+            <ncx:text>Creating Backbone models</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch09s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286765666" playOrder="107">
+          <ncx:navLabel>
+            <ncx:text>Incorporating defined Backbone models</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch09s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286766487" playOrder="108">
+          <ncx:navLabel>
+            <ncx:text>Data models and Backbone</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch09s04.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286766699" playOrder="109">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch09s05.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286766715" playOrder="110">
+        <ncx:navLabel>
+          <ncx:text>10. Animation</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch10.html"/>
+        <ncx:navPoint id="id286766780" playOrder="111">
+          <ncx:navLabel>
+            <ncx:text>Fun stuff at Adequate LLC!</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch10.html#ch10lvl1sec75"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286766869" playOrder="112">
+          <ncx:navLabel>
+            <ncx:text>Model updates</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch10s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286767278" playOrder="113">
+          <ncx:navLabel>
+            <ncx:text>Animate</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch10s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286767971" playOrder="114">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch10s04.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286767989" playOrder="115">
+        <ncx:navLabel>
+          <ncx:text>11. React Tools</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch11.html"/>
+        <ncx:navPoint id="id286768150" playOrder="116">
+          <ncx:navLabel>
+            <ncx:text>Development tools</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch11.html#ch11lvl1sec79"/>
+          <ncx:navPoint id="id286768181" playOrder="117">
+            <ncx:navLabel>
+              <ncx:text>Using Babel for ES6 and JSX</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch11.html#ch11lvl2sec18"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286768460" playOrder="118">
+            <ncx:navLabel>
+              <ncx:text>ESLint</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch11.html#ch11lvl2sec19"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286768747" playOrder="119">
+          <ncx:navLabel>
+            <ncx:text>React Dev Tools</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch11s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286769009" playOrder="120">
+          <ncx:navLabel>
+            <ncx:text>Build tools</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch11s03.html"/>
+          <ncx:navPoint id="id286769075" playOrder="121">
+            <ncx:navLabel>
+              <ncx:text>What is Webpack?</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch11s03.html#ch11lvl2sec20"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286769139" playOrder="122">
+            <ncx:navLabel>
+              <ncx:text>Webpack configuration</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch11s03.html#ch11lvl2sec21"/>
+            <ncx:navPoint id="id286769461" playOrder="123">
+              <ncx:navLabel>
+                <ncx:text>Loaders</ncx:text>
+              </ncx:navLabel>
+              <ncx:content src="ch11s03.html#ch11lvl3sec02"/>
+            </ncx:navPoint>
+            <ncx:navPoint id="id286769889" playOrder="124">
+              <ncx:navLabel>
+                <ncx:text>Hot module replacement</ncx:text>
+              </ncx:navLabel>
+              <ncx:content src="ch11s03.html#ch11lvl3sec03"/>
+            </ncx:navPoint>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286770163" playOrder="125">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch11s04.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286770178" playOrder="126">
+        <ncx:navLabel>
+          <ncx:text>12. Flux</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch12.html"/>
+        <ncx:navPoint id="id286770274" playOrder="127">
+          <ncx:navLabel>
+            <ncx:text>Flux architecture and unidirectional flow</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch12.html#ch12lvl1sec83"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286771083" playOrder="128">
+          <ncx:navLabel>
+            <ncx:text>Flux actions</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch12s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286771533" playOrder="129">
+          <ncx:navLabel>
+            <ncx:text>Flux stores</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch12s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286772412" playOrder="130">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch12s04.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286772424" playOrder="131">
+        <ncx:navLabel>
+          <ncx:text>13. Redux and React</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch13.html"/>
+        <ncx:navPoint id="id286772766" playOrder="132">
+          <ncx:navLabel>
+            <ncx:text>Redux</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch13.html#ch13lvl1sec87"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286773072" playOrder="133">
+          <ncx:navLabel>
+            <ncx:text>Setting up Redux</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch13s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286774009" playOrder="134">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch13s03.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="backindex" playOrder="135">
+        <ncx:navLabel>
+          <ncx:text>Index</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="backindex.html"/>
+      </ncx:navPoint>
+    </ncx:navPoint>
+  </ncx:navMap>
+</ncx:ncx>
