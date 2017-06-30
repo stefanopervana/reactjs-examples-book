@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Spread attributes</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Spread attributes"><div class="titlepage"><div><div><h1 class="title"><a id="ch02lvl1sec22"></a>Spread attributes</h1></div></div></div><p class="it"><a>Shawn aprendió un </a><a id="id54" class="indexterm">montón de cosas sobre JSX pero cuando él reflexionaba sobre los pasos anteriores, se le ocurrió otra pregunta.</a></p>
+
+
+<p class="p">Shawn learned a <a class="indexterm"></a>lot of things about JSX but when he was reflecting on the previous steps, he came up with another question.</p><p class="it"><a class="indexterm">"Mike, a partir de ahora sólo estamos pasando dos props del componente <code class="literal">App</code>: <code class="literal">headings</code> y <code class="literal">changesets</code>. Sin embargo, mañana estos Props pueden aumentar a cualquier número y pasarlos uno por uno sería engorroso, especialmente cuando tenemos que pasar algunos datos de los reciente.. cambios en el API directamente. Será difícil mantener una pista de la estructura de los datos entrantes y pasarla en consecuencia en los Props. ¿hay una mejor manera?"</a></p>
+
+
+<p class="p">"Mike, as of now we are just passing two props to the <code class="literal">App</code> component: <code class="literal">headings</code> and <code class="literal">changesets</code>. However, tomorrow these props can increase to any number. Passing them one by one would be cumbersome. Especially, when we have to pass some data from the recent changes API directly. It will be hard to a keep track of the structure of the incoming data and pass it accordingly in the props. Is there a better way?"</p><p class="it"><a class="indexterm">"Otra excelente pregunta, Shawn. Es cierto que podría ser engorroso pasar una gran cantidad de atributos para el componente de uno en uno. Pero podemos solucionar esto usando los atributos <code class="literal">spread</code>".</a></p>
+
+
+<p class="p">"Another excellent question, Shawn. True, it might be cumbersome passing a large number of attributes to the component one by one. But we can solve this using the <code class="literal">spread</code> attributes."</p><div class="informalexample">
+<pre class="programlisting">var props = { headings: headings, changeSets: data, timestamps: timestamps };<br></br>
+ReactDOM.render(&lt;App {...props } /&gt;, <br></br>
+                     document.getElementById('container'));</pre>
+                     </div><p class="it"><a class="indexterm">"En este caso, todas las propiedades del objeto se pasan como Props al componente <code class="literal">App</code> . Podemos pasar cualquier objeto que puede contener cualquier número de pares de valores clave y todos ellos se pasarán como Props para el componente" explica Mike.</a></p>
+
+
+                     <p class="p">"In this case, all the properties of object are passed as props to the <code class="literal">App</code> component. We can pass any object that can contain any number of key value pairs and all of them will be passed as props to the component" explained Mike.</p><p class="it"><a class="indexterm">"Muy bien. El operador <code class="literal">(…)</code> está presente sólo en JSX?"</a></p>
+
+
+                     <p class="p">"Very cool. Is the <code class="literal">(…)</code> operator present only in JSX?"</p><p class="it"><a class="indexterm">"Nop. Se basa en realidad en el elemento de atributo extendido en ES2015, que es el próximo estándar de JavaScript. ES2015 o ES6 que es como se le llama, introduce algunas nuevas características en el lenguaje JavaScript y React se está aprovechando de estas normas en desarrollo con el fin de proporcionar una sintaxis más limpia en JSX" añadió Mike.</a></p>
+
+
+                     <p class="p">"Nope. It is actually based on the spread attribute feature in ES2015, which is the next JavaScript standard. ES2015, or ES6 as it is called, introduces some new features in JavaScript language and React is taking advantage of these developing standards in order to provide a cleaner syntax in JSX" added Mike.</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note03"></a>Note</h3>
+
+
+                     <p class="it"><a>ES2015 ya </a><a id="id55" class="indexterm">soporta un operador spread (de difusión) para las arrays en </a><a class="ulink" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator</a>. Hay <a id="id56" class="indexterm">también una propuesta </a><a id="id57" class="indexterm">para objetos en </a><a class="ulink" href="https://github.com/sebmarkbage/ecmascript-rest-spread">https://github.com/sebmarkbage/ecmascript-rest-spread</a> .</p>
+
+                     <p class="p">ES2015 already <a class="indexterm"></a>supports spread operator for arrays at <a class="ulink" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator</a>. There is <a class="indexterm"></a>also a proposal <a class="indexterm"></a>for objects at <a class="ulink" href="https://github.com/sebmarkbage/ecmascript-rest-spread">https://github.com/sebmarkbage/ecmascript-rest-spread</a>.</p></div></div><p class="it">"No solo esto, los atributos de propagación se pueden usar varias veces o bien se pueden combinar con otros atributos, aunque el  <a id="id58" class="indexterm">orden de los atributos es importante."</a></p>
+
+
+
+                     <p class="p">"Not only this, spread attributes can be used multiple times or it can be combined with other attributes. The <a class="indexterm"></a>order of the attributes is important though. Newer attributes override previous ones."</p><div class="informalexample"><pre class="programlisting">var data = [{ "when": "2 minutes ago",<br></br>
+              "who": "Jill Dupre",<br></br>
+              "description": "Created new account"<br></br>
+            },<br></br>
+            {<br></br>
+              "when": "1 hour ago",<br></br>
+              "who": "Lose White",<br></br>
+              "description": "Added fist chapter"<br></br>
+            }];<br></br>
+var headings = ['When', 'Who', 'Description'];<br></br>
+<br></br>
+var props = { headings: headings, changeSets: data };<br></br>
+<br></br>
+ReactDOM.render(&lt;App {...props} headings = {['Updated at ', 'Author', 'Change']} /&gt;, <br></br>document.getElementById('container'));</pre></div>
+
+<p class="it"><a class="indexterm">"En lugar de mostrar <span class="strong"><strong>Cuando</strong></span>, <span class="strong"><strong>Quién</strong></span> y <span class="strong"><strong>Descripción</strong></span>, <span class="strong"><strong>Actualizado a</strong></span> , <span class="strong"><strong>Autor</strong></span>, y <span class="strong"><strong>el cambio</strong></span> se mostrará como los encabezados en este caso", explicó Mike.</a></p>
+
+
+<p class="p">"Instead of showing <span class="strong"><strong>When</strong></span>, <span class="strong"><strong>Who</strong></span>, and <span class="strong"><strong>Description</strong></span>, <span class="strong"><strong>Updated at</strong></span>, <span class="strong"><strong>Author</strong></span>, and <span class="strong"><strong>Change</strong></span> will be shown as the headings in this case" Mike explained.</p><div class="mediaobject"><img src="graphics/4730_02_01.jpg" alt="Spread attributes"/></div><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note04"></a>Note</h3>
+
+<p class="it"><a>ES2015 o ES6 es el último estándar de la versión JavaScript. Tiene un montón de características, que son utilizadas por React, similares a los atributos de propagación. Nosotros vamos a usar mucho más ES2015 o código ES6 en los próximos capítulos.</a></p>
+
+
+<p class="p">ES2015 or ES6 is the latest version JavaScript standard. It has a lot of features, which are used by React, similar to the spread attributes. We will be using lot more ES2015 or ES6 code in the upcoming chapters.</p></div></div></div></body></html>

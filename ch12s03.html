@@ -1,0 +1,420 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Flux stores</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Flux stores"><div class="titlepage"><div><div><h1 class="title"><a id="ch12lvl1sec85"></a>Flux stores</h1></div></div></div><p class="it"><a>"Cool, parece que ahora estamos todo listo para crear nuestra tienda."</a></p>
+
+
+<p class="p">"Cool, it looks like now we are all set to create our store."</p><p class="it"><a>"Sí Shawn. Nosotros </a><a id="id340" class="indexterm">vamos a empezar por definir el objeto de estado que vamos a seguí en la actualización y utilizando como almacén."</a></p>
+
+
+<p class="p">"Yup Shawn. We <a class="indexterm"></a>will start by defining the state object that we will keep on updating and using as a store."</p><div class="informalexample"><pre class="programlisting">var AppDispatcher = require('../dispatcher/AppDispatcher');
+var EventEmitter = require('events').EventEmitter;
+var SocialConstants = require('../constants/SocialConstants');
+var assign = require('object-assign');
+var _ = require('underscore');
+
+var CHANGE_EVENT = 'change';
+
+var _state = {
+  tweets: [],
+  reddits: [],
+  feed: [],
+  showTweets: true,
+  showReddits: true
+};</pre></div><p class="it"><a class="indexterm">"También hemos definido una <code class="literal">CHANGE_EVENT</code> constante que se utiliza como un identificador para <span class="emphasis"><em>escuchar</em></span> a los acontecimientos del <span class="emphasis"><em>cambio</em></span> de tipo del emisor evento en nuestra tienda."</a></p>
+
+
+<p class="p">"We have also defined a <code class="literal">CHANGE_EVENT</code> constant that we use as an identifier to <span class="emphasis"><em>listen</em></span> to events of the <span class="emphasis"><em>change</em></span> type from the event emitter in our store."</p><p class="it"><a class="indexterm">"A continuación, definir un método para actualizar los estados, creando una nueva."</a></p>
+
+
+<p class="p">"We then define a method to update the states, creating a new one."</p><div class="informalexample"><pre class="programlisting">function updateState(state) {
+  _state = assign({}, _state, state);
+}</pre></div><p class="it"><a class="indexterm">"Este fusiona las nuevas propiedades que necesitan ser actualizados y fusionado en el estado existente y actualizada del estado actual."</a></p>
+
+
+<p class="p">"This merges the new properties that need to be updated and merged into the existing state and updated the current state."</p><p class="it"><a class="indexterm">"Cool, esto parece algo similar al <code class="literal">setState</code> método de React", dijo Shawn.</a></p>
+
+
+<p class="p">"Cool, this looks somewhat similar to the <code class="literal">setState</code> React method," said Shawn.</p><p class="it"><a class="indexterm">"Sí. Ahora estamos </a><a id="id341" class="indexterm">vamos a definir nuestra tienda que se actualizará el estado actual."</a></p>
+
+
+<p class="p">"Yup. Now we are <a class="indexterm"></a>going to define our store that will update the current state."</p><div class="informalexample"><pre class="programlisting">var SocialStore = assign({}, EventEmitter.prototype, {
+
+  getState: function () {
+    return _state;
+  },
+
+  emitChange: function () {
+    this.emit(CHANGE_EVENT);
+  },
+
+  addChangeListener: function (callback) {
+    this.on(CHANGE_EVENT, callback);
+  },
+
+  removeChangeListener: function (callback) {
+    this.removeListener(CHANGE_EVENT, callback);
+  }
+});</pre></div><p class="it"><a class="indexterm">"Aquí, estamos definiendo nuestra <code class="literal">SocialStore</code> heredando de <code class="literal">EventEmitter</code>. Esto le da la capacidad de ser utilizado por los componentes registrarse para escuchar en eventos, <code class="literal">CHANGE_EVENT</code> en nuestro caso. El <code class="literal">addChangeListener</code> y <code class="literal">removeChangeListener</code> los métodos de toma de métodos que deben ser llamados eventos y saque el oyente, de la siguiente manera:" <code class="literal">this.on(CHANGE_EVENT, callback);</code> y<code class="literal"> this.removeListener(CHANGE_EVENT, callback);</code> </a></p>
+
+
+<p class="p">"Here, we are defining our <code class="literal">SocialStore</code> by inheriting from <code class="literal">EventEmitter</code>. This gives it the capability to be used by the components to register to listen on events, <code class="literal">CHANGE_EVENT</code> in our case. The <code class="literal">addChangeListener</code> and <code class="literal">removeChangeListener</code> methods take in methods that should be called on events and remove the listener, as follows:" <code class="literal">this.on(CHANGE_EVENT, callback);</code> and<code class="literal"> this.removeListener(CHANGE_EVENT, callback);</code>
+</p><p class="it"><a class="indexterm">"Siempre queremos notificar a los oyentes, que denominamos".</a></p>
+
+
+<p class="p">"Whenever we want to notify the listeners, we call."</p><div class="informalexample"><pre class="programlisting">this.emit(CHANGE_EVENT);</pre></div><p class="it"><a class="indexterm">"Finalmente, nuestros puntos de vista podes obtener el estado actual de la tienda utilizando la función siguiente:"</a></p>
+
+
+<p class="p">"Finally, our views can get the current state from the store using following function:"</p><div class="informalexample"><pre class="programlisting">getState: function () {
+    return _state;
+  }</pre></div><p class="it"><a class="indexterm">"Por último, Shawn, vamos a </a><a id="id342" class="indexterm">atar todo esto junto con nuestra Dispatcher individual, de la siguiente manera:"</a></p>
+
+
+  <p class="p">"Finally, Shawn, let's <a class="indexterm"></a>tie this all together with our Single Dispatcher, as follows:"</p><div class="informalexample"><pre class="programlisting">AppDispatcher.register(function (action) {
+
+  switch (action.type) {
+
+    case SocialConstants.FILTER_BY_TWEETS:
+      updateState({
+        showTweets: action.showTweets,
+        feed: mergeFeed(_state.tweets, _state.reddits, action.showTweets, _state.showReddits)
+      });
+      SocialStore.emitChange();
+      break;
+
+    case SocialConstants.FILTER_BY_REDDITS:
+      updateState({
+        showReddits: action.showReddits,
+        feed: mergeFeed(_state.tweets, _state.reddits, _state.showTweets, action.showReddits)
+      });
+      SocialStore.emitChange();
+      break;
+    case SocialConstants.SYNC_TWEETS:
+      updateState({
+        tweets: action.tweets,
+        feed: mergeFeed(action.tweets, _state.reddits, _state.showTweets, _state.showReddits)
+      });
+      SocialStore.emitChange();
+      break;
+
+    case SocialConstants.SYNC_REDDITS:
+      updateState({
+        reddits: action.reddits,
+        feed: mergeFeed(_state.tweets, action.reddits, _state.showTweets, _state.showReddits)
+      });
+      SocialStore.emitChange();
+      break;
+    default:
+    // no op
+  }
+});</pre></div><p class="it"><a class="indexterm">"Siempre que hemos <code class="literal">AppDispatcher.dispatch</code> de ser llamado por la carga útil, se invoca el método anterior."</a></p>
+
+
+<p class="p">"Whenever we have <code class="literal">AppDispatcher.dispatch</code> being called by the payload, the preceding method is invoked."</p><p class="it"><a class="indexterm">"Vamos a echar un vistazo a una de estas acciones."</a></p>
+
+
+<p class="p">"Let's take a look at one of these actions."</p><div class="informalexample"><pre class="programlisting">    case SocialConstants.SYNC_TWEETS:
+      updateState({
+        tweets: action.tweets,
+        feed: mergeFeed(action.tweets, _state.reddits, _state.showTweets, _state.showReddits)
+      });
+      SocialStore.emitChange();
+      break;</pre></div><p class="it"><a class="indexterm">"Lo que estamos haciendo aquí está llamando <code class="literal">updateState</code> para actualizar el estado actual dotándolo de los tweets actualizados y actualizar la alimentación, basado en el <code class="literal">mergeFeed</code> método."</a></p>
+
+
+      <p class="p">"What we are doing here is calling <code class="literal">updateState</code> to update the current state by providing it with the updated tweets and update the feed, based on the <code class="literal">mergeFeed</code> method."</p><p class="it"><a class="indexterm">"Vamos a echar un vistazo a él."</a></p>
+
+
+      <p class="p">"Let's take a look at it."</p><div class="informalexample"><pre class="programlisting">function mergeFeed(tweets, reddits, showTweets, showReddits) {
+  let mergedFeed = [];
+  mergedFeed = showTweets ? mergedFeed.concat(tweets) : mergedFeed;
+  mergedFeed = showReddits ? mergedFeed.concat(reddits) : mergedFeed;
+
+  mergedFeed = _.sortBy(mergedFeed, (feedItem) =&gt; {
+    if (feedItem.type == 'tweet') {
+      let date = new Date(feedItem.created_at);
+      return date.getTime();
+    } else if ((feedItem.type == 'reddit')) {
+      return feedItem.created_utc * 1000;
+    }
+  })
+  return mergedFeed;
+};</pre></div><p class="it"><a class="indexterm">"He combinado varias </a><a id="id343" class="indexterm">operaciones aquí para ser manejados, en función de si <code class="literal">showTweets</code>, <code class="literal">showReddits</code> son seleccionados."</a></p>
+
+
+<p class="p">"I have combined various <a class="indexterm"></a>operations here to be handled, based on whether <code class="literal">showTweets</code>, <code class="literal">showReddits</code> are selected."</p><p class="it"><a class="indexterm">"Por lo tanto, lo que este método no es que acepta los tweets y datos de la matriz reddit, así como comprueba si muestran reddits o muestran los tweets está marcada o no. Construimos el pienso final basado en estos campos controladas / sin marcar en la <code class="literal">mergedFeed</code> matriz."</a></p>
+
+
+<p class="p">"So, what this method does is that it accepts the tweets and reddit array data, as well as checks whether show reddits or show tweets is checked or not. We build the final feed based on these checked/unchecked fields into the <code class="literal">mergedFeed</code> array."</p><p class="it"><a class="indexterm">"Entonces, clasificamos este conjunto de ambos mezclados tweets y reddits Data- <code class="literal">mergedFeed</code>, utilizando <code class="literal">underscorejs</code> el método, <code class="literal">sortBy</code> y que ordenar la matriz sobre la base de los campos de tiempo en los dos tipos de objetos. En el caso de los tweets, este campo es el <code class="literal">created_at</code> campo, y en caso de reddit, es el <code class="literal">created_utc</code> campo. Nos normalizar el tiempo de marca de hora UTC para la comparación ".</a></p>
+
+
+<p class="p">"Then, we sort this array of both mixed up tweets and reddits data—<code class="literal">mergedFeed</code>, using <code class="literal">underscorejs</code> method, <code class="literal">sortBy</code>, and we sort the array on the basis of time fields on the two types of objects. In case of tweets, this field is the <code class="literal">created_at</code> field, and in case of reddit, it's the <code class="literal">created_utc</code> field. We normalize the time in UTC timestamp for comparison."</p><p class="it"><a class="indexterm">"Volviendo a la acción de los tweets de sincronización, después de actualizar el estado, que llamamos el método emisor de la tienda:"</a></p>
+
+
+<p class="p">"Coming back to the sync tweets action, after updating the state, we call the emitter method on store:"</p><div class="informalexample"><pre class="programlisting">      SocialStore.emitChange();</pre></div><p class="it"><a class="indexterm">"Esto exige nuestra emisor de la tienda para ofrecer finalmente cambios a los componentes."</a></p>
+
+
+<p class="p">"This calls our emitter from the store to eventually deliver updates to the components."</p><p class="it"><a class="indexterm">"Lo tengo. Creo que el siguiente paso es crear nuestras opiniones."</a></p>
+
+
+<p class="p">"Got it. I believe the next step is creating our Views."</p><p class="it"><a class="indexterm">"Eso es correcto. Vamos a dividir nuestro punto de vista en tres componentes- <code class="literal">Header</code>, <code class="literal">MainSection</code> y <code class="literal">SocialTracker</code> componente de contenedor."</a></p>
+
+
+<p class="p">"That's right. We will split our view into three components—<code class="literal">Header</code>, <code class="literal">MainSection</code>, and <code class="literal">SocialTracker</code> container component."</p><p class="it"><a class="indexterm">"Partimos de la </a><a id="id344" class="indexterm">forma siguiente:"</a><a class="indexterm"> <code class="literal">Header</code></a></p>
+
+
+<p class="p">"We start with the <a class="indexterm"></a>
+<code class="literal">Header</code>, as follows:"</p><div class="informalexample"><pre class="programlisting">var React = require('react');
+var ReactBootstrap =  require('react-bootstrap');
+var Row =  ReactBootstrap.Row, Jumbotron =  ReactBootstrap.Jumbotron;
+
+var Header = React.createClass({
+
+  render: function () {
+    return (
+        &lt;Row&gt;
+          &lt;Jumbotron className="center-text"&gt;
+            &lt;h1&gt;Social Media Tracker&lt;/h1&gt;
+          &lt;/Jumbotron&gt;
+        &lt;/Row&gt;
+    );
+  }
+
+});
+
+module.exports = Header;</pre></div><p class="it"><a class="indexterm">"Es un componente de visualización simple, que contiene el encabezado".</a></p>
+
+
+<p class="p">"It's a simple display component, containing the header."</p><p class="it"><a class="indexterm">"Ah, Mike. Me he dado cuenta que está utilizando el módulo de arranque-React. Esto se ve muy limpio. En lugar de definir en los elementos de fricción y las propiedades de arranque, que nos ayuda a envolverlos en los componentes Reactn con propiedades".</a></p>
+
+
+<p class="p">"Ah, Mike. I notice you are using the react-bootstrap module. That looks neat. Instead of defining it in plain elements and bootstrap properties, it helps us to wrap them in the React Components with properties."</p><p class="it"><a class="indexterm">"Sí. Estamos utilizando el <code class="literal">Jumbotron</code> y <code class="literal">Row</code> aquí. Esta fila conseguíá envuelto en un componente de arranque de cuadrícula".</a></p>
+
+
+<p class="p">"Yup. We are using the <code class="literal">Jumbotron</code> and <code class="literal">Row</code> here. This Row will get wrapped in a bootstrap Grid component."</p><p class="it"><a class="indexterm">"A continuación, vamos a conseguí nuestra <code class="literal">MainSection</code> componente configurado, esto mostrará las entradas para obtener los nombres de usuario de Twitter y Reddit tema, así como comprobar por ellos:"</a></p>
+
+
+<p class="p">"Next, we are going to get our <code class="literal">MainSection</code> component set up, this will show the inputs to get the usernames for Twitter and Reddit topic, as well as check for them:"</p><div class="informalexample"><pre class="programlisting">var React = require('react');
+…
+var SocialActions = require('../actions/SocialActions');
+var SocialStore = require('../stores/SocialStore');
+var MainSection = React.createClass({
+
+  getInitialState: function () {
+    return assign({twitter: 'twitter', reddit: 'twitter'}, SocialStore.getState());
+  },
+
+  componentDidMount: function () {
+    SocialStore.addChangeListener(this._onChange);
+    this.syncFeed();
+  },
+
+  componentWillUnmount: function () {
+    SocialStore.removeChangeListener(this._onChange);
+  },
+
+  render: function () {
+
+    return (
+        &lt;Row&gt;
+          &lt;Col xs={8} md={8} mdOffset={2}&gt;
+            &lt;Table striped hover&gt;
+              &lt;thead&gt;
+              &lt;tr&gt;
+                &lt;th width='200'&gt;Feed Type&lt;/th&gt;
+                &lt;th&gt;Feed Source&lt;/th&gt;
+              &lt;/tr&gt;
+              &lt;/thead&gt;
+              &lt;tbody&gt;
+              &lt;tr&gt;
+                &lt;td&gt;&lt;Input id='test' type="checkbox" label="Twitter" onChange={SocialActions.filterTweets}
+                           checked={this.state.showTweets}/&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;Input onChange={this.changeTwitterSource} type="text" addonBefore="@" value={this.state.twitter}/&gt;
+                &lt;/td&gt;
+              &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;th&gt;&lt;Input type="checkbox" label="Reddit" onChange={SocialActions.filterReddits}
+                           checked={this.state.showReddits}/&gt;&lt;/th&gt;
+                &lt;td&gt;&lt;Input onChange={this.changeRedditSource} type="text" addonBefore="@"
+                           value={this.state.reddit}/&gt;&lt;/td&gt;
+              &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;th&gt;&lt;/th&gt;
+                &lt;td&gt;&lt;Button bsStyle="primary" bsSize="large" onClick={this.syncFeed}&gt;Sync Feed&lt;/Button&gt;
+                &lt;/td&gt;
+              &lt;/tr&gt;
+              &lt;/tbody&gt;
+            &lt;/Table&gt;
+          &lt;/Col&gt;
+        &lt;/Row&gt;
+    );
+  },
+
+  changeTwitterSource: function (event) {
+    this.setState({twitter: event.target.value});
+  },
+
+  changeRedditSource: function (event) {
+    this.setState({reddit: event.target.value});
+  },
+
+  syncFeed: function () {
+    SocialActions.fetchReddits(this.state.reddit);
+    SocialActions.fetchTweets(this.state.twitter);
+  },
+
+  _onChange: function () {
+    this.setState(SocialStore.getState());
+  }
+
+});
+
+module.exports = MainSection;</pre></div><p class="it"><a class="indexterm">"Ahora el componente </a><a id="id345" class="indexterm">está haciendo un par de cosas aquí. En primer lugar, está el establecimiento del estado sobre la base de la tienda."</a></p>
+
+
+<p class="p">"Now the component <a class="indexterm"></a>is doing a couple of things here. First, it's setting the state on the basis of the store."</p><div class="informalexample"><pre class="programlisting">  getInitialState: function () {
+    return assign({twitter: 'twitter', reddit: 'twitter'}, SocialStore.getState());
+  },</pre></div><p class="it"><a class="indexterm">"También es el seguimiento de dos campos-twitter-e información Reddit nombre de usuario diferentes Atamos estos valores basados ​​en las aportaciones de los campos, como hemos visto antes:".</a></p>
+
+
+  <p class="p">"It is also tracking two different fields—Twitter and Reddit—username information. We bind these values based on inputs from the fields, as we have seen before:"</p><div class="informalexample"><pre class="programlisting">  changeTwitterSource: function (event) {
+    this.setState({twitter: event.target.value});
+  },
+
+  changeRedditSource: function (event) {
+    this.setState({reddit: event.target.value});
+  },</pre></div><p class="it"><a class="indexterm">"Y a continuación, utilizar este controlador de cambio en los </a><a id="id346" class="indexterm">campos de entrada, como tal."</a></p>
+
+
+  <p class="p">"And then use this change handler on the <a class="indexterm"></a>input fields, like so."</p><div class="informalexample"><pre class="programlisting">&lt;Input onChange={this.changeTwitterSource} type="text" addonBefore="@" value={this.state.twitter}/&gt;</pre></div><p class="it"><a class="indexterm">"A continuación, tenemos nuestro <code class="literal">componentDidMount</code> y <code class="literal">componentWillUnmount</code> funciones de registro y dar de baja a escuchar a los eventos emitidos por el <code class="literal">SocialStore</code>:"</a></p>
+
+
+  <p class="p">"Next, we have our <code class="literal">componentDidMount</code> and <code class="literal">componentWillUnmount</code> functions register and de-register them to listen to the events emitted from the <code class="literal">SocialStore</code>:"</p><div class="informalexample"><pre class="programlisting">  componentDidMount: function () {
+    SocialStore.addChangeListener(this._onChange);
+    this.syncFeed();
+  },
+
+  componentWillUnmount: function () {
+    SocialStore.removeChangeListener(this._onChange);
+  },</pre></div><p class="it"><a class="indexterm">"Aquí, registramos el <code class="literal">_onChange</code> método que se llamará cuando se producen los cambios en el <code class="literal">SocialStore</code> el. <code class="literal">_onChange</code> método, a su vez, actualiza el estado actual del dispositivo, basado en el estado de la tienda, de la siguiente manera:"</a></p>
+
+
+  <p class="p">"Here, we register the <code class="literal">_onChange</code> method to be called whenever the changes occur in the <code class="literal">SocialStore</code>. The <code class="literal">_onChange</code> method, in turn, updates the current state of the component, based on state of the store, as follows:"</p><div class="informalexample"><pre class="programlisting">    this.setState(SocialStore.getState());</pre></div><p class="it"><a class="indexterm">"A continuación, se especifican los <code class="literal">SocialAction</code> métodos a ser llamados para eventos tales como marcando / desmarcando pantalla Twitter / Reddit y llamando a sincronizar los tweets y reddits. En llamando a los datos de sincronización, <code class="literal">syncFeed</code> se vuelve a llamar, que llama a los métodos de sincronización relacionados desde <code class="literal">SocialActions</code>, pasando el actual nombre de Twitter y Reddit tema."</a></p>
+
+
+  <p class="p">"Next, we specify the <code class="literal">SocialAction</code> methods to be called for events such as checking/unchecking Twitter/Reddit display and calling to sync the tweets and reddits. On calling out the syncing data, <code class="literal">syncFeed</code> gets called, which calls the related sync methods from <code class="literal">SocialActions</code>, passing in the current Twitter name and Reddit topic."</p><div class="informalexample"><pre class="programlisting">  syncFeed: function () {
+    SocialActions.fetchReddits(this.state.reddit);
+    SocialActions.fetchTweets(this.state.twitter);
+  },</pre></div>
+
+
+  <p class="it"><a class="indexterm">"Por último, vamos a envolver todo con el <code class="literal">SocialTracker</code> componente, de la siguiente manera:"</a></p>
+
+
+  <p class="p">"Finally, we are going to wrap everything up with the <code class="literal">SocialTracker</code> component, as follows:"</p><div class="informalexample"><pre class="programlisting">var ArrayUtil = require('../utils/array');
+var assign = require('object-assign');
+var Header = require('./Header.react');
+var MainSection = require('./MainSection.react');
+var React = require('react');
+var SocialStore = require('../stores/SocialStore');
+var SocialActions = require('../actions/SocialActions');
+var ReactBootstrap =  require('react-bootstrap');
+var Col =  ReactBootstrap.Col, Grid =  ReactBootstrap.Grid, Row =  ReactBootstrap.Row;
+
+var SocialTracker = React.createClass({
+  getInitialState: function() {
+    return assign({}, SocialStore.getState());
+  },
+  componentDidMount: function() {
+    SocialStore.addChangeListener(this._onChange);
+  },
+  componentWillUnmount: function() {
+    SocialStore.removeChangeListener(this._onChange);
+  },
+  render: function() {
+    return (
+        &lt;Grid className="grid"&gt;
+          &lt;Header/&gt;
+          &lt;MainSection/&gt;
+          {this.renderFeed()}
+        &lt;/Grid&gt;
+    )
+  },
+
+  renderFeed: function() {
+    var feed = this.state.feed;
+    var feedCollection = ArrayUtil.in_groups_of(feed, 3);
+    if (feed.length &gt; 0) {
+      return feedCollection.map((feedGroup, index) =&gt; {
+        console.log(feedGroup);
+        return &lt;Row key={`${feedGroup[0].id}${index}`}&gt;
+          {feedGroup.map((feed) =&gt; {
+            if (feed.type == 'tweet') {
+              return &lt;Col md={4} key={feed.id}&gt;&lt;div className="well twitter"&gt;&lt;p&gt;{feed.text}&lt;/p&gt;&lt;/div&gt;&lt;/Col&gt;;
+            } else {
+              var display = feed.selftext == "" ? `${feed.title}: ${feed.url}` : feed.selftext;
+              return &lt;Col md={4} key={feed.id}&gt;&lt;div className="well reddit"&gt;&lt;p&gt;{display}&lt;/p&gt;&lt;/div&gt;&lt;/Col&gt;;
+            }
+          })}
+        &lt;/Row&gt;
+      });
+    } else {
+      return &lt;div&gt;&lt;/div&gt;
+    }
+  },
+
+  _onChange: function() {
+    this.setState(SocialStore.getState());
+  }
+
+});
+
+module.exports = SocialTracker;</pre></div><p class="it"><a class="indexterm">"Tenemos la misma puesta a punto que hemos utilizado anteriormente para escuchar las actualizaciones almacenar y actualizar el estado actual del componente."</a></p>
+
+
+<p class="p">"We have the same set up that we used previously to listen to the store updates and update the current state of the component."</p><p class="it"><a class="indexterm">"Nice, veo, lo único que </a><a id="id347" class="indexterm">queda es un bucle sobre la alimentación y la visualización de ellos", continuó Shawn.</a></p>
+
+
+<p class="p">"Nice, I see, all that's <a class="indexterm"></a>left is looping over the feed and displaying them," continued Shawn.</p><p class="it"><a class="indexterm">"Veo que estamos mostrando la alimentación en grupos de tres en una fila y la aplicación de estilos individuales, en función de si es un tweet y así sucesivamente. Dividirlos en grupos, parece que estamos utilizando <code class="literal">ArrayUtil</code>."</a></p>
+
+
+<p class="p">"I see that we are displaying the feed in groups of three in a row and applying individual styles, based on whether its a tweet and so on. To divide them in groups, we seem to be using <code class="literal">ArrayUtil</code>."</p><div class="informalexample"><pre class="programlisting">var ArrayUtil = (function () {
+  function in_groups_of(arr, n) {
+    var ret = [];
+    var group = [];
+    var len = arr.length;
+    for (var i = 0; i &lt; len; ++i) {
+      group.push(arr[i]);
+      if ((i + 1) % n == 0) {
+        ret.push(group);
+        group = [];
+      }
+    }
+    if (group.length) ret.push(group);
+    return ret;
+  };
+
+  return {'in_groups_of': in_groups_of}
+}());
+
+module.exports = ArrayUtil;</pre></div><p class="it"><a class="indexterm">"Sí, eso es correcto. Con esto, parece que está todo listo. Por fin se mostrará en el componente como de costumbre."</a></p>
+
+
+<p class="p">"Yup, that's right. With this, it looks like we are all set. We will finally display the component as usual."</p><div class="informalexample"><pre class="programlisting">var React = require('react');
+var ReactDOM = require('react-dom');
+var SocialTracker = require('./components/SocialTracker.react');
+
+ReactDOM.render(
+  &lt;SocialTracker /&gt;,
+  document.getElementById('container')
+);</pre></div><p class="it"><a class="indexterm">"Vamos a echar un vistazo a </a><a id="id348" class="indexterm">cómo se ve, ¿de acuerdo?"</a></p>
+
+
+<p class="p">"Let's take a look at <a class="indexterm"></a>how it looks, shall we?"</p><div class="mediaobject"><img src="graphics/4730_12_03.jpg" alt="Flux stores"/></div><p class="it"><a class="indexterm">"Así es como se ve, sin los tweets:"</a></p>
+
+
+<p class="p">"Here's how it looks, without tweets:"</p><div class="mediaobject"><img src="graphics/4730_12_04.jpg" alt="Flux stores"/></div><p class="it"><a class="indexterm">"Así es como se ve, al cambiar el usuario de twitter:"</a></p>
+
+
+<p class="p">"Here's how it looks, when changing the twitter user:"</p><div class="mediaobject"><img src="graphics/4730_12_05.jpg" alt="Flux stores"/></div><p class="it"><a class="indexterm">"Esto se ve </a><a id="id349" class="indexterm">impresionante, Mike!"</a></p>
+
+
+<p class="p">"This looks <a class="indexterm"></a>awesome, Mike!"</p></div></body></html>

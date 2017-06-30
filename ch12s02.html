@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Flux actions</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Flux actions"><div class="titlepage"><div><div><h1 class="title"><a id="ch12lvl1sec84"></a>Flux actions</h1></div></div></div><p class="it"><a>"Ahora tenemos que </a><a id="id335" class="indexterm">definir los tipos de acciones que nos vamos a referir a como constantes en varios lugares, como el envío del tipo de acciones para almacenar, y en nuestra tienda, decidir qué tipo de acción se ha pasado a almacenar para tomar las acciones apropiadas .</a></p>
+
+<p class="p">"Now we need to <a class="indexterm"></a>define the actions types that we are going to refer to as constants at various places, such as sending the type from Actions to store, and in our store, deciding what action type has been passed to store to take appropriate actions.</p><div class="informalexample"><pre class="programlisting">//SocialConstants.js
+var keyMirror = require('keymirror');
+
+module.exports = keyMirror({
+  FILTER_BY_TWEETS: null,
+  FILTER_BY_REDDITS: null,
+  SYNC_TWEETS: null,
+  SYNC_REDDITS: null
+
+});</pre></div><p class="it"><a class="indexterm">"En este caso, estamos usando el </a><a class="ulink" href="https://github.com/STRML/keyMirror">https://github.com/STRML/keyMirror</a> paquete para crear claves y valores para el objeto en función de las teclas. Esto se convertirá en un objeto similar a continuación."</p>
+
+<p class="p">"Here, we are using the <a class="ulink" href="https://github.com/STRML/keyMirror">https://github.com/STRML/keyMirror</a> package to create keys and values for the object based on the keys. This will convert into object similar to below."</p><div class="informalexample"><pre class="programlisting">{
+FILTER_BY_TWEETS: 'FILTER_BY_TWEETS', 
+…
+}</pre></div><p class="it">"Esto es útil cuando se añaden nuevas claves para no repetir el mismo contenido de nuevo."</p>
+
+<p class="p">"This is handy when adding new keys to not repeat the same contents again."</p><p class="it">"Ahora podemos empezar a utilizar las constantes de acción Representan cuatro acciones que vamos a realizar, de la siguiente manera:".</p>
+
+<p class="p">"We can now start using the action constants. They represent four actions that we are going to perform, as follows:"</p><div class="itemizedlist"><ul class="itemizedlist">
+
+<li class="it"><code class="literal">SYNC_TWEETS</code>: Esto obtiene los tweets de un usuario dado</li>
+<li class="listitem" style="list-style-type: disc"><code class="literal">SYNC_TWEETS</code>: This fetches the tweets for a given user</li>
+
+<li class="it"><code class="literal">SYNC_REDDITS</code>: Esto obtiene los reddits para dar un tema</li>
+<li class="listitem" style="list-style-type: disc"><code class="literal">SYNC_REDDITS</code>: This fetches the reddits for a give topic</li>
+
+<li class="it"><code class="literal">FILTER_BY_TWEETS</code>: Esto sólo muestra los tweets, en lugar de tweets y reddits</li>
+<li class="listitem" style="list-style-type: disc"><code class="literal">FILTER_BY_TWEETS</code>: This only displays tweets, instead of tweets and reddits</li>
+
+<li class="it"><code class="literal">FILTER_BY_REDDITS</code>: Solo muestra reddits, en lugar de tweets y reddits</li>
+<li class="listitem" style="list-style-type: disc"><code class="literal">FILTER_BY_REDDITS</code>: This only displays reddits, instead of tweets and reddits</li>
+
+
+
+</ul></div><p class="it">"A continuación, vamos a definir las acciones que se podes llamar desde diferentes lugares en nuestros puntos de vista."</p>
+
+<p class="p">"Next, let's define the actions that will be called from different places in our views."</p><div class="informalexample"><pre class="programlisting">// file: SocialActions.js
+var AppDispatcher = require('../dispatcher/AppDispatcher');
+var SocialConstants = require('../constants/SocialConstants');
+var assign = require('object-assign');
+var JSONUtil = require('../utils/jsonutil');
+
+var SocialActions = {
+
+  filterTweets: function (event) {
+    AppDispatcher.dispatch({
+      type: SocialConstants.FILTER_BY_TWEETS,
+      showTweets: event.target.checked
+    });
+  },
+
+  filterReddits: function (event) {
+    AppDispatcher.dispatch({
+      type: SocialConstants.FILTER_BY_REDDITS,
+      showReddits: event.target.checked
+    });
+  },
+
+
+  syncTweets: function (json) {
+    AppDispatcher.dispatch({
+      type: SocialConstants.SYNC_TWEETS,
+      tweets: json.map((tweet) =&gt; {
+        return assign(tweet, {type: 'tweet'})
+      }),
+      receivedAt: Date.now()
+    });
+  },
+
+  syncReddits: function (json) {
+    AppDispatcher.dispatch({
+      type: SocialConstants.SYNC_REDDITS,
+      reddits: json.data.children.map((child) =&gt; {
+        return assign(child.data, {type: 'reddit'})
+      }),
+      receivedAt: Date.now()
+    });
+  },
+
+  fetchTweets: function (username) {
+    fetch(`/tweets.json?username=${username}`)
+        .then(JSONUtil.parseJSON)
+        .then(json =&gt; SocialActions.syncTweets(json)).catch(JSONUtil.handleParseException)
+  },
+
+  fetchReddits: function (topic) {
+    fetch(`https://www.reddit.com/r/${topic}.json`)
+        .then(JSONUtil.parseJSON)
+        .then(json =&gt; SocialActions.syncReddits(json)).catch(JSONUtil.handleParseException)
+  }
+};
+
+module.exports = SocialActions;</pre></div><p class="it">"Vamos a través de estas acciones, caso por caso:"</p>
+
+<p class="p">"Let's go through these actions, case-by-case:"</p><div class="informalexample"><pre class="programlisting">  fetchTweets: function (username) {
+    fetch(`/tweets.json?username=${username}`)
+        .then(JSONUtil.parseJSON)
+        .then(json =&gt; SocialActions.syncTweets(json)).catch(JSONUtil.handleParseException)
+  }</pre></div><p class="it">"En este caso, estamos utilizando buscar, que es similar al Ajax que hemos usado antes, a buscar tweets de nuestra propia <a id="id336" class="indexterm">API, donde estamos pasando el nombre de usuario para el que necesitamos para obtener los tweets. Estamos haciendo uso de métodos de utilidad JSON aquí lo que hemos definido como sigue:"</a><a class="indexterm"> <code class="literal">tweets.json</code></a></p>
+
+  <p class="p">"Here, we are using fetch, which is similar to Ajax that we have used before, to fetch tweets from our own <a class="indexterm"></a>
+<code class="literal">tweets.json</code> API, where we are passing the username for which we need to get the tweets. We are making use of JSON utility methods here that we have defined as follows:"</p><div class="informalexample"><pre class="programlisting">var JSONUtil = (function () {
+  function parseJSON(response){
+    return response.json()
+  }
+  function handleParseException(ex) {
+    console.log('parsing failed', ex)
+  }
+  return {'parseJSON': parseJSON, 'handleParseException': handleParseException}
+}());
+
+module.exports = JSONUtil;</pre></div><p class="it"><a class="indexterm">"Ellos ayudan a convertir las respuestas a JSON, o en caso de fallas, los registros:"</a></p>
+
+<p class="p">"They help us convert responses to JSON, or in case of failures, logs them:"</p><p class="it"><a class="indexterm">Después de recibir una respuesta satisfactoria del API, que llamamos <code class="literal">SocialActions.syncTweets(json)</code> método, desde el mismo módulo.</a></p>
+
+<p class="p">After we receive a successful response from API, we call <code class="literal">SocialActions.syncTweets(json)</code> method, from the same module.</p><div class="informalexample"><pre class="programlisting">  syncTweets: function (json) {
+    AppDispatcher.dispatch({
+      type: SocialConstants.SYNC_TWEETS,
+      tweets: json.map((tweet) =&gt; {
+        return assign(tweet, {type: 'tweet'})
+      }),
+      receivedAt: Date.now()
+    });
+  }</pre></div><p class="it"><a class="indexterm">"A continuación, <code class="literal">syncTweets</code> acepta la JSON. Luego, se envuelve el JSON en una carga útil objeto para ser enviado a despachador. En este objeto, estamos creando una serie de tweets de la carga útil. También están etiquetando cada objeto para representar su tipo como Tweet por lo que podemos mezclar y combinar los tweets y reddit en mismas matrices y la identidad qué objeto que representa: un tweet o reddit ".</a></p>
+
+  <p class="p">"Next, <code class="literal">syncTweets</code> accepts the JSON. Then, it wraps the JSON into an object payload to be sent to dispatcher. In this object, we are creating a tweets array out of the payload. We are also tagging each object to depict its type as tweet so that we can mix and match the tweets and reddit in same arrays and identity which object it represents: a tweet or reddit."</p><div class="informalexample"><pre class="programlisting">assign(tweet, {type: 'tweet'})</pre></div><p class="it"><a class="indexterm">"Utilizamos <code class="literal">Object.assign</code>, que se une dos objetos entre sí. Lo usamos desde el <code class="literal">object-assign</code> paquete de aquí."</a></p>
+
+  <p class="p">"We use <code class="literal">Object.assign</code>, which merges two objects together. We use it from the <code class="literal">object-assign</code> package here."</p><p class="it"><a class="indexterm">"Ahora, notificamos el </a><a id="id337" class="indexterm">despachador de la carga a ser entregado en última instancia a las tiendas de la siguiente manera"</a></p>
+
+  <p class="p">"Now, we notify the <a class="indexterm"></a>Dispatcher about the payload to be ultimately delivered to the stores follows"</p><div class="informalexample"><pre class="programlisting">AppDispatcher.dispatch({ payload…});</pre></div><p class="it"><a class="indexterm">"Del mismo modo, tenemos el <code class="literal">syncReddits</code> método, de la siguiente manera:"</a></p>
+
+  <p class="p">"Similarly, we have the <code class="literal">syncReddits</code> method, as follows:"</p><div class="informalexample"><pre class="programlisting">  fetchReddits: function (topic) {
+    fetch(`https://www.reddit.com/r/${topic}.json`)
+        .then(JSONUtil.parseJSON)
+        .then(json =&gt; SocialActions.syncReddits(json)).catch(JSONUtil.handleParseException)
+  }</pre></div><p class="it"><a class="indexterm">"Esto obtiene las reddits </a><a id="id338" class="indexterm">de <code class="literal">https://www.reddit.com/r/${topic}.json</code>, por ejemplo </a><a class="ulink" href="https://www.reddit.com/r/twitter.json">https://www.reddit.com/r/twitter.json</a> .</p>
+
+  <p class="p">"This fetches the reddits <a class="indexterm"></a>from <code class="literal">https://www.reddit.com/r/${topic}.json</code>, for example <a class="ulink" href="https://www.reddit.com/r/twitter.json">https://www.reddit.com/r/twitter.json</a>.</p><p class="it">"Después de ir a buscar, que entrega los datos a <code class="literal">SocialActions.syncReddits(json))</code>, lo que crea las cargas útiles para el despachador, de la siguiente manera:"</p>
+
+  <p class="p">"After fetching, it delivers the data to <code class="literal">SocialActions.syncReddits(json))</code>, which creates the payloads for the dispatcher, as follows:"</p><div class="informalexample"><pre class="programlisting">  syncReddits: function (json) {
+    AppDispatcher.dispatch({
+      type: SocialConstants.SYNC_REDDITS,
+      reddits: json.data.children.map((child) =&gt; {
+        return assign(child.data, {type: 'reddit'})
+      }),
+      receivedAt: Date.now()
+    });
+  }</pre></div><p class="it">"Tené en cuenta, cómo estamos pasando el atributo de tipo para las acciones aquí. Esto es para notificar a las tiendas de qué acción tomar cuando reciben la carga útil."</p>
+
+  <p class="p">"Note, how we are passing the type attribute for the actions here. This is to notify the stores what action to take when they receive the payload."</p><p class="it">"Entendido. Sería interesante ver cómo se procede sobre la base de este objeto."</p>
+
+  <p class="p">"Got it. It would be interesting to see how we proceed on the basis of this object."</p><p class="it">"Sí A continuación, tenemos dos métodos sencillos que transmiten los eventos a las tiendas, de la siguiente manera:"</p>
+
+  <p class="p">"Yup. Next, we have two simple methods that relay the events to the stores, as follows:"</p><div class="informalexample"><pre class="programlisting">  filterTweets: function (event) {
+    AppDispatcher.dispatch({
+      type: SocialConstants.FILTER_BY_TWEETS,
+      showTweets: event.target.checked
+    });
+  },
+
+  filterReddits: function (event) {
+    AppDispatcher.dispatch({
+      type: SocialConstants.FILTER_BY_REDDITS,
+      showReddits: event.target.checked
+    });
+  },</pre></div><p class="it">"Vamos a utilizar estos métodos como <code class="literal">onClick</code> métodos. Al hacer clic en las casillas de verificación, el valor de la casilla de verificación, ya sea reddit o twitter-estará disponible en <code class="literal">event.target.checked</code>."</p>
+
+  <p class="p">"We are going to use these methods as <code class="literal">onClick</code> methods. On clicking the checkboxes, the value for the checkbox—either reddit or twitter—will be available in <code class="literal">event.target.checked</code>."</p><p class="it">"Nos envolvemos estos en un <a id="id339" class="indexterm">objeto simple, etiquetarlas con el tipo de llamada de acción, y enviar el mismo al despachador. De esta manera, vamos a saber si vamos a mostrar los tweets, reddit, o ninguno."</a></p>
+
+  <p class="p">"We wrap these in a <a class="indexterm"></a>simple object, tag them with the type of action call, and send the same to the Dispatcher. This way, we will know if we are going to display the tweets, reddit, or none."</p></div></body></html>

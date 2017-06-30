@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Styles in JSX</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Styles in JSX"><div class="titlepage"><div><div><h1 class="title"><a id="ch02lvl1sec23"></a>Styles in JSX</h1></div></div></div><p class="it"><a>"Mike, todas las </a><a id="id59" class="indexterm">cosas que hicimos hoy en día son muy cool. Cuando empezamos aañadir estilos? ¿Cómo puedo hacer que esta página se vea bonita? Ahora mismo es un poco aburrida." Pidió a Shawn.</a></p>
+
+
+<p class="p">"Mike, all of the <a class="indexterm"></a>things that we did today are very cool. When do we start adding styles? How can I make this page look pretty? Right now it's a bit dull." Shawn asked.</p><p class="it"><a class="indexterm">"Ah, bien. Vamos a hacer eso. React nos permite pasar estilos a los componentes de la misma manera que podes pasar los Props. Por ejemplo, queremos que nuestros títulos sean del color floral white y tal vez queremos cambiar el tamaño de la fuente. Vamos a representarlo de una típica manera CSS de la siguiente manera:"</a></p>
+
+
+<p class="p">"Ah, right. Let's do that. React allows us to pass styles to the components the same way props can be passed. For example, we want our headings to be of the floral white color and maybe we want to change the font size. We will represent it in a typical CSS way as follows:"</p><div class="informalexample"><pre class="programlisting">background-color: 'FloralWhite',
+font-size: '19px';</pre></div><p class="it"><a class="indexterm">"Podemos representar esto como un objeto JavaScript en la forma CamelCase".</a></p>
+
+
+<p class="p">"We can represent this as a JavaScript object in the CamelCase fashion."</p><div class="informalexample"><pre class="programlisting">    var headingStyle = { backgroundColor: 'FloralWhite',<br></br>
+                         fontSize: '19px'<br></br> 
+                       };</pre></div><p class="it"><a class="indexterm">Entonces, podemos usarlo en cada componente Heading como un objeto JavaScript ".</a></p>
+
+
+                       <p class="p">Then, we can use it in each Heading component as a JavaScript object."</p><div class="informalexample"><pre class="programlisting">RecentChangesTable.Heading = React.createClass({<br></br>
+  render: function() {<br></br>
+    var headingStyle = { backgroundColor: 'FloralWhite',<br></br>
+                         fontSize: '19px' };<br></br>
+    return(&lt;th style={headingStyle}&gt;{this.props.heading}&lt;/th&gt;);<br></br>
+  }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Del mismo modo, vamos a cambiar las filas que tienen sus propios estilos."</a></p>
+
+
+<p class="p">"Similarly, let's change the rows to have their own styles."</p><div class="informalexample"><pre class="programlisting">  RecentChangesTable.Row = React.createClass({<br></br>
+  render: function() {<br></br>
+  var trStyle = { backgroundColor: 'aliceblue' };<br></br>
+    return &lt;tr style={trStyle}&gt;<br></br>
+                &lt;td&gt;{this.props.changeSet.when}&lt;/td&gt;<br></br>
+                &lt;td&gt;{this.props.changeSet.who}&lt;/td&gt;<br></br>
+                &lt;td&gt;{this.props.changeSet.description}&lt;/td&gt;<br></br>
+            &lt;/tr&gt;;<br></br>
+  }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Ahora tenemos algunos nuevos títulos y filas brillantes salpicados por el estilo CSS", agregó Mike.</a></p>
+
+
+<p class="p">"We now have some shiny new headings and rows sprinkled by CSS styling" Mike added.</p><div class="mediaobject"><img src="graphics/4730_02_02.jpg" alt="Styles in JSX"/></div><p class="it"><a class="indexterm">"Lindo. El nombre del atributo para pasar estos estilos debe ser 'style', ¿verdad?" preguntó a Shawn.</a></p>
+
+
+<p class="p">"Nice. The name of the attribute to pass these styles must be 'style', right?" Shawn asked.</p><p class="it"><a class="indexterm">"Sí. También las llaves de este objeto de estilo necesita CamelCased, por ejemplo, <code class="literal">backgroundColor</code>, <code class="literal">backgroundImage</code>, <code class="literal">fontSize</code>, y así sucesivamente."</a></p>
+
+
+<p class="p">"Yes. Also the keys of this style object need to be CamelCased, for example, <code class="literal">backgroundColor</code>, <code class="literal">backgroundImage</code>, <code class="literal">fontSize</code>, and so on."</p><p class="it"><a class="indexterm">"Mike, yo entiendo el estilo en línea, sin embargo, cómo agrego las clases CSS?"</a></p>
+
+
+<p class="p">"Mike, I understood the inline styling, however, how to add the CSS classes?"</p><p class="it"><a class="indexterm">"Ah justo. Podemos </a><a id="id60" class="indexterm">pasar el nombre de la clase como un atributo de las etiquetas del DOM. Vamos a extraer el estilo a una nueva clase CSS <code class="literal">recentChangesTable</code>".</a></p>
+
+
+<p class="p">"Ah right. We can <a class="indexterm"></a>pass the class name as an attribute to the DOM tags. Let's extract the styling to a new <code class="literal">recentChangesTable</code> CSS class."</p><div class="informalexample"><pre class="programlisting">// css<br></br>
+recentChangesTable {<br></br>
+  background-color: 'FloralWhite',<br></br>
+  font-size: '19px'<br></br>
+}</pre></div><p class="it"><a class="indexterm">"Ahora, para aplicar esta clase para nuestro componente, todo lo que tenemos que hacer es pasarlo al componente mediante el expalined <code class="literal">className</code> prop".</a></p>
+
+
+<p class="p">"Now, to apply this class to our component, all we need to do is pass it to the component using the expalined <code class="literal">className</code> prop."</p><div class="informalexample"><pre class="programlisting">render: function(){<br></br>
+    return &lt;table className = 'recentChangesTable'&gt;<br></br>
+             &lt;Headings headings = {this.props.headings} /&gt;<br></br>
+             &lt;Rows changeSets = {this.props.changeSets} /&gt;<br></br>
+           &lt;/table&gt;;<br></br>
+    }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Como hemos visto anteriormente, React hace uso de los atributos CamelCase. Aquí, el prop <code class="literal">className</code> se convertirá en un atributo de clase normal cuando React renderiza el HTML actual."</a></p>
+
+
+<p class="p">"As we have seen previously, React makes use of the CamelCase attributes. Here, the <code class="literal">className</code> prop will be converted to a normal class attribute when React renders the actual HTML."</p><div class="informalexample"><pre class="programlisting">&lt;table class = 'recentChangesTable'&gt; <br></br>
+…<br></br>
+&lt;/table&gt;</pre></div><p class="it"><a class="indexterm">"También podemos pasar múltiples clases a la prop <code class="literal">className</code>."</a></p>
+
+
+<p class="p">"We can also pass multiple classes to the <code class="literal">className</code> prop."</p><div class="informalexample"><pre class="programlisting">&lt;table className = 'recentChangesTable userHeadings'&gt;</pre></div><p class="it"><a class="indexterm">"Eso es todo! Simplemente, podes comenzar a usar los estilos libremente en nuestros componentes. Esto hace que sea trivial integrar React con estilos CSS existentes."</a></p>
+
+
+<p class="p">"That's it! We can simply start using the styles freely in our components. This makes it trivial to integrate React with existing CSS styles."</p></div></body></html>

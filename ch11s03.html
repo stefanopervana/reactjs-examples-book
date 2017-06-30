@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Build tools</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Build tools"><div class="titlepage"><div><div><h1 class="title"><a id="ch11lvl1sec81">Build tools</a></h1></div></div></div><p class="it"><a>"Shawn, la construcción </a><a id="id298" class="indexterm">del sistema es sin duda la primera cosa que hay que preocuparse por la hora de crear una nueva aplicación web. No es sólo una herramienta para ejecutar secuencias de comandos, pero en el mundo de JavaScript, por lo general da forma a la estructura básica de nuestra aplicación."</a></p>
+<p class="p">"Shawn, the build <a class="indexterm">system is arguably the first thing that we should care about when creating a new web application. It is not only a tool for running scripts, but in the JavaScript world, it usually shapes the basic structure of our application."</a></p><p class="it"><a class="indexterm">Los siguientes responsabilidades deben ser realizados por un sistema de construcción:</a></p>
+<p class="p">The following responsibilities should be performed by a build system:</p><div class="itemizedlist"><ul class="itemizedlist">
+
+<li class="indexterm">Las dependencias externas, así dependencias internas deben gestionarse</li>
+
+<li class="listitem" style="list-style-type: disc">External dependencies as well internal dependencies should be managed</li><li class="it">Debería funcionar compiladores / preprocesadores</li>
+
+<li class="listitem" style="list-style-type: disc">It should run compilers/preprocessors</li>
+
+<li class="it">Se debe optimizar los activos para la producción</li>
+
+<li class="listitem" style="list-style-type: disc">It should optimize assets for production</li>
+
+<li class="it">El servidor web de desarrollo, recargador navegador y vigilante de archivo se deben ejecutar por ella</li>
+
+<li class="listitem" style="list-style-type: disc">The development web server, browser reloader, and file watcher should be run by it</li>
+
+</ul></div><p class="it"><a class="indexterm">"Hay un montón de diferentes herramientas como ronco, de golpe, y Browserify, que podes ser utilizados como parte de nuestro sistema de construcción. Cada herramienta tiene sus propias ventajas y desventajas. Sin embargo, hemos decidido ir con webpack en nuestros proyectos. " dijo Mike.</a></p>
+<p class="p">"There are a lot of different tools such as Grunt, Gulp, and Browserify, which can be used as part of our build system. Each tool has its own advantages and disadvantages. However, we have decided to go with Webpack in our projects." said Mike.</p><div class="section" title="What is Webpack?"><div class="titlepage"><div><div><h2 class="title"><a id="ch11lvl2sec20">What is Webpack?</a></h2></div></div></div><p class="it"><a>"Webpack es un </a><a id="id299" class="indexterm">bundler módulo. No haces nuestra JavaScript con sus dependencias en un solo paquete."</a></p>
+<p class="p">"Webpack is a <a class="indexterm">module bundler. It bundles our JavaScript with its dependencies into a single package."</a></p><p class="it"><a class="indexterm">"A diferencia de Browserify y otras herramientas, webpack también agrupa otros activos tales como CSS, fuentes, e imágenes. Es compatible con la sintaxis módulo CommonJS, lo cual es muy común en Node.js y paquetes de NGP. Por lo tanto, facilita las cosas ya que no hacemos necesitamos usar otros gestores de paquetes para los activos frontend. Sólo podemos utilizar la NGP y compartir las dependencias entre el código del lado del servidor y el código de interfaz. también es lo suficientemente inteligente como para cargar las dependencias en el orden correcto para que nosotros no necesitamos preocuparse acerca de la adquisición dependencias explícitos e implícitos ".</a></p>
+<p class="p">"Unlike Browserify and other tools, Webpack also bundles other assets such as CSS, fonts, and images. It supports CommonJS module syntax, which is very common in node.js and npm packages. Therefore, it makes things easier as we don't need to use another package managers for frontend assets. We can just use npm and share the dependencies between server-side code and front-end code. It is also smart enough to load dependencies in the correct order so that we don't need to worry about ordering explicit and implicit dependencies."</p><p class="it"><a class="indexterm">"Como resultado, webpack el único que podes realizar la tarea de Browserify, así como otras herramientas de construcción, tales como ronco y Gulp".</a></p>
+<p class="p">"As a result, Webpack alone can perform the task of Browserify as well as other build tools such as Grunt and Gulp."</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note23">Note</a></h3><p class="it"><a>Esta sección </a><a id="id300" class="indexterm">no cubre todos los aspectos de webpack. Sin embargo, vamos a discutir cómo utilizar eficazmente con webpack React.</a></p>
+<p class="p">This section <a class="indexterm">will not cover every aspect of Webpack. However, we will discuss how to use Webpack effectively with React.</a></p></div></div></div><div class="section" title="Webpack configuration"><div class="titlepage"><div><div><h2 class="title"><a id="ch11lvl2sec21">Webpack configuration</a></h2></div></div></div><p class="it"><a>"Shawn, en una </a><a id="id301" class="indexterm">aplicación típica React, que use el código ES6 y JSX en nuestros componentes. También utilizamos activos frontend dentro del mismo componente para que sea más portátil. Por lo tanto, nuestra configuración webpack debe manejar las todos estos aspectos correctamente." explica Mike.</a></p>
+<p class="p">"Shawn, in a <a class="indexterm">typical React app, we use ES6 code and JSX in our components. We also use frontend assets within the same component to make it more portable. Therefore, our Webpack configuration must handle the all these aspects correctly." explained Mike.</a></p><p class="it"><a class="indexterm">"Tomemos un ejemplo de nuestra aplicación Pinterest y ver cómo webpack está configurado para ejecutarlo."</a></p>
+<p class="p">"Let's take an example of our Pinterest app and see how Webpack is configured to run it."</p><p class="it"><a class="indexterm">"En primer lugar, tenemos que informar a webpack sobre el punto de entrada de nuestra aplicación. En nuestro caso, es el <code class="literal">index.js</code> archivo, que monta el <code class="literal">App</code> componente en el DOM."</a></p>
+<p class="p">"First of all, we need to inform Webpack about the entry point of our app. In our case, it is the <code class="literal">index.js</code> file, which mounts the <code class="literal">App</code> component in the DOM."</p><div class="informalexample"><pre class="programlisting">// src/index.js
+render((
+  &lt;Router history={history}&gt;
+    &lt;Route path="/" component={App}&gt;
+      &lt;IndexRoute component={Home}/&gt;
+      &lt;Route path="/pictures/:id" component={Picture}/&gt;
+    &lt;/Route&gt;
+  &lt;/Router&gt;
+), document.getElementById('rootElement'));</pre></div><p class="it"><a class="indexterm">"Por lo tanto, podemos mencionar el punto de entrada como <code class="literal">src/index.js</code> en el <code class="literal">webpack.config.js</code> archivo.".</a></p>
+<p class="p">"Therefore, we mention the entry point as <code class="literal">src/index.js</code> in the <code class="literal">webpack.config.js</code>. file."</p><div class="informalexample"><pre class="programlisting">// webpack.config.js
+path = require('path');
+var webpack = require('webpack');
+
+module.exports = {
+  // starting point of the application
+  entry: [ './src/index']
+};</pre></div><p class="it"><a class="indexterm">"En segundo lugar, tenemos que informar a webpack dónde colocar el código de paquete generado a partir de nuestra fuente. Esto se hace mediante la adición de una configuración para la salida."</a></p>
+<p class="p">"Secondly, we need to inform Webpack where to put the generated bundled code from our source. This is done by adding a config for output."</p><div class="informalexample"><pre class="programlisting">// webpack.config.js
+var path = require('path');
+var webpack = require('webpack');
+
+module.exports = {
+  entry: ['./src/index'],
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/static/'
+  }
+}</pre></div><p class="it"><a class="indexterm">"La opción de salida dice webpack para escribir los archivos cumplido de carpeta dist del directorio actual. El nombre </a><a id="id302" class="indexterm">del archivo será <code class="literal">bundle.js</code>. Podemos ver la salida <code class="literal">bundle.js</code> mediante la ejecución del <code class="literal">webpack</code> comando."</a></p>
+<p class="p">"The output option tells Webpack to write the complied files in the current directory's dist folder. The name <a class="indexterm">of the file will be <code class="literal">bundle.js</code>. We can see the output of <code class="literal">bundle.js</code> by running the <code class="literal">webpack</code> command."</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm"><span class="strong"><strong>$ webpack</strong></span>
+<span class="strong"><strong>Hash: f8496f13702a67943730</strong></span>
+<span class="strong"><strong>Version: webpack 1.12.11</strong></span>
+<span class="strong"><strong>Time: 2690ms</strong></span>
+<span class="strong"><strong>    Asset     Size  Chunks             Chunk Names</strong></span>
+<span class="strong"><strong>bundle.js  1.81 MB       0  [emitted]  main</strong></span>
+<span class="strong"><strong>   [0] multi main 52 bytes {0} [built]</strong></span>
+<span class="strong"><strong>    + 330 hidden modules</strong></span>
+</a></pre></div><p class="it"><a class="indexterm">"Esto creará un <code class="literal">dist/bundle.js</code> archivo con todo el código compilado."</a></p>
+<p class="p">"This will create a <code class="literal">dist/bundle.js</code> file with all the compiled code."</p><p class="it"><a class="indexterm">"El <code class="literal">publicPath</code> especifica la dirección URL pública de los archivos de salida, cuando se hace referencia en un navegador. Este es el camino que utilizamos en nuestro <code class="literal">index.html</code> archivo, que será servido por el servidor web a los usuarios."</a></p>
+<p class="p">"The <code class="literal">publicPath</code> specifies the public URL address of the output files, when referenced in a browser. This is the path that we use in our <code class="literal">index.html</code> file, which will be served by the web server to the users."</p><div class="informalexample"><pre class="programlisting">// index.html
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;React Router/ Data Models&lt;/title&gt;
+    &lt;link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" type="text/css" /&gt;
+    &lt;link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet"&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id='rootElement' class="container"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+  &lt;script src="https://code.jquery.com/jquery-2.1.4.min.js"&gt;&lt;/script&gt;
+  &lt;script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"&gt;&lt;/script&gt;
+<span class="strong"><strong>  &lt;script src="/static/bundle.js"&gt;&lt;/script&gt;</strong></span>
+&lt;/html&gt;</pre></div><div class="section" title="Loaders"><div class="titlepage"><div><div><h3 class="title"><a id="ch11lvl3sec02">Loaders</a></h3></div></div></div><p class="it"><a>"Después de esto, tenemos que </a><a id="id303" class="indexterm">especificar diferentes cargadores para transformar nuestro código JSX, ES6, y otros activos correctamente. Los cargadores son transformaciones que se aplican a un archivo de recursos de su aplicación. Son funciones (que se ejecutan en Node.js) que toman la fuente de un recurso </a><a id="id304" class="indexterm">de archivos como parámetro y devuelve la nueva fuente. utilizamos <code class="literal">babel-loader</code> para nuestro código ES6 y JSX ".</a></p>
+<p class="p">"After this, we have to <a class="indexterm">specify different loaders to transform our JSX, ES6 code, and other assets properly. Loaders are transformations that are applied to a resource file of your app. They are functions (running in node.js) that take the source of a resource </a><a class="indexterm">file as the parameter and return the new source. We use <code class="literal">babel-loader</code> for our ES6 and JSX code."</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">// webpack.config.js
+module.exports = {
+  module: {
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015', 'react'],
+          plugins: ['transform-function-bind']
+        },
+        include: path.join(__dirname, 'src')
+      }]
+  }
+};</a></pre></div><p class="it"><a class="indexterm">"Hemos instalado el <code class="literal">babel-loader</code> paquete a través de la NGP y lo incluyó en <code class="literal">package.json</code>. Después de esto, hemos especificado en la configuración de nuestra webpack. La opción de prueba coincide con los archivos con la expresión regular dada. El cargador dado analiza estos archivos. Por lo tanto, <code class="literal">babel-loader</code> se compilará <code class="literal">.jsx</code> y <code class="literal">.js</code> archivos de nuestros archivos de origen en el <code class="literal">src</code> directorio especificado por la <code class="literal">include</code> opción. Nosotros también especifican que <code class="literal">babel-loader</code> debería usar ES2015 y Reactn preajustes, así como la función de complemento se unen transformador de modo que Babel será capaz de analizar todo nuestro código correctamente ".</a></p>
+<p class="p">"We have installed the <code class="literal">babel-loader</code> package via npm and included it in <code class="literal">package.json</code>. After this, we have specified it in our Webpack configuration. The test option matches the files with the given regex. The given loader parses these files. Therefore, <code class="literal">babel-loader</code> will compile <code class="literal">.jsx</code> and <code class="literal">.js</code> files from our source files in the <code class="literal">src</code> directory specified by the <code class="literal">include</code> option. We also specify that <code class="literal">babel-loader</code> should use es2015 and react presets as well as function-bind transformer plugin so that Babel will be able to parse all of our code properly."</p><p class="it"><a class="indexterm">"Para otro tipo de activos tales como CSS, fuentes, e imágenes, utilizamos sus mozos de carga."</a></p>
+<p class="p">"For other type of assets such as CSS, fonts, and images, we use their own loaders."</p><div class="informalexample"><pre class="programlisting">// webpack.config.js
+
+module.exports = {
+module: {
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015', 'react'],
+          plugins: ['transform-function-bind']
+        },
+        include: path.join(__dirname, 'src')
+      },
+      { test: /\.css$/, loader: "style-loader!css-loader" },
+      { test: /\.woff(\d+)?$/, loader: 'url?prefix=font/&amp;limit=5000&amp;mimetype=application/font-woff' },
+      { test: /\.ttf$/, loader: 'file?prefix=font/' },
+      { test: /\.eot$/, loader: 'file?prefix=font/' },
+      { test: /\.svg$/, loader: 'file?prefix=font/' },
+      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&amp;minetype=application/font-woff"},
+      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }
+    ]
+  }
+};</pre></div><p class="it"><a class="indexterm">"Todos estos cargadores </a><a id="id305" class="indexterm">vienen en sus propios paquetes de NGP. Tenemos que instalar los paquetes de la NGP </a><a id="id306" class="indexterm">de <code class="literal">style-loader</code>, <code class="literal">css-loader</code>, <code class="literal">url-loader</code>, y <code class="literal">file-loader</code> y actualización <code class="literal">package.json</code>."</a></p>
+<p class="p">"All of these loaders <a class="indexterm">come in their own npm packages. We have to install npm packages </a><a class="indexterm">for <code class="literal">style-loader</code>, <code class="literal">css-loader</code>, <code class="literal">url-loader</code>, and <code class="literal">file-loader</code> and update <code class="literal">package.json</code>."</a></p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note24">Note</a></h3><p class="it"><a>Compruebe </a><a class="ulink" href="https://webpack.github.io/docs/using-loaders.html">https://webpack.github.io/docs/using-loaders.html</a> para más detalles acerca de <a id="id307" class="indexterm">cómo usar y configurar cargadores.</a></p>
+<p class="p">Check <a class="ulink" href="https://webpack.github.io/docs/using-loaders.html">https://webpack.github.io/docs/using-loaders.html</a> for more details about <a class="indexterm">using and configuring loaders.</a></p></div></div></div><div class="section" title="Hot module replacement"><div class="titlepage"><div><div><h3 class="title"><a id="ch11lvl3sec03">Hot module replacement</a></h3></div></div></div><p class="it"><a>"Shawn, una de las características más interesantes de webpack es <span class="strong"><strong>reemplazo del módulo caliente</strong></span> ( <span class="strong"><strong>HMR</strong></span> ). Esto </a><a id="id308" class="indexterm">significa que cada vez que modificamos un componente </a><a id="id309" class="indexterm">y guardar el archivo, webpack reemplazará el módulo en la página sin volver a cargar el navegador y perder el estado del componente." informó Mike.</a></p>
+<p class="p">"Shawn, one of the coolest features of Webpack is <span class="strong"><strong>Hot Module Replacement</strong></span> (<span class="strong"><strong>HMR</strong></span>). This <a class="indexterm">means that whenever we modify a component </a><a class="indexterm">and save the file, Webpack will replace the module on the page without reloading the browser and losing component state." informed Mike.</a></p><p class="it"><a class="indexterm">"Wow! Eso suena muy impresionante." exclamó Shawn.</a></p>
+<p class="p">"Wow! That sounds very impressive." exclaimed Shawn.</p><p class="it"><a class="indexterm">"Para conseguí trabajo recarga caliente, tenemos que utilizar la excelente React--loader caliente paquete y webpack-dev-servidor. El paquete webpack-dev-servidor nos salva de funcionamiento webpack repetidamente por cada cambio de archivo antes de iniciar el servidor. Será ejecutar la aplicación para nosotros usando las <code class="literal">config</code> opciones proporcionadas en <code class="literal">webpack.config.js</code>. el punto clave en la creación de webpack-dev-servidor que está configurando para la recarga caliente. se podes hacer mediante la adición de una <code class="literal">hot: true config</code> opción ".</a></p>
+<p class="p">"To get hot reloading working, we have to use the excellent react-hot-loader package and webpack-dev-server. The webpack-dev-server package saves us from running Webpack repeatedly for every file change before starting the server. It will run the app for us using the <code class="literal">config</code> options provided in <code class="literal">webpack.config.js</code>. The key point in setting up webpack-dev-server is configuring it for hot reloading. It can be done by adding a <code class="literal">hot: true config</code> option."</p><div class="informalexample"><pre class="programlisting">// server.js
+var webpack = require('webpack');
+var WebpackDevServer = require('webpack-dev-server');
+var config = require('./webpack.config');
+
+new WebpackDevServer(webpack(config), {
+  publicPath: config.output.publicPath,
+  hot: true,
+  historyApiFallback: true
+}).listen(9000, 'localhost', function (err, result) {
+  if (err) {
+    console.log(err);
+  }
+
+  console.log('Listening at localhost:9000');
+});</pre></div><p class="it"><a class="indexterm">"Esto hará que </a><a id="id310" class="indexterm">seguro que webpack-dev-servidor se iniciará en el puerto localhost <code class="literal">9000</code>, la recarga habilitado caliente. También utilizará toda la configuración que hemos definido en <code class="literal">webpack.config.js</code>". dijo Mike.</a></p>
+<p class="p">"This will make <a class="indexterm">sure that webpack-dev-server will start on localhost port <code class="literal">9000</code>, with hot reloading enabled. It will also use all the configuration that we defined in <code class="literal">webpack.config.js</code>." said Mike.</a></p><p class="it"><a class="indexterm">"Tendremos que modificar nuestra <code class="literal">package.json</code> para ejecutar el <code class="literal">server.js</code> guión".</a></p>
+<p class="p">"We will have to modify our <code class="literal">package.json</code> to run the <code class="literal">server.js</code> script."</p><div class="informalexample"><pre class="programlisting">// package.json
+"scripts": {
+    "start": "node server.js",
+  }</pre></div><p class="it"><a class="indexterm">"Esto va a </a><a id="id311" class="indexterm">asegurarse de que el <code class="literal">npm start</code> comando se ejecutará el <code class="literal">webpack-dev-server</code>.</a></p>
+  <p class="p">"This will <a class="indexterm">make sure that the <code class="literal">npm start</code> command will run the <code class="literal">webpack-dev-server</code>.</a></p><p class="it"><a class="indexterm">"También tenemos que hacer algunos cambios en la configuración de nuestra webpack con el fin de hacer que el trabajo de recarga caliente. Tenemos que configurar la opción de entrada para incluir dev servidor y el servidor de recarga caliente."</a></p>
+  <p class="p">"We also have to make some changes in our Webpack configuration in order to make hot reloading work. We have to configure the entry option to include dev server and hot reloading server."</p><div class="informalexample"><pre class="programlisting">entry: [
+    'webpack-dev-server/client?http://localhost:9000',
+    'webpack/hot/only-dev-server',
+    './src/index'
+]</pre></div><p class="it"><a class="indexterm">"El siguiente paso, tenemos que informar a webpack utilizar hot-cargador con otros cargadores que ya hemos añadido".</a></p>
+<p class="p">"Next up, we need to inform Webpack to use hot-loader with other loaders that we have already added."</p><div class="informalexample"><pre class="programlisting">module: {
+    loaders: [
+      { test: /\.jsx?$/,
+        loader: 'react-hot',
+        include: path.join(__dirname, 'src')
+      }
+     .. .. .. 
+    ]
+  }</pre></div><p class="it"><a class="indexterm">"Por último, el módulo plug-in de sustitución en caliente de webpack tiene que ser incluido en la sección de plugins de la config."</a></p>
+  <p class="p">"Finally, the hot module replacement plugin from Webpack has to be included in the plugins section of the config."</p><div class="informalexample"><pre class="programlisting">plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
+]</pre></div><p class="it"><a class="indexterm">"La última </a><a id="id312" class="indexterm">configuración webpack se parece a esto"</a></p>
+<p class="p">"The final <a class="indexterm">Webpack configuration looks like this"</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">// webpack.config.js
+var path = require('path');
+var webpack = require('webpack');
+
+module.exports = {
+  devtool: 'eval',
+  entry: [
+    'webpack-dev-server/client?http://localhost:9000',
+    'webpack/hot/only-dev-server',
+    './src/index'
+  ],
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/static/'
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
+  ],
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  },
+  module: {
+    loaders: [
+      { test: /\.jsx?$/,
+        loader: 'react-hot',
+        include: path.join(__dirname, 'src')
+      },
+      {
+
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015', 'react'],
+          plugins: ['transform-function-bind']
+        },
+        include: path.join(__dirname, 'src')
+      },
+      { test: /\.css$/, loader: "style-loader!css-loader" },
+      { test: /\.woff(\d+)?$/, loader: 'url?prefix=font/&amp;limit=5000&amp;mimetype=application/font-woff' },
+      { test: /\.ttf$/, loader: 'file?prefix=font/' },
+      { test: /\.eot$/, loader: 'file?prefix=font/' },
+      { test: /\.svg$/, loader: 'file?prefix=font/' },
+      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&amp;minetype=application/font-woff"},
+      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }
+    ]
+  }
+};</a></pre></div><p class="it"><a class="indexterm">"Ahora bien, si partimos de la aplicación usando <code class="literal">npm start</code>, entonces se usará en caliente recargador con webpack-dev-servidor. Shawn, pruebe a cambiar algo de código y comprobar si el código se actualiza en el </a><a id="id313" class="indexterm">navegador sin actualizar la </a><a id="id314" class="indexterm">página. Magia !!" explica Mike.</a></p>
+<p class="p">"Now if we start the app using <code class="literal">npm start</code>, then it will use hot-reloader with webpack-dev-server. Shawn, try changing some code and check whether the code gets updated in the <a class="indexterm">browser without refreshing the </a><a class="indexterm">page. Magic!!" explained Mike.</a></p><p class="it"><a class="indexterm">"Grande, Mike. Sí, realmente funciona. Salve webpack y carga caliente!"</a></p>
+<p class="p">"Great, Mike. Yeah, it really works. All hail Webpack and hot reloading!"</p></div></div></div>
+</body></html>

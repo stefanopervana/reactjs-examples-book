@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 13. Redux and React</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="chapter" title="Chapter 13. Redux and React"><div class="titlepage"><div><div><h1 class="title"><a id="ch13"></a>Chapter 13. Redux and React</h1></div></div></div><p class="it"><a>En el capítulo anterior, nos echamos en Flux como una arquitectura. Vimos cómo surgen problemas durante el intercambio de datos entre los componentes. Vimos diferentes partes de esta arquitectura-acciones, tiendas, puntos de vista y despachador-y basarse en el ejemplo usando pura Flux, Despachador de Facebook y EventEmitter. Por último, hemos construido una sencilla aplicación para ver cómo todos estos componentes están atados juntos para crear un flujo más sencilla de compartir un estado común a través de los componentes.</a></p>
+
+
+<p class="p">In the previous chapter, we dived into Flux as an architecture. We saw how problems arise during data sharing across components. We saw different parts of this architecture—Actions, Stores, Views, and Dispatcher—and build upon our example using pure Flux, Dispatcher from Facebook, and EventEmitter. Finally, we built a simple application to see how all these components are tied up together to create a simple flow to share a common state across components.</p><p class="it"><a>En este capítulo, vamos a echar un vistazo a el uso de Flujo en una aplicación de gestión de estado basada en Flux popular, <span class="strong"><strong>Redux</strong></span> . Veremos qué se diferencia de la implementación dfluxe pura que vimos anteriormente. Vamos a echar un vistazo a los diferentes componentes de Redux-sus tiendas, acciones y reductores para las tiendas y acciones. Por último, vamos a ver cómo una aplicación se conecta con la tienda, mantiene un estado único de la tienda, y pasa la información por las vistas.</a></p>
+
+
+<p class="p">In this chapter, we will take a look at using Flux in a popular Flux-based state management implementation, <span class="strong"><strong>Redux</strong></span>. We will see how it differs from pure Flux implementation that we saw previously. We will take a look at different components of Redux—its stores, actions, and reducers for the stores and actions. Finally, we will see how an app connects with the store, maintains a single state of the store, and passes information around in the views.</p><p class="it"><a>Vamos a cubrir los siguientes temas en este capítulo:</a></p>
+
+
+<p class="p">We will cover the following topics in this chapter:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">Redux</li><li class="listitem" style="list-style-type: disc">Setting up Redux</li><li class="listitem" style="list-style-type: disc">Redux store</li><li class="listitem" style="list-style-type: disc">Reducers</li><li class="listitem" style="list-style-type: disc">Connecting stores to app components</li><li class="listitem" style="list-style-type: disc">Data flow in Redux</li></ul></div><p class="it"><a>Al final del capítulo, podremos empezar a utilizar Redux en nuestras aplicaciones para mantener el estado de las Vistas. Vamos a ser capaces de configurar y conectar con las diferentes partes de la aplicación. Vamos a ser capaces de ver cómo distribuir los datos en las tiendas y reductores de uso y las acciones para gestionar datos de la tienda'.</a></p>
+
+
+<p class="p">At the end of the chapter, we will be able to start using Redux in our applications to maintain the state for the Views. We will be able to set up and connect it with different parts of the app. We will be able to see how to distribute data in stores and use reducers and actions to manage store' data.</p><div class="section" title="Redux"><div class="titlepage"><div><div><h1 class="title"><a id="ch13lvl1sec87"></a>Redux</h1></div></div></div><p class="it"><a>"Buena </a><a id="id350" class="indexterm">mañana, Shawn," comenzó a Mike.</a></p>
+
+
+<p class="p">"Good <a class="indexterm"></a>morning, Shawn," started Mike.</p><p class="it"><a class="indexterm">"Buenos días, Mike. ¿Qué estamos trabajando en la actualidad?"</a></p>
+
+
+<p class="p">"Good morning, Mike. What are we working on today?"</p><p class="it"><a class="indexterm">"Ah, ayer, se trabajó con fundente. Era para presentarle a los conceptos básicos de flujo. En la mayoría de nuestros proyectos, utilizamos algo similar a ella con el fin de administrar el estado de las aplicaciones."</a></p>
+
+
+<p class="p">"Ah, yesterday, we worked with Flux. It was to introduce you to the basics of Flux. In most of our projects, we used something similar to it in order to manage the state in the apps."</p><p class="it"><a class="indexterm">"Hoy en día, vamos a ver cómo utilizar Redux".</a></p>
+
+
+<p class="p">"Today, we will see how to use Redux."</p><p class="it"><a class="indexterm">"Guay."</a></p>
+
+
+<p class="p">"Cool."</p><p class="it"><a class="indexterm">"Como se ha dicho </a><a id="id351" class="indexterm">en </a><a class="ulink" href="https://github.coktreactjs/redux">https: //github.coktreactjs/redux</a> , <span class="emphasis"><em>Redux es un contenedor estado predecible para aplicaciones de JavaScript</em></span> Es algo de lo que hemos implementado con anterioridad.".</p>
+
+
+<p class="p">"As stated <a class="indexterm"></a>at <a class="ulink" href="https://github.coktreactjs/redux">https://github.coktreactjs/redux</a>, <span class="emphasis"><em>Redux is a predictable state container for JavaScript apps</em></span>. It's kind of what we implemented previously."</p><p class="it">"Con Redux, mantenemos <a id="id352" class="indexterm">un solo árbol del estado para la aplicación completa y añadimos reductores para mejorar el estado de la tienda. Anteriormente, nos mutando directamente el valor de <code class="literal">_state</code> y luego notificar a los suscriptores sobre el cambio. Vamos a echar un vistazo a nuestra aplicación configuración para empezar a utilizar, de la siguiente manera:"</a></p>
+
+
+<p class="p">"With Redux, we maintain <a class="indexterm"></a>a single state tree for the complete application and add reducers to enhance the state of the store. Previously, we were directly mutating the value of <code class="literal">_state</code> and then notifying the subscribers about the change. Let's take a look at our app setup to get started with, as follows:"</p>
+
+
+<p class="p">
+<code class="literal">├── actions</code>
+</p>
+
+
+<p class="p">
+<code class="literal">│   └── social.js</code>
+</p>
+
+
+<p class="p">
+<code class="literal">├── components</code>
+</p>
+
+
+<p class="p">
+<code class="literal">│   └── SocialTracker.js</code>
+</p>
+
+
+<p class="p">
+<code class="literal">├── config.js</code>
+</p>
+
+
+<p class="p">
+<code class="literal">├── containers</code>
+</p>
+
+
+<p class="p">
+<code class="literal">│   └── App.js</code>
+</p>
+
+
+<p class="p">
+<code class="literal">├── reducers</code>
+</p>
+
+
+<p class="p">
+<code class="literal">│   ├── index.js</code>
+</p>
+
+
+<p class="p">
+<code class="literal">│   └── social.js</code>
+</p>
+
+
+<p class="p">
+<code class="literal">├── server.js</code>
+</p>
+
+
+
+
+<p class="p">
+<code class="literal">├── store</code>
+</p>
+
+
+<p class="p">
+<code class="literal">│   └── configureStore.js</code>
+</p>
+
+
+<p class="p">
+<code class="literal">├── styles</code>
+</p>
+
+
+<p class="p">
+<code class="literal">│   └── App.css</code>
+</p>
+
+
+<p class="p">
+<code class="literal">├── utils</code>
+</p><p class="it"><a class="indexterm">Esto se basa en nuestra </a><a id="id353" class="indexterm">solicitud anterior y el ejemplo de </a><a class="ulink" href="https://github.acktreactjs/redux/tree/master/examples/todomvc">https: //github.acktreactjs/redux/tree/master/examples/todomvc</a> ".</p>
+
+
+<p class="p">This is based on our <a class="indexterm"></a>previous application and example from <a class="ulink" href="https://github.acktreactjs/redux/tree/master/examples/todomvc">https://github.acktreactjs/redux/tree/master/examples/todomvc</a>."</p><p class="it">"Um, no veo un despachador aquí."</p>
+
+
+<p class="p">"Umm, I don't see a dispatcher here."</p><p class="it">"Correcta Redux se desvía de la Flujo normal;. Aquí, que no tiene un despachador Durante la puesta en marcha, vamos a ver cómo nos conectamos tiendas para los componentes de manera que los componentes consiguen versiones de los cambios en el estado en la tienda."</p>
+
+
+<p class="p">"Correct. Redux deviates from the normal Flux; here, it does not have a dispatcher. During the set up, we will see how we connect stores to the components so that the components get updates for the changes to state in the store."</p><p class="it">"Lo tengo. Vamos a empezar como antes, entonces?"</p>
+
+
+<p class="p">"Got it. Let's begin as before then?"</p><p class="it">"Sip."</p>
+
+
+<p class="p">"Yup."</p><p class="it">"Vamos a empezar con nuestro principal <a id="id354" class="indexterm">componente, lo que será envuelto para escuchar a almacenar por Redux, de la siguiente manera:"</a></p>
+
+
+<p class="p">"Let's start with our Main <a class="indexterm"></a>Component; this will be wrapped to listen to store by Redux, as follows:"</p><div class="informalexample"><pre class="programlisting">      // App.js
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import SocialTracker from '../components/SocialTracker'
+import * as SocialActions from '../actions/social'
+
+function mapStateToProps(state) {
+  return {
+    social: state.social
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(SocialActions, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SocialTracker)</pre></div></div></div></body></html>

@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 11. React Tools</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="chapter" title="Chapter 11. React Tools"><div class="titlepage"><div><div><h1 class="title"><a id="ch11"></a>Chapter 11. React Tools</h1></div></div></div><p class="it"><a>En el capítulo anterior, hemos aprendido a utilizar la animación complemento y la transición CSS. También hemos explorado diferentes eventos y estudiado cómo mejorar fácilmente nuestra aplicación con el fin de crear efectos impresionantes animaciones utilizando.</a></p>
+
+<p class="p">In the previous chapter, we learned how to use Animation add-on and CSS transition. We have also explored different events and studied how to easily enhance our application in order to create stunning effects using animations.</p><p class="it"><a>En este capítulo, vamos a ver varias herramientas en el ecosistema de React, que son útiles en todo el tiempo de vida de una aplicación de desarrollo, depuración y herramientas de construcción. Veremos cómo estas herramientas hacen que el desarrollo de aplicaciones React una hermosa experiencia.</a></p>
+
+<p class="p">In this chapter, we will look at various tools in the React ecosystem, which are useful in the whole lifetime of an application—the development, debugging, and build tools. We will see how these tools make developing React applications a beautiful experience.</p><p class="it"><a>Vamos a estudiar las siguientes herramientas en este capítulo:</a></p>
+
+<p class="p">We will study the following tools in this chapter:</p><div class="itemizedlist"><ul class="itemizedlist">
+
+<li class="listitem" style="list-style-type: disc">Babel</li>
+
+<li class="listitem" style="list-style-type: disc">ESLint</li>
+
+<li class="listitem" style="list-style-type: disc">React Developer Tools</li>
+
+<li class="listitem" style="list-style-type: disc">Webpack</li>
+
+<li class="listitem" style="list-style-type: disc">Hot reloading using Webpack</li>
+
+</ul></div><p class="it"><a>Mike y Shawn tenían algo de tiempo libre antes de comenzar su siguiente proyecto. Decidieron pasar este tiempo en aprender más sobre diversas herramientas que habían utilizado hasta ahora en sus proyectos de React durante el desarrollo, las pruebas y la agrupación de las aplicaciones.</a></p>
+
+<p class="p">Mike and Shawn had some free time before starting their next project. They decided to spend this time in learning more about various tools that they had used so far in their React projects for development, testing, and bundling the apps.</p><div class="section" title="Development tools"><div class="titlepage"><div><div><h1 class="title"><a id="ch11lvl1sec79"></a>Development tools</h1></div></div></div><p class="it"><a>"Shawn, hoy me gustaría hablar acerca de las herramientas que hemos utilizado hasta ahora, mientras que la construcción de nuestra </a><a id="id278" class="indexterm">React aplicaciones en la actualidad. React es una biblioteca muy pequeña, lo que hace una cosa derecho de representación de la interfaz de usuario. Sin embargo, tuvimos que utilizar una gran cantidad de otras herramientas con React largo de nuestro viaje hasta ahora. Hoy es el día para discutir todo lo relacionado con ellos ". dijo Mike.</a></p>
+
+<p class="p">"Shawn, today I would like to discuss about the tools that we have used until now while building our <a class="indexterm"></a>React apps today. React is a very small library, which does one thing right—rendering the UI. However, we had to use a lot of other tools with React throughout our journey until now. Today is the day to discuss everything about them." said Mike.</p><p class="it"><a class="indexterm">"Impresionante, Mike, estoy dispuesto, como siempre. Vamos a rodar." exclamó Shawn.</a></p>
+
+<p class="p">"Awesome, Mike! I am ready as always. Let's get rolling." exclaimed Shawn.</p><div class="section" title="Using Babel for ES6 and JSX"><div class="titlepage"><div><div><h2 class="title"><a id="ch11lvl2sec18"></a>Using Babel for ES6 and JSX</h2></div></div></div><p class="it"><a>"Shawn, nos </a><a id="id279" class="indexterm">hemos utilizado ES6 o ES2015 código desde el principio. Nosotros </a><a id="id280" class="indexterm">también somos muy optimistas acerca del uso de JSX. Código ES7 A veces, también hemos utilizado, como por ejemplo la función de <code class="literal">bind</code> operador en nuestro último proyecto gatos Pinterest."</a></p>
+
+<p class="p">"Shawn, we <a class="indexterm"></a>have used ES6 or ES2015 code since the beginning. We <a class="indexterm"></a>are also very bullish about using JSX. Sometimes, we have also used ES7 code, such as the function <code class="literal">bind</code> operator in our latest Cats Pinterest project."</p><div class="informalexample"><pre class="programlisting">// src/Home.js
+
+class Home extends React.Component {
+  componentDidMount() {
+    this.timer = setInterval(<span class="strong"><strong>::this.generateCats</strong></span>, 1000);
+  }
+}</pre></div><p class="it"><a class="indexterm">"Sí, Mike. Me </a><a id="id281" class="indexterm">encantaba la concisión de estas nuevas características." dijo Shawn.</a></p>
+
+<p class="p">"Yes, Mike. I <a class="indexterm"></a>loved the conciseness of these new features." said Shawn.</p><p class="it"><a class="indexterm">"Sin embargo, </a><a id="id282" class="indexterm">los navegadores actuales todavía no entienden el código ES6 o ES7 que hemos escrito. Utilizamos Babel para transformar este código en JavaScript ES5, que los navegadores actuales podes ejecutar. Se nos permite utilizar la sintaxis de JavaScript del futuro hoy. Babel también tiene soporte JSX, por lo tanto, es muy útil para usar con React ". explica Mike.</a></p>
+
+<p class="p">"However, <a class="indexterm"></a>current browsers still don't understand the ES6 or ES7 code that we have written. We use Babel to transform this code in ES5 JavaScript, which current browsers can run. It allows us to use the JavaScript syntax from the future today. Babel also has JSX support, therefore, it is very handy to use with React." explained Mike.</p><p class="it"><a class="indexterm">"Babel es muy modular y viene con una arquitectura plug-in. Cuenta con plugins para diferentes sintaxis ES6 / ES7. En general, queremos utilizar React plugins específicos específicos y ES6. Grupos Babel tales complementos comunes en algo llamado <span class="strong"><strong>preajustes</strong></span> . Babel tiene varios plugins para ES6, React, así como las diferentes etapas de las futuras propuestas de lenguaje ".</a></p>
+
+<p class="p">"Babel is very modular and comes with a plugin architecture. It has plugins for different ES6/ES7 syntaxes. Generally, we want to use React specific and ES6 specific plugins. Babel groups such common plugins into something called <span class="strong"><strong>presets</strong></span>. Babel has various plugins for ES6, React, as well as different stages of future language proposals."</p><p class="it"><a class="indexterm">"Estamos sobre todo interesados en utilizar el ES2015 y React preajustes, que forman parte de todos los plugins relacionados con la ES6 y React. De vez en cuando, necesitamos algunas de las características avanzadas, tales como la sintaxis de la función bind ES7, por lo que necesitamos para configurarlo por separado. En tales casos, se utilizan los plugins individuales directamente, ya que utilizamos <code class="literal">transform-function-bind</code> para la función de <code class="literal">bind</code> sintaxis ".</a></p>
+
+<p class="p">"We are mostly interested in using the ES2015 and React presets, which comprise of all the plugins related to ES6 and React. Occasionally, we do need some of the advanced features, such as the ES7 function bind syntax, so we need to configure it separately. In such cases, we use the individual plugins directly, as we used <code class="literal">transform-function-bind</code> for the function <code class="literal">bind</code> syntax."</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note18"></a>Note</h3><p class="it"><a>Todos estos ajustes preestablecidos y plugins vienen en sus propios paquetes de NGP. Babel se construye de esta manera, un pequeño núcleo y una arquitectura de plugins gigante con una gran cantidad de opciones de configuración a su alrededor.</a></p>
+
+<p class="p">All of these presets and plugins come in their own npm packages. Babel is built this way—a small core and a giant plugin architecture with a lot of configuration options around it.</p></div></div><p class="it"><a>"Por lo tanto, tendremos que instalar todos estos paquetes por separado."</a></p>
+
+<p class="p">"Therefore, we will have to install all of these packages separately."</p><div class="informalexample"><pre class="programlisting">
+<span class="strong"><strong>npm install babel-core --save</strong></span>
+<span class="strong"><strong>npm install babel-loader --save</strong></span>
+<span class="strong"><strong>npm install babel-preset-react --save</strong></span>
+<span class="strong"><strong>npm install babel-preset-es2015 --save</strong></span>
+<span class="strong"><strong>npm install babel-plugin-transform-function-bind –save</strong></span>
+</pre></div><p class="it"><a>"Lo tengo. También he visto algunas configuraciones relacionadas Babel en nuestra configuración webpack." dijo Shawn.</a></p>
+
+<p class="p">"Got it. I have also seen some Babel related configuration in our Webpack configuration." said Shawn.</p><p class="it"><a>"Sí. Aunque Babel nos permite convertir archivos desde la línea de comandos, no queremos convertir cada archivo manualmente. Por lo tanto, hemos configurado webpack de tal manera que va a convertir nuestro código ES6 / ES7 usando Babel antes de comenzar la aplicación. se utiliza babel-loader </a><a id="id283" class="indexterm">paquete. vamos a discutir en detalle cuando hablemos de </a><a id="id284" class="indexterm">webpack el día de hoy ", dijo Mike.</a></p>
+
+<p class="p">"Yes. Though Babel allows us to convert files from the command line, we do not want to convert each and every file manually. Therefore, we have configured Webpack in such a way that it will convert our ES6/ES7 code using Babel before starting the app. It uses babel-loader <a class="indexterm"></a>package. Let's discuss it in detail when we discuss <a class="indexterm"></a>webpack later today," said Mike.</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note19"></a>Note</h3><p class="it"><a>Estamos utilizando </a><a id="id285" class="indexterm">Babel versión 6 a lo largo de este libro. Compruebe </a><a id="id286" class="indexterm">hacia fuera </a><a id="id287" class="indexterm">más detalles acerca de Babel en </a><a class="ulink" href="http://babeljs.io/">http://babeljs.io/</a> .</p>
+
+<p class="p">We are using <a class="indexterm"></a>Babel version 6 throughout this book. Check <a class="indexterm"></a>out <a class="indexterm"></a>more details about Babel at <a class="ulink" href="http://babeljs.io/">http://babeljs.io/</a>.</p></div></div></div><div class="section" title="ESLint"><div class="titlepage"><div><div><h2 class="title"><a id="ch11lvl2sec19"></a>ESLint</h2></div></div></div><p class="it"><a>"Shawn, que han visto </a><a id="id288" class="indexterm">mis confirmaciones relacionadas con pelusa en nuestros proyectos, ¿verdad?"</a></p>
+
+<p class="p">"Shawn, you have seen <a class="indexterm"></a>my commits related to linting in our projects, right?"</p><p class="it"><a class="indexterm">"Sí. Solía ​​tener molesto por estos pequeños cambios pequeños al principio, pero luego me acostumbré a ellos." dijo Mike.</a></p>
+
+<p class="p">"Yes. I used to get annoyed at these small little changes initially, but then I got used to them." said Mike.</p><p class="it"><a class="indexterm">" <span class="strong"><strong>Pelusa</strong></span> es muy importante, sobre todo si queremos mantener la calidad del código a través de diferentes proyectos. Afortunadamente, pelusa React proyectos es muy fácil con ESLint. También es compatible con la sintaxis y ES6 JSX por lo que también podemos pelusa nuestra próxima generación de código." informó Mike.</a></p>
+
+<p class="p">"<span class="strong"><strong>Linting</strong></span> is very important, especially if we want to maintain the code quality across different projects. Fortunately, linting React projects is very easy with ESLint. It also supports ES6 syntax and JSX so that we can also lint our next generation code." informed Mike.</p><p class="it"><a class="indexterm">"Estamos utilizando eslint-plugin-React y paquetes de babel-eslint NGP a pelusa ES6 y React código. También hemos instalado a nivel mundial el paquete ESLint NPM."</a></p>
+
+<p class="p">"We are using eslint-plugin-react and babel-eslint npm packages to lint ES6 and React code. We have also globally installed the ESLint npm package."</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note20"></a>Note</h3><p class="it"><a>Compruebe </a><a class="ulink" href="http://eslint.org/docs/user-guide/getting-started">http://eslint.org/docs/user-guide/getting-started</a> para obtener detalles sobre <a id="id289" class="indexterm">cómo empezar con ESLint.</a></p>
+
+<p class="p">Check <a class="ulink" href="http://eslint.org/docs/user-guide/getting-started">http://eslint.org/docs/user-guide/getting-started</a> for details about <a class="indexterm"></a>getting started with ESLint.</p></div></div><p class="it"><a class="indexterm">"Mike, también veo que ha agregado comando pelusa debajo de secuencias de comandos en <code class="literal">package.json</code>." añadido Shawn.</a></p>
+
+<p class="p">"Mike, I also see that you have added lint command under scripts in <code class="literal">package.json</code>." added Shawn.</p><div class="informalexample"><pre class="programlisting">// package.json  
+
+"scripts": {
+"lint": "eslint src"
+}</pre></div><p class="it"><a class="indexterm">"Sí, Shawn. Es común pasar por alto algunas cosas aquí y allí, en un gran proyecto. Tener un comando para pelusa del proyecto nos ayuda en la búsqueda de este tipo de cosas. Necesitamos la eslint, eslint-Babel, y eslint-plugin-React paquetes para utilizar ESLint dentro de nuestro código. Por lo tanto, tenemos que instalarlo antes de ejecutar este comando ".</a></p>
+
+<p class="p">"Yes, Shawn. It is common to miss a few things here and there in a big project. Having a command to lint the project helps us in finding such things. We need the eslint, eslint-babel, and eslint-plugin-react packages to use ESLint within our code. Therefore, we need to install it before trying to run this command."</p><div class="informalexample"><pre class="programlisting">
+<span class="strong"><strong>npm install eslint --save</strong></span>
+<span class="strong"><strong>npm install babel-eslint --save</strong></span>
+<span class="strong"><strong>npm install eslint-plugin-react –save</strong></span>
+</pre></div><p class="it"><a class="indexterm">"También estamos utilizando algunas opciones de configuración estándar para ESLint. Estas opciones están presentes en el <code class="literal">.eslintrc</code> archivo de nuestro proyecto. Definimos las reglas que queremos comprobar con ESLint en este archivo. También activar la función ES6 que queremos ESLint crear una lista blanca. de lo contrario, se elevará errores pelusa de dicho código, ya que sólo es compatible de forma nativa ES5. también especificamos que ESLint debe utilizar babel-eslint como analizador de manera que el código ES6 será analizado por </a><a id="id290" class="indexterm">ESLint correctamente."</a></p>
+
+<p class="p">"We are also using some standard configuration options for ESLint. These options are present in the <code class="literal">.eslintrc</code> file of our project. We define the rules that we want to check with ESLint in this file. We also enable ES6 feature that we want ESLint to whitelist. Otherwise, it will raise linting errors for such code as it natively only supports ES5. We also specify that ESLint should use babel-eslint as parser so that ES6 code will be parsed by <a class="indexterm"></a>ESLint properly."</p><div class="informalexample"><pre class="programlisting">// .eslintrc
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true,
+    "jquery": true 
+  },
+  "plugins": [
+    "react" 
+  ],
+  "ecmaFeatures": {
+    "arrowFunctions": true,
+    "blockBindings": true,
+    "classes": true,
+    "defaultParams": true,
+    "destructuring": true,
+    "forOf": true,
+    "generators": true,
+    "modules": true,
+    "spread": true,
+    "templateStrings": true,
+    "jsx": true
+  },
+  "rules": {
+    "consistent-return": [0],
+    "key-spacing": [0],
+    "quotes": [0],
+    "new-cap": [0],
+    "no-multi-spaces": [0],
+    "no-shadow": [0],
+    "no-alert": [0],
+    "no-unused-vars": [0],
+    "no-underscore-dangle": [0],
+    "no-use-before-define": [0, "nofunc"],
+    "comma-dangle": [0],
+    "space-after-keywords": [2],
+    "space-before-blocks": [2],
+    "camelcase": [0],
+    "eqeqeq": [2]
+  }
+}</pre></div><p class="it"><a class="indexterm">"Nos está listo ahora. Ir </a><a id="id291" class="indexterm">adelante y ejecutarlo en nuestro proyecto Pinterest y solución de problemas de pelusa que queda." informó Mike.</a></p>
+
+<p class="p">"We are all set now. Go <a class="indexterm"></a>ahead and run it on our Pinterest project and fix remaining linting issues." informed Mike.</p><div class="informalexample"><pre class="programlisting">
+<span class="strong"><strong>$ npm run lint</strong></span>
+
+<span class="strong"><strong>&gt; react-router-flux@0.0.1 lint /Users/prathamesh/Projects/sources/reactjs-by-example/chapter11</strong></span>
+<span class="strong"><strong>&gt; eslint src</strong></span>
+
+
+<span class="strong"><strong>/reactjs-by-example/chapter11/src/Home.js</strong></span>
+<span class="strong"><strong>  29:20  error  Missing space before opening brace  space-before-blocks</strong></span>
+
+<span class="strong"><strong>x 1 problem (1 error, 0 warnings)</strong></span>
+</pre></div><p class="it"><a class="indexterm">"Ah, que se quejaba de un espacio que falta. Voy a corregir rápidamente."</a></p>
+
+<p class="p">"Ah, it complained about a missing space. Let me fix it quickly."</p><div class="informalexample"><pre class="programlisting">// Before  
+faveUnfave(event){
+    …
+}
+
+// After
+faveUnfave(event) {
+…
+}</pre></div><p class="it"><a class="indexterm">"Perfecto, Shawn!"</a></p>
+
+<p class="p">"Perfect, Shawn!"</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note21"></a>Note</h3><p class="it"><a>ESLint también podes ser </a><a id="id292" class="indexterm">integrado con el editor de texto. Compruebe </a><a class="ulink" href="http://eslint.org/docs/user-guide/integrations.html">http://eslint.org/docs/user-guide/integrations.html</a> para más detalles.</p>
+
+<p class="p">ESLint can also be <a class="indexterm"></a>integrated with your text editor. Check <a class="ulink" href="http://eslint.org/docs/user-guide/integrations.html">http://eslint.org/docs/user-guide/integrations.html</a> for more details.</p></div></div></div></div></div></body></html>

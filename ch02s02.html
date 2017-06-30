@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Transforming JSX into JavaScript</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Transforming JSX into JavaScript"><div class="titlepage"><div><div><h1 class="title"><a id="ch02lvl1sec16"></a>Transforming JSX into JavaScript</h1></div></div></div>
+
+
+<p class="it"><a>"Shawn, como lo </a><a id="id33" class="indexterm">mencionamos, el JSX se transforma a la </a><a id="id34" class="indexterm">sintaxis de JavaScript nativa."</a></p>
+
+<p class="p">"Shawn, as I <a class="indexterm"></a>mentioned, the JSX is transformed to the <a class="indexterm"></a>native JavaScript syntax."</p><div class="informalexample"><pre class="programlisting">// Input (JSX):<br></br>
+var app = &lt;App name="Mike" /&gt;;</pre></div>
+
+
+<p class="it">"Esto a la larga se transforma a"</p>
+
+<p class="p">"This will eventually get transformed to"</p><div class="informalexample"><pre class="programlisting">// Output (JS):<br></br>
+var app = React.createElement(App, {name:"Mike"});</pre></div><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="tip02"></a>Tip</h3>
+
+
+<p class="it"><span class="strong"><strong>La descarga del código de ejemplo</strong></span></p>
+
+<p class="p"><span class="strong"><strong>Downloading the example code</strong></span>
+</p>
+
+
+<p class="it"><a>Podes descargar los archivos de código de ejemplo para este libro de su cuenta al </a><a class="ulink" href="http://www.packtpub.com">http://www.packtpub.com</a>. Si has adquirido este libro otra parte, podes visitar <a class="ulink" href="http://www.packtpub.com/support">http://www.packtpub.com/support</a> y registrarse para tener los archivos enviados por correo electrónico directamente a vos.</p>
+
+<p class="p">You can download the example code files for this book from your account at <a class="ulink" href="http://www.packtpub.com">http://www.packtpub.com</a>. If you purchased this book elsewhere, you can visit <a class="ulink" href="http://www.packtpub.com/support">http://www.packtpub.com/support</a> and register to have the files e-mailed directly to you.</p>
+
+
+<p class="it">Podes descargar los archivos de código siguiendo estos pasos:</p>
+
+<p class="p">You can download the code files by following these steps:</p><div class="itemizedlist"><ul class="itemizedlist">
+
+<li class="it">Iniciá sesión o registrá en nuestro sitio web utilizando tu dirección de correo electrónico y la contraseña.</li>
+<li class="listitem" style="list-style-type: disc">Log in or register to our website using your e-mail address and password.</li>
+<li class="it">Pasá el puntero del mousse  sobre la pestaña <span class="strong"><strong>SOPORTE</strong></span> en la parte superior.</li>
+<li class="listitem" style="list-style-type: disc">Hover the mouse pointer on the <span class="strong"><strong>SUPPORT</strong></span> tab at the top.</li>
+<li class="it">Hacé clic en <span class="strong"><strong>Código Descargas y erratas</strong></span> .</li>
+<li class="listitem" style="list-style-type: disc">Click on <span class="strong"><strong>Code Downloads &amp; Errata</strong></span>.</li>
+<li class="it">Introducí el nombre del libro en la <span class="strong"><strong>búsqueda</strong></span> cuadro.</li>
+<li class="listitem" style="list-style-type: disc">Enter the name of the book in the <span class="strong"><strong>Search</strong></span> box.</li>
+<li class="it">Seleccioná el libro para el que estás buscando para descargar los archivos de código.</li>
+<li class="listitem" style="list-style-type: disc">Select the book for which you're looking to download the code files.</li>
+<li class="it">Seleccioná en el menú desplegable en el que adquiristes este libro.</li>
+<li class="listitem" style="list-style-type: disc">Choose from the drop-down menu where you purchased this book from.</li>
+<li class="it">Hacé clic en <span class="strong"><strong>descarga de código</strong></span> .</li>
+<li class="listitem" style="list-style-type: disc">Click on <span class="strong"><strong>Code Download</strong></span>.</li>
+
+</ul></div>
+
+
+<p class="it">Una vez descargado el archivo, por favor asegúrate de descomprimir o extraer la carpeta utilizando la última versión de:</p>
+
+<p class="p">Once the file is downloaded, please make sure that you unzip or extract the folder using the latest version of:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">WinRAR / 7-Zip for Windows</li>
+
+<li class="listitem" style="list-style-type: disc">Zipeg / iZip / UnRarX for Mac</li>
+
+<li class="listitem" style="list-style-type: disc">7-Zip / PeaZip for Linux</li>
+
+</ul></div></div></div>
+
+
+<p class="it">"Si deseas ver esto en acción, probá este ejemplo en <a class="ulink" href="https://babeljs.io/repl/">https://babeljs.io/repl/</a>. Es un REPL en vivo en el que podes transformar un código JSX al código JavaScript nativo."</p>
+
+<p class="p">"If you would like to see this live in action, try this example at <a class="ulink" href="https://babeljs.io/repl/">https://babeljs.io/repl/</a>. It's a live REPL that can transform a JSX code to the native JavaScript code."</p>
+
+
+<p class="it">"Hay otro editor disponible para la conversión de HTML a JSX. Podes echarle un vistazo en <a class="ulink" href="http://facebook.github.io/react/html-jsx.html">http://facebook.github.io/react/html-jsx.html</a> . Esto te permite pegar un arbitraria <a id="id35" class="indexterm"> que se convierte a JSX con la extracción de estilos, clases, y otro código HTML información y luego crear un componente en la parte superior del mismo". dijo Mike.</a></p>
+
+<p class="p">"There is another editor available for converting HTML to JSX. You can check it out at <a class="ulink" href="http://facebook.github.io/react/html-jsx.html">http://facebook.github.io/react/html-jsx.html</a>. This allows you to paste an arbitrary <a class="indexterm"></a>HTML code that gets converted to JSX with extraction of styles, classes, and other information and then create a component on top of it." said Mike.</p>
+
+
+<p class="it">"Bastante práctico. Sin embargo, esto es sólo para facilidad de desarrollo, ¿verdad? ¿Qué pasa cuando hacemos uso de nuestro código?" Shawn preguntó.</p>
+
+<p class="p">"Pretty handy. However, this is just for ease of development, right? What happens when we deploy our code?" asked Shawn.</p>
+
+
+<p class="it"><a class="indexterm">"JSX no está destinado a </a><a id="id36" class="indexterm">ser compilado en tiempo de ejecución. Aunque hay un transformador JSX </a><a id="id37" class="indexterm"> que convierte JSX a JavaScript en un navegador. Su uso para compilar JSX en tiempo de ejecución en el navegador ralentizaría nuestra aplicación. Vamos a utilizar herramientas tales como Babel, que es un transpiler JavaScript para convertir nuestro código JSX al código JavaScript nativo antes de desplegar la aplicación".</a></p>
+
+<p class="p">"JSX is not meant to <a class="indexterm"></a>be compiled at runtime. Though there is a JSX <a class="indexterm"></a>transformer that converts JSX to JavaScript in a browser. Using it to compile JSX at runtime in the browser would slow down our application. We will use tools such as Babel, which is a JavaScript transpiler to convert our JSX code to the native JavaScript code before deploying the application."</p></div></body></html>

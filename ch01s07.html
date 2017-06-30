@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='utf-8'?> <html xmlns="http://www.w3.org/1999/xhtml"><head><title>Passing data to components</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Passing data to components"><div class="titlepage"><div><div><h1 class="title"><a id="ch01lvl1sec13"></a>Passing data to components</h1></div></div></div> <p class="it"><a>"Cómo se definen nuestros datos </a><a id="id19" class="indexterm">y todo lo demás en el método render?"</a></p> <p class="p">"Do we define our data <a class="indexterm"></a>and everything else in the render method?"</p><p class="it"><a class="indexterm">"Estaba llegando a eso. Nuestro </a><a id="id20" class="indexterm">componente no debe contener esta información. La información se le debe pasar como parámetro a el."</a></p> <p class="p">"I was just getting to that. Our <a class="indexterm"></a>component should not contain this information. The information should be passed as a parameter to it."</p> <p class="it">"React nos permite pasar los objetos JavaScript a los componentes. Estos objetos se pasan cuando llamamos al método <code class="literal">React.render</code> y creamos una instancia del componente <code class="literal">&lt;App&gt;</code>. El siguiente es cómo podemos pasar objetos a el:".</a></p> <p class="p">"React allows us to pass the JavaScript objects to components. These objects would be passed when we call the <code class="literal">React.render</code> method and create an instance of the <code class="literal">&lt;App&gt;</code> component. The following is how we can pass objects to it:"</p> <div class="informalexample"><pre class="programlisting">React.render(&lt;App title='Recent  Changes'/&gt;, document.body);</pre></div> <p class="it"><a class="indexterm">"Observá cómo aquí están utilizando la sintaxis <code class="literal">&lt;App/&gt;</code>, en lugar de <code class="literal">createElement</code>. Como ya he mencionado anteriormente, podemos crear elementos de nuestros componentes y representarlos mediante JSX como se ha hecho antes."</a></p> <p class="p">"Notice how are using the <code class="literal">&lt;App/&gt;</code> syntax here, instead of <code class="literal">createElement</code>. As I mentioned previously, we can create elements from our components and represent them using JSX as done earlier."</p><div class="informalexample"><pre class="programlisting">React.render(React.createElement(App), document.body)</pre></div><p class="it"><a class="indexterm">"El código anterior se convierte en lo siguiente:"</a></p> <p class="p">"The preceding code becomes the following:"</p><div class="informalexample"><pre class="programlisting">React.render(&lt;App/&gt;, document.body)</pre></div> <div class="informalexample"><pre class="programlisting"><a class="indexterm">React.render (&lt;App /&gt;, document.body)</a></pre></div><p class="it"><a class="indexterm">"Eso se ve aún más limpio", dijo Shawn.</a></p> <p class="p">"That looks even more cleaner", said Shawn.</p> <p class="it"><a class="indexterm">"Como podes ver, estamos pasando el título para nuestra tabla como el parámetro <code class="literal">title</code>, seguido por el contenido del título. React hace que estos datos se pasen al componente como algo que se llama <code class="literal">props</code>. El <code class="literal">props</code>, abreviatura de propiedades, son las opciones de configuración de un componente que se pasan al componente cuando se lo inicializa".</a></p> <p class="p">"As you can see, we are passing the title for our table as the <code class="literal">title</code> parameter, followed by the contents of the title. React makes this data passed to the component as something called <code class="literal">props</code>. The <code class="literal">props</code>, short for properties, are a component's configuration options that are passed to the component when initializing it."</p><p class="it"><a class="indexterm">"Estos <code class="literal">props</code> son simplemente </a><a id="id21" class="indexterm">objetos JavaScript Se hacen accesible para nosotros. </a><a id="id22" class="indexterm">Dentro de nuestro componente mediante el <code class="literal">this.props</code> método Vamos a tratar de acceder a este desde el. método <code class="literal">render</code>, de la siguiente manera:"</a></p>
+
+
+<p class="p">"These <code class="literal">props</code> are just plain <a class="indexterm"></a>JavaScript objects. They are made accessible to us <a class="indexterm"></a>within our component via the <code class="literal">this.props</code> method. Let's try accessing this from the <code class="literal">render</code> method, as follows:"</p><div class="informalexample"><pre class="programlisting">…<br></br>
+  render: function(){<br></br>
+   console.log(this.props.title);<br></br>
+  }<br></br>
+…</pre></div><p class="it"><a class="indexterm">"Eso debería empezar a registrar el título que pasa al componente de la consola."</a></p>
+
+
+
+<p class="p">"That should start logging the title that we passed to the component to the console."</p><p class="it"><a class="indexterm">"Ahora, vamos a tratar de abstraer las headings, así como los datos JSON fuera del método <code class="literal">render</code> y empezar a pasarlos al componente, de la siguiente manera:"</a></p>
+
+
+
+<p class="p">"Now, let's try to abstract the headings as well as the JSON data out of the <code class="literal">render</code> method and start passing them to the component, as follows:"</p><div class="informalexample">
+<pre class="programlisting">var data = [{ "when": "2 minutes ago",<br></br>
+                           "who": "Jill Dupre",<br></br>
+                           "description": "Created new account"<br></br>
+                         },<br></br>
+                         ….<br></br>
+                        }]; <br></br> 
+var headings = ['When', 'Who', 'Description']<br></br>
+&lt;App headings = {headings} data = {data} /&gt;</pre></div><p class="it"><a class="indexterm">"No. Sacamos los datos del método <code class="literal">render</code> y ahora están pasando a nuestro componente."</a></p>
+
+
+
+<p class="p">"There. We pulled the data out of the <code class="literal">render</code> method and are now passing it to our component."</p><p class="it"><a class="indexterm">"Hemos definido los dynamic headers para nuestra tabla que vamos a empezar a utilizar en el componente."</a></p> <p class="p">"We defined the dynamic headers for our table that we will start using in the component."</p><p class="it"><a class="indexterm">"Aquí las llaves, que se utiliza para transferir los parámetros a nuestro componente, se utilizan para especificar las expresiones de JavaScript que serán evaluados y luego se utilizan como valores de atributos."</a></p> <p class="p">"Here the curly braces, used to pass the parameters to our component, are used to specify the JavaScript expressions that will be evaluated and then used as attribute values."</p><p class="it"><a class="indexterm">"Por ejemplo, el código anterior de JSX es traducido por React a JavaScript, de la siguiente manera:"</a></p> <p class="p">"For example, the preceding JSX code will get translated into JavaScript by React, as follows:"</p><div class="informalexample"><pre class="programlisting">React.createElement(App, { headings: headings, data: data });</pre></div><p class="it"><a class="indexterm">"Vamos a volver a los <code class="literal">props</code> más tarde. Sin embargo, en este momento, vamos a pasar a completar nuestro componente."</a></p> <p class="p">"We will revisit <code class="literal">props</code> later. However, right now, let's move on to complete our component."</p><p class="it"><a class="indexterm">"Ahora, utilizando los datos y conceptos pasados a través <code class="literal">props</code>, tenemos que generar la estructura de la tabla en la aplicación del método <code class="literal">render</code>."</a></p> <p class="p">"Now, using the passed data and headings via <code class="literal">props</code>, we need to generate the table structure in the app's <code class="literal">render</code> method."</p><p class="it"><a class="indexterm">"Vamos a generar los headings en primer lugar, de la siguiente manera:"</a></p>
+
+
+<p class="p">"Let's generate the headings first, as follows:"</p><div class="informalexample"><pre class="programlisting">var App = React.createClass({<br></br>
+<br></br>
+  render: function(){<br></br>
+      var headings = this.props.headings.map(function(heading) {<br></br>
+          return(&lt;th&gt;<br></br>
+                 {heading}<br></br>
+                 &lt;/th&gt;);<br></br>
+      });<br></br>
+  }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Aviso, de como estamos utilizando <code class="literal">this.props.headings</code>. Para acceder a la información que pasa sobre los headings Ahora vamos a </a><a id="id23" class="indexterm">crear rows (filas) de la tabla similares a lo que </a><a id="id24" class="indexterm">hacíamos antes:"</a></p>
+
+
+
+<p class="p">"Notice, how we are using <code class="literal">this.props.headings</code> to access the passed information about headings. Now let's <a class="indexterm"></a>create rows of the table similar to what we <a class="indexterm"></a>were doing earlier:"</p><div class="informalexample"><pre class="programlisting">var App = React.createClass({<br></br>
+<br></br>
+  render: function(){<br></br>
+      var headings = this.props.headings.map(function(heading) {<br></br>
+          return(&lt;th&gt;<br></br>
+                 {heading}<br></br>
+                 &lt;/th&gt;);<br></br>
+      });<br></br>
+<br></br>
+      var rows = this.props.data.map(function(change) {<br></br>
+          return(&lt;tr&gt;<br></br>
+                   &lt;td&gt; { change.when } &lt;/td&gt;<br></br>
+                   &lt;td&gt; { change.who } &lt;/td&gt;<br></br>
+                   &lt;td&gt; { change.description } &lt;/td&gt;<br></br>
+                 &lt;/tr&gt;);<br></br>
+      });<br></br>
+  }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Por último, vamos a poner los headings y filas juntos en nuestra tabla."</a></p>
+
+
+
+<p class="p">"Finally, let's put the headings and rows together in our table."</p><div class="informalexample"><pre class="programlisting">var App = React.createClass({<br></br>
+<br></br>
+  render: function(){<br></br>
+      var headings = this.props.headings.map(function(heading) {<br></br>
+          return(&lt;th&gt;<br></br>
+                 {heading}<br></br>
+                 &lt;/th&gt;);<br></br>
+      });<br></br>
+<br></br>
+      var rows = this.props.data.map(function(change) {<br></br>
+          return(&lt;tr&gt;<br></br>
+                   &lt;td&gt; {change.when} &lt;/td&gt;<br></br>
+                   &lt;td&gt; {change.who} &lt;/td&gt;<br></br>
+                   &lt;td&gt; {change.description} &lt;/td&gt;<br></br>
+                 &lt;/tr&gt;);<br></br>
+      });<br></br>
+<br></br>
+      return(&lt;table&gt;<br></br>
+               {headings}<br></br>
+               {rows}<br></br>
+             &lt;/table&gt;);<br></br>
+  }<br></br>
+});<br></br>
+<br></br>
+React.render(&lt;App headings = {headings} data = {data} /&gt;,<br></br>
+                      document.body);</pre></div><p class="it"><a class="indexterm">"La tabla se muestra ahora con las dynamic headers pasadas y los datos JSON."</a></p>
+
+
+
+                      <p class="p">"The table is now displayed with the passed dynamic headers and JSON data."</p><p class="it"><a class="indexterm">"Los títulos se pueden cambiar para <code class="literal">["Last change at", "By Author", "Summary"]</code> y la tabla, en nuestra opinión, se actualizará automáticamente."</a></p> <p class="p">"The headings can be changed to <code class="literal">["Last change at", "By Author", "Summary"]</code> and the table in our view will get updated automatically."</p><p class="it"><a class="indexterm">"Está bien, Shawn, vamos </a><a id="id25" class="indexterm">adelante y añadimos un título a nuestra tabla. Asegúrate de pasarlo </a><a id="id26" class="indexterm">desde los props."</a></p> <p class="p">"Alright, Shawn, go <a class="indexterm"></a>ahead and add a title to our table. Make sure to pass <a class="indexterm"></a>it from the props."</p><p class="it"><a class="indexterm">"Ok", dijo Shawn.</a></p> <p class="p">"Ok," said Shawn.</p><p class="it"><a class="indexterm">"Ahora, el método render se cambiará a lo siguiente:"</a></p>
+
+
+                      <p class="p">"Now, the render method will be changed to the following:"</p><div class="informalexample"><pre class="programlisting">…<br></br>
+ return &lt;div&gt;<br></br>
+               &lt;h1&gt;<br></br>
+                 {this.props.title}<br></br>
+               &lt;/h1&gt;<br></br>
+               &lt;table&gt;<br></br>
+                 &lt;thead&gt;<br></br>
+                   {headings}<br></br>
+                 &lt;/thead&gt; <br></br> 
+                 {rows} <br></br>
+                &lt;/table&gt;<br></br>
+            &lt;/div&gt;<br></br>
+…</pre></div><p class="it"><a class="indexterm">"Mientras la llamada a <code class="literal">React.render</code> cambiará a lo siguiente:"</a></p>
+
+
+
+<p class="p">"While the call to <code class="literal">React.render</code> will change to the following:"</p><div class="informalexample"><pre class="programlisting">var title =  'Recent Changes';
+React.render(&lt;App headings={headings} data={data} title={title}/&gt;, document.body);</pre></div><p class="it"><a class="indexterm">"Impresionante. Estas </a><a id="id27" class="indexterm">comenzando a conseguí algo. Vamos a ver cómo se ve</a><a id="id28" class="indexterm"> terminado, de acuerdo?"</a></p>
+
+
+
+<p class="p">"Awesome. You are <a class="indexterm"></a>starting to get a hang of it. Let's see how this looks in <a class="indexterm"></a>completion shall we?"</p><div class="informalexample"><pre class="programlisting">var App = React.createClass({<br></br>
+  render: function(){<br></br>
+      var headings = this.props.headings.map(function(heading) {<br></br>
+          return(&lt;th&gt;<br></br>
+                 {heading}<br></br>
+                 &lt;/th&gt;);<br></br>
+      });<br></br>
+<br></br>
+  var rows = this.props.data.map(function(row){<br></br>
+  return  &lt;tr&gt;<br></br>
+     &lt;td&gt;{row.when}&lt;/td&gt;<br></br>
+     &lt;td&gt;{row.who}&lt;/td&gt;<br></br>
+     &lt;td&gt;{row.description}&lt;/td&gt;<br></br>
+   &lt;/tr&gt;<br></br>
+<br></br>
+  })<br></br>
+ return &lt;div&gt;&lt;h1&gt;{this.props.title}&lt;/h1&gt;&lt;table&gt;<br></br>
+ &lt;thead&gt;<br></br>
+{headings}<br></br>
+ &lt;/thead&gt; <br></br> 
+{rows} <br></br>
+ &lt;/table&gt;&lt;/div&gt;<br></br>
+  }<br></br>
+});<br></br>
+  var data = [{ "when": "2 minutes ago",<br></br>
+              "who": "Jill Dupre",<br></br>
+              "description": "Created new account"<br></br>
+            },<br></br>
+            {<br></br>
+              "when": "1 hour ago",<br></br>
+              "who": "Lose White",<br></br>
+              "description": "Added fist chapter"<br></br>
+            },<br></br>
+            {<br></br>
+              "when": "2 hours ago",<br></br>
+              "who": "Jordan Whash",<br></br>
+              "description": "Created new account"<br></br>
+            }];<br></br>
+<br></br>
+var headings = ["Last updated at", "By Author", "Summary"]<br></br>
+var title = "Recent Changes";<br></br>
+React.render(&lt;App headings={headings} data={data} title={title}/&gt;, document.body);</pre></div><p class="it"><a class="indexterm">"Deberíamos empezar </a><a id="id29" class="indexterm">a ver algo de la siguiente manera:"</a></p>
+
+
+ <p class="p">"We should again start <a class="indexterm"></a>seeing something as follows:"</p><div class="mediaobject"><img src="graphics/4730_01_06.jpg" alt="Passing data to components"/></div><p class="it"><a class="indexterm">"Aquí lo tenemos, Shawn. Nuestro </a><a id="id30" class="indexterm">primer componente utilizando React!", Dijo Mike.</a></p> <p class="p">"Here we have it, Shawn. Our <a class="indexterm"></a>very first component using React!", said Mike.</p><p class="it"><a class="indexterm">"Esto se ve increíble. No puedo esperar a probar más cosas en React!", Exclamó Shawn.</a></p> <p class="p">"This looks amazing. I can't wait to try out more things in React!", exclaimed Shawn.</p></div></body></html>

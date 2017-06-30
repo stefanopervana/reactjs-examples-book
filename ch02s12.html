@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Non-DOM attributes</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Non-DOM attributes"><div class="titlepage"><div><div><h1 class="title"><a id="ch02lvl1sec26"></a>Non-DOM attributes</h1></div></div></div><p class="it"><a>"Está bien Shawn, es </a><a id="id64" class="indexterm">hora de echar un vistazo detallado a nuestra solicitud de nuevo. Si ves de cerca la salida de la consola, verás algunas advertencias relacionadas con keys."</a></p>
+
+<p class="p">"Alright Shawn, it's <a class="indexterm"></a>time to take a detailed look at our application again. If you closely see the console output, you will see a few warnings related to Keys."</p><div class="informalexample"><pre class="programlisting">"Each child in an array should have a unique \"key\" prop. Check the render method of Rows. See http://fb.me/react-warning-keys for more information."</pre></div><p class="it"><a class="indexterm">"En el método <code class="literal">render()</code> de <code class="literal">Rows</code>, estamos renderizando una colección de los componentes <code class="literal">Row</code>."</a></p>
+
+<p class="p">"In the <code class="literal">render()</code> method of <code class="literal">Rows</code>, we are rendering collection of the <code class="literal">Row</code> components."</p><div class="informalexample"><pre class="programlisting">RecentChangesTable.Rows = React.createClass({<br></br>
+  render: function() {<br></br>
+    var rows = this.props.changeSets.map(function(changeSet) {<br></br>
+      return(&lt;Row changeSet = {changeSet}/&gt;);<br></br>
+    });<br></br>
+<br></br>
+    return &lt;tbody&gt;{rows}&lt;/tbody&gt;;<br></br>
+  }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Durante la renderización de los elementos de la lista, un componente puede moverse hacia arriba o hacia abajo en el árbol DOM basado en la interacción con el usuario. Por ejemplo, en el caso de la búsqueda o clasificación, los elementos de la lista pueden cambiar su posición. Los nuevos artículos también pueden añadirse a la parte delantera de la lista en caso de que los nuevos datos seán entregados. En tales casos, React puede quitar y volver a crear los componentes basados en el algoritmo de diff. Pero si proporcionamos un identificador único para cada elemento de la lista, a continuación, React de manera inteligente decidirá si lo debe destruir o no. Esto mejorará el rendimiento del renderizado. Esto puede lograrse haciendo pasar una única prop <code class="literal">key</code> a cada elemento de la lista ".</a></p>
+
+<p class="p">"During the rendering of list items, a component may move up or down in the DOM tree based on the user interaction. For example, in case of search or sorting, the items in the list can change their position. New items can also get added to the front of the list in case new data gets fetched. In such cases, React may remove and recreate components based on the diff algorithm. But if we provide a unique identifier for each element in the list, then React will intelligently decide whether to destroy it or not. This will improve the rendering performance. This can be achieved by passing a unique <code class="literal">key</code> prop to every item in the list."</p><p class="it"><a class="indexterm">En nuestro caso, el número de filas está fijado actualmente. Pero más tarde, queremos mostrar la página de actualizaciones a medida que los nuevos datos están siendo obtenidos de la API. La situación se complica cuando se añaden o eliminan dinámicamente a medida que el estado y la identidad de cada componente de los childs debe ser mantenida en todas las render pass. El <code class="literal">key</code> prop le ayudará React para identificar únicamente el componente en tales casos. Seguir adelante y utilizar el índice del componente <code class="literal">Row</code> para este propósito, ya que será único a partir de ahora" Mike explica con más detalle.</a></p>
+
+<p class="p">In our case, the number of rows is currently fixed. But later on, we want to show the updates page as the new data is being fetched from the API. The situation gets complicated when children are added or removed dynamically as the state and identity of each component must be maintained in every render pass. The <code class="literal">key</code> prop will help React to uniquely identify the component in such cases. Go ahead and use the index of the <code class="literal">Row</code> component for this purpose as it will be unique as of now" Mike further explained.</p><p class="it"><a class="indexterm">"Cool. Así que voy a tratar de añadir la <code class="literal">key</code> prop a <code class="literal">Rows</code>. Noté también el mismo problema con el componente <code class="literal">Headings</code>, por lo tanto, voy a añadir una key para <code class="literal">Headings</code>". dijo Shawn.</a></p>
+
+<p class="p">"Cool. So let me try adding the <code class="literal">key</code> prop to <code class="literal">Rows</code>. I noticed same issue with the <code class="literal">Headings</code> component too, therefore, I will add a key for <code class="literal">Headings</code> as well." said Shawn.</p><div class="informalexample"><pre class="programlisting">RecentChangesTable.Rows = React.createClass({<br></br>
+  render: function() {<br></br>
+    var rows = this.props.changeSets.map(function(changeSet, index) {<br></br>
+      return(&lt;Row key={index} changeSet = {changeSet}/&gt;);<br></br>
+    });<br></br>
+<br></br>
+    return (&lt;div&gt;{rows}&lt;/div&gt;);<br></br>
+  }<br></br>
+});<br></br>
+RecentChangesTable.Headings = React.createClass({<br></br>
+  render: function() {<br></br>
+    var headings = this.props.headings.map(function(name, index) {<br></br>
+      return(&lt;RecentChangesTable.Heading key={index} heading = {name}/&gt;);<br></br>
+    });<br></br>
+<br></br>
+    return (&lt;thead&gt;&lt;tr&gt;{headings}&lt;/tr&gt;&lt;/thead&gt;);<br></br>
+  }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Perfecto. Tené en cuenta que el valor de las keys para una lista dada debe ser único. Vamos a conocer más acerca de las keys cuando comenzemos a actualizar el DOM basado en datos dinámicos. Pero esto es suficiente por ahora", dijo Mike.</a></p>
+
+<p class="p">"Perfect. Note that the value of keys for a given list should be unique. We will get to know more about the keys when we start updating the DOM based on dynamic data. But this is good enough for now" said Mike.</p><p class="it"><a class="indexterm">"Tiene sentido. ¿Hay algún tipo de palabras keywords/identifiers disponibles para nosotros?"</a></p>
+
+<p class="p">"Makes sense. Are there any more such keywords/identifiers available for us?"</p><p class="it"><a class="indexterm">"Sí. Junto con la key, también hay refs o referencias. Se permite l componente parent mantener una referencia de un componente child </a><a id="id65" class="indexterm">. En este momento, no podemos acceder a los componentes childs fuera del método <code class="literal">render()</code> del componente. Pero tener <code class="literal">ref</code> nos permite utilizar el componente secundario en cualquier parte del componente, no sólo el método <code class="literal">render()</code>".</a></p>
+
+<p class="p">"Yes. Along with key, there is also refs or references. It allows the parent component to keep a reference of a child <a class="indexterm"></a>component. Right now, we can't access the child components outside the <code class="literal">render()</code> method of the component. But having <code class="literal">ref</code> allows us to use the child component anywhere in the component, not just the <code class="literal">render()</code> method."</p><div class="informalexample"><pre class="programlisting">&lt;input ref="myInput" /&gt;</pre></div><p class="it"><a class="indexterm">"Ahora, podemos acceder a estas referencias fuera del método render también."</a></p>
+
+<p class="p">"Now, we can access these references outside the render method too."</p><div class="informalexample"><pre class="programlisting">    this.refs.myInput</pre></div><p class="it"><a class="indexterm">"Es bastante útil cuando queremos informar a un componente de cambiar algo en tiempo de ejecución. Vamos a discutir y utilizar <code class="literal">refs</code> con más detalle más adelante, cuando nos ocupemos de controladores de eventos", agregó Mike.</a></p>
+
+<p class="p">"It's pretty useful when we want to inform a component to change something at runtime. We will discuss and use <code class="literal">refs</code> in more detail later when we deal with event handlers" Mike added.</p></div></body></html>

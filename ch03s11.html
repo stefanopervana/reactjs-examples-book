@@ -1,0 +1,295 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Component life cycle methods</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Component life cycle methods"><div class="titlepage"><div><div><h1 class="title"><a id="ch03lvl1sec38"></a>Component life cycle methods</h1></div></div></div><p class="it"><a>"Shawn, vamos a </a><a id="id88" class="indexterm">empezar con un ejemplo exhaustivo que desencadena estos métodos." Informó Mike.</a></p>
+
+
+<p class="p">"Shawn, let's <a class="indexterm"></a>start with an exhaustive example that triggers these methods." Mike informed.</p><div class="informalexample"><pre class="programlisting">console.log('Start') // Marks entry point of JS code.<br></br>
+var App = React.createClass({<br></br>
+    componentWillMount: function(){<br></br>
+      console.log('componentWillMount');<br></br>
+    },<br></br>
+    <br></br>
+    componentDidMount: function(){<br></br>
+      console.log('componentDidMount');<br></br>
+    },<br></br>
+    <br></br>
+    getInitialState: function(){<br></br>
+      return { status: true}<br></br>
+    },<br></br>
+<br></br>
+    getDefaultProps: function(){<br></br>
+      return {name: 'John'};<br></br>
+    },<br></br>
+  <br></br>
+    componentWillReceiveProps: function(nextProps){<br></br>
+      console.log('componentWillReceiveProps');<br></br>
+    },<br></br>
+<br></br>
+    shouldComponentUpdate: function(nextProps, nextState){<br></br>
+      console.log('shouldComponentUpdate');<br></br>
+      return true;<br></br>
+    },<br></br>
+ <br></br>   
+    componentWillUpdate: function(){<br></br>
+      console.log('componentWillUpdate');<br></br>
+    },<br></br>
+    <br></br>
+    render: function() {<br></br>
+      console.log('render');<br></br>
+      return &lt;h1 onClick={this.toggleState}&gt;<br></br>    
+             {this.state.status.toString()}<br></br>
+             &lt;/h1&gt;<br></br>
+    },<br></br>
+<br></br>
+    componentWillUnmount: function(){<br></br>
+      console.log('componentWillUnmount')<br></br>
+    },<br></br>
+    <br></br>
+    toggleState: function() {<br></br>
+      this.setState({status: !this.state.status})<br></br>
+    }<br></br>
+    });<br></br>
+<br></br>
+/* List of methods and signatures for reference<br></br>
+* componentWillMount<br></br>
+* componentDidMount<br></br>
+* componentWillReceiveProps(object nextProps)<br></br>
+* boolean shouldComponentUpdate(object nextProps, object nextState)<br></br>
+* componentWillUpdate(object nextProps, object nextState)<br></br>
+* componentDidUpdate(object prevProps, object prevState)<br></br>
+* componentWillUnmount()<br></br>
+/<br></br>
+<br></br>
+React.render(&lt;App name='Jane'/&gt;, document.body);</pre></div><div class="mediaobject"><img src="graphics/4730_03_04.jpg" alt="Component life cycle methods"/></div><p class="it"><a class="indexterm">"Simplemente muestra un body con el texto <code class="literal">true</code> y luego al hacer clic, lo cambia para mostrar <code class="literal">false</code>." Mike.</a></p>
+
+
+<p class="p">"It simply displays a body with the <code class="literal">true</code> text and then on clicking, it changes it to display <code class="literal">false</code>." Mike.</p><p class="it"><a class="indexterm">"Shawn, para simplificar, he añadido un simple método <code class="literal">console.log()</code> para todos los métodos de ciclo de vida para que nosotros sepamos que es lo que estamos llamando. Si hacemos un fresh run, se imprime el siguiente:".</a></p>
+
+
+<p class="p">"Shawn, to keep things simple, I have added just a simple <code class="literal">console.log()</code> method for every life cycle method so that we know it was called. If we do a fresh run, the following is printed:"</p><div class="informalexample"><pre class="programlisting">"Start"<br></br>
+"componentWillMount"<br></br>
+"render"<br></br>
+"componentDidMount"</pre></div><p class="it"><a class="indexterm">"Ah, lo tengo. Básicamente, la ventana imprimió por primera vez <code class="literal">Start</code> para señalar que el archivo ha sido cargado." Dijo Shawn.</a></p>
+
+
+<p class="p">"Ah, got it. Basically, the window first printed <code class="literal">Start</code> to signal the file has been loaded." Shawn said.</p><p class="it"><a class="indexterm">"Correcto. A continuación, se imprime <code class="literal">componentWillMount</code>. Ese es el punto de entrada de nuestro componente. Este método es llamado cuando un componente se monta en el body por primera vez. Podes ver que estamos llamando a <code class="literal">React.render</code>".</a></p>
+
+
+<p class="p">"Correct. Next, it printed out <code class="literal">componentWillMount</code>. That's the entry point for our component. This method is called when a component gets mounted on the body for the first time. If you can see, we are calling <code class="literal">React.render</code>."</p><div class="informalexample"><pre class="programlisting">React.render(&lt;App name='Jane'/&gt;, document.body);</pre></div>
+
+<p class="it">Esto es lo que desencadena <code class="literal">componentWillMount</code>. En este método, podemos llamar a <code class ="literal">setState</code> para realizar algunos cambios en nuestros datos internos. Sin embargo, eso no llama a un nuevo re-render o este método de nuevo.</a><a class="indexterm"> <code class="literal">setState</code></a></p>
+
+<p class="p">This is what triggers <a class="indexterm"></a>
+<code class="literal">componentWillMount</code>. In this method, we can call <code class="literal">setState</code> to perform some changes to our internal data. However, that doesn't call a new re-render or this method again.</p>
+
+<p class="it"><a class="indexterm">El siguiente es la llamada real al método <code class="literal">render</code>. Este es el responsable de la visualización de un modelo real.</a></p>
+
+<p class="p">Next is the actual <code class="literal">render</code> method call. This is responsible for the actual component display.</p><p class="it"><a class="indexterm">Por último, tenemos una llamada a <code class="literal">componentDidMount</code>. Este lo llama inmediatamente después de montar el componente y sólo una vez después de que el componente se representa.</a></p>
+
+
+<p class="p">Finally, we have a call to <code class="literal">componentDidMount</code>. This is invoked immediately after mounting the component and only once after the component is rendered.</p><p class="it"><a class="indexterm">Podemos hacer uso de este a buscar la información dinámica que queremos mostrar en nuestro componente después de la primera representación del componente.</a></p>
+
+
+<p class="p">We can make use of this to fetch the dynamic information that we want to display in our component after the initial render of the component.</p><p class="it"><a class="indexterm">"Una vez hecho esto, hemos terminado con nuestra ejecución inicial para la visualización de un componente!"</a></p>
+
+
+<p class="p">"Once that's done, we are done with our initial run for the display of a component!"</p><p class="it"><a class="indexterm">"Bonito." exclamó Shawn.</a></p>
+
+
+<p class="p">"Nice." exclaimed Shawn.</p><p class="it"><a class="indexterm">"Ahora, hemos añadido un simple evento <code class="literal">onClick</code>. Esto exige <code class="literal">this.toggleState</code>, que alterna el estado actual de <code class="literal">true</code> a <code class="literal">false</code> y viceversa."</a></p>
+
+
+<p class="p">"Now, we have added a simple <code class="literal">onClick</code> event. This calls <code class="literal">this.toggleState</code>, which toggles the current status from <code class="literal">true</code> to <code class="literal">false</code> and vice versa."</p><p class="it"><a class="indexterm">Como se ve afectado el estado, React vuelve a renderizar el componente <code class="literal">App</code>. Podemos ver la secuencia de llamadas al método cuando esto sucede, lo siguiente:"</a></p>
+
+
+<p class="p">As the state is affected, React re-renders the <code class="literal">App</code> component. We can see the method call sequence when this happens, as follows:"</p><div class="informalexample"><pre class="programlisting">"…"<br></br>
+"shouldComponentUpdate"<br></br>
+"componentWillUpdate"<br></br>
+"render"<br></br>
+"…"</pre></div><p class="it"><a class="indexterm">"Ah, bueno. Se fue a través de otro ciclo de re-renderizado." dijo Shawn.</a></p>
+
+
+<p class="p">"Ah, nice. It went through another re-render cycle." said Shawn.</p><p class="it"><a class="indexterm">"Correcto. Cuando el estado se cambió, React sabía que tenía que volver a re-renderizar el componente <code class="literal">App</code>. Se llama primero a <code class="literal">shouldComponentUpdate</code>. Este método devuelve <code class="literal">true</code> o <code class="literal">false</code> indicando a React si dibujar el componente o no.</a></p>
+
+
+<p class="p">"Correct. When the state was changed, React knew it needed to re-render the <code class="literal">App</code> component. It calls <code class="literal">shouldComponentUpdate</code> first. This method returns <code class="literal">true</code> or <code class="literal">false</code> indicating React to render the component or not.</p><p class="it"><a class="indexterm">"También podemos controlar si el componente se debe volver a re-renderizar ni siquiera si el estado se actualiza. Este método puede devolver <code class="literal">false</code> y luego React no volver a renderizar el componente incluso si se cambia el estado."</a></p>
+
+
+<p class="p">"We can also control whether the component should be re-rendered or not even if the state gets updated. This method can return <code class="literal">false</code> and then React will not re-render the component even if the state is changed."</p><div class="informalexample"><pre class="programlisting">    shouldComponentUpdate: function(nextProps, nextState){<br></br>
+      console.log('shouldComponentUpdate');<br></br>
+      return false; // Will not re-render the component.<br></br>
+    },</pre></div><p class="it"><a class="indexterm">"También podemos comparar <code class="literal">nextProps</code> y <code class="literal">nextState</code> a los valores existentes y luego decidir si se debe re-renderizar."</a></p>
+
+
+    <p class="p">"We can also compare <code class="literal">nextProps</code> and <code class="literal">nextState</code> to the existing values and then decide whether to re-render."</p><p class="it"><a class="indexterm">"Impresionante, esto significa que podríamos obtener componentes más rápido!" exclamó Shawn.</a></p>
+
+
+    <p class="p">"Awesome, this means that we could get faster components!" Shawn exclaimed.</p><p class="it"><a class="indexterm">"Exactamente. Por omisión, siempre devuelve verdadero, para renderizar siempre los cambios." Mike concluyó.</a></p>
+
+
+    <p class="p">"Exactly. By default, it always returns true, to always render on changes." Mike concluded.</p><p class="it"><a class="indexterm">"El siguiente, <code class="literal">componentWillUpdate</code> se llamará justo antes <code class="literal">rendering</code>. Nos ocupamos de cualquier cambio que </a><a id="id90" class="indexterm">nos gustaría hacer o cualquier servicio de limpieza. Una cosa a tener en cuenta es que no podemos llamar <code class="literal">setState</code> en este método. Las actualizaciones de estado deben ser manejadas en otro lugar."</a></p>
+
+
+    <p class="p">"Next up, <code class="literal">componentWillUpdate</code> will get called just before <code class="literal">rendering</code>. We can take care of any changes that <a class="indexterm"></a>we would like to do or any housekeeping. One thing to note is that we can't call <code class="literal">setState</code> in this method. State updates should be handled elsewhere."</p><p class="it"><a class="indexterm">"Oh, está bien," Shawn.</a></p>
+
+
+    <p class="p">"Oh, ok," Shawn.</p><p class="it"><a class="indexterm">"Sólo nos queda <code class="literal">componentWillReceiveProps</code>."</a></p>
+
+
+    <p class="p">"We are only left with <code class="literal">componentWillReceiveProps</code>."</p><div class="informalexample"><pre class="programlisting"> componentWillReceiveProps: function(nextProps){<br></br>
+      console.log('componentWillReceiveProps');<br></br>
+    },</pre></div><p class="it"><a class="indexterm">"Se recibe <code class="literal">nextProps</code>, que son los nuevos props que el componente secundario recibe del componente padre. Este método no es llamado para el render inicial. Podemos actualizar el estado o hacer algún otro trabajo de limpieza basado en los cambios en los props."</a></p>
+
+
+    <p class="p">"It receives <code class="literal">nextProps</code>, which are the new props that the child component receives from the parent component. This method is not called for initial render. We can update the state or do some other housekeeping work based on the changes in props."</p><p class="it"><a class="indexterm">"Agradable, Mike. Pienso que estoy consiguiendo una mejor truco para esto."</a></p>
+
+
+    <p class="p">"Nice, Mike. I think I am getting a better hang of this."</p><p class="it"><a class="indexterm">"Por último, tenemos <code class="literal">componentWillUnmount</code>. Esto se llama cuando el componente se desmonta del body. Podemos usar esto para liberar los recursos, realizar limpiezas, no se ha establecido ningún temporizador, y así sucesivamente."</a></p>
+
+
+    <p class="p">"Finally, we have <code class="literal">componentWillUnmount</code>. This is called when the component is unmounted from the body. We can use this to release the resources, perform cleanups, unset any timers, and so on."</p><p class="it"><a class="indexterm">"Lo tengo."</a></p>
+
+
+    <p class="p">"Got it."</p><p class="it"><a class="indexterm">"Muy bien! Vamos a actualizar nuestro componente para empezar a ir a buscar la información de </a><a class="ulink" href="https://openlibrary.org/">https://openlibrary.org/</a> ."</p>
+
+
+    <p class="p">"Alright! Let's update our component to start fetching the information from <a class="ulink" href="https://openlibrary.org/">https://openlibrary.org/</a>."</p><p class="it">"Por lo tanto, lo que vamos a hacer es actualizar el <code class="literal">componentDidMount</code> para realizar una llamada AJAX y obtener los datos a mostrar."</p>
+
+
+    <p class="p">"So, what we will be doing is updating the <code class="literal">componentDidMount</code> to perform an AJAX call and fetch data to display."</p><div class="informalexample"><pre class="programlisting">  componentDidMount : function(){<br></br>
+    $.ajax({<br></br>
+      url: 'http://openlibrary.org/recentchanges.json?limit=10',<br></br>
+      context: this,<br></br>
+      dataType: 'json',<br></br>
+      type: 'GET'<br></br>
+    }).done(function (data) {<br></br>
+      var changeSets = this.mapOpenLibraryDataToChangeSet(data);<br></br>
+      this.setState({changeSets: changeSets});<br></br>
+    });<br></br>
+  }</pre></div><p class="it">"En este caso, estamos <a id="id91" class="indexterm">haciendo una llamada a </a><a class="ulink" href="http://openlibrary.org/recentchanges.json?limit=10">http://openlibrary.org/recentchanges.json?limit=10</a> y pedir los diez cambios más recientes, vamos a obtener los datos en el siguiente formato:".</p>
+
+
+  <p class="p">"Here, we are <a class="indexterm"></a>making a call to <a class="ulink" href="http://openlibrary.org/recentchanges.json?limit=10">http://openlibrary.org/recentchanges.json?limit=10</a> and asking for the ten most-recent changes. We will get the data in the following format:"</p><div class="informalexample"><pre class="programlisting">[{<br></br>
+     comment:   "Added new cover",<br></br>
+     kind:      "add-cover",<br></br>
+     author:    {<br></br>
+         key: "/people/fsrc"<br></br>
+     },<br></br>
+     timestamp: "2015-05-25T19:20:33.981700",<br></br>
+     changes:   [<br></br>
+                    {<br></br>
+                        key:      "/books/OL25679864M",<br></br>
+                        revision: 2<br></br>
+                    }<br></br>
+                ],<br></br>
+     ip:        null,<br></br>
+     data:      { url: "" },<br></br>
+     id:        "49441324"<br></br>
+ }, <br></br>
+{<br></br>
+…<br></br>
+}<br></br>
+]</pre></div><p class="it">"Vamos a necesitar para dar formato a los datos de acuerdo con nuestras necesidades para que quede bien representada. Vamos a echarle un vistazo:".</p>
+
+
+<p class="p">"We will need to format the data as per our requirements so that it's displayed nicely. Let's take a look at it:"</p><div class="informalexample"><pre class="programlisting">mapOpenLibraryDataToChangeSet : function (data) {<br></br>
+  return data.map(function (change, index) {<br></br>
+    return {<br></br>
+      "when": jQuery.timeago(change.timestamp),<br></br>
+      "who": change.author.key,<br></br>
+      "description": change.comment<br></br>
+    }<br></br>
+  });<br></br>
+} </pre></div><p class="it">"Aquí, estamos extrayendo la timestamp, author information, y la descripción del cambio, que es el comentario en el cambio. A medida que el tiempo ha cambiado es una timestamp, hemos hecho uso del plugin <code class="literal">jQuery.timeago</code> para obtener una clasificación conveniente de tiempo, tales como <code class="literal">2 minutes ago</code> y así sucesivamente. para utilizar este plugin, es necesario incluirlo en nuestra etiqueta HTML <code class="literal">head</code>". Mike explicó.</p>
+
+
+<p class="p">"Here, we are extracting the timestamp, author information, and description of the change, which is the comment in the change. As the changed time is a timestamp, we have made use of the <code class="literal">jQuery.timeago</code> plugin to get desirable display of time, such as <code class="literal">2 minutes ago</code> and so forth. To use this plugin, we need to include it in our HTML <code class="literal">head</code> tag." Mike explained.</p><div class="informalexample"><pre class="programlisting">&lt;script src="jquery.timeago.js" type="text/javascript"&gt;&lt;/script&gt;</pre></div><p class="it">"Parece que es todo <a id="id92" class="indexterm">que se une." Shawn.</a></p>
+
+
+<p class="p">"Looks like it's all <a class="indexterm"></a>coming together." Shawn.</p>
+
+
+<p class="it"><a class="indexterm">"Vamos a echar un vistazo a todo en la acción, ¿de acuerdo?"</a></p>
+
+
+<p class="p">"It is, let's take a look at everything in action, shall we?"</p><div class="informalexample"><pre class="programlisting">var Heading = React.createClass({<br></br>
+    render: function () {<br></br>
+        var headingStyle = {<br></br>
+            backgroundColor: 'FloralWhite',<br></br>
+            fontSize: '19px'<br></br>
+        };<br></br>
+        return (&lt;th style={headingStyle}&gt; {this.props.heading} &lt;/th&gt;);<br></br>
+    }<br></br>
+});<br></br>
+var Headings = React.createClass({<br></br>
+    render: function () {<br></br>
+        var headings = this.props.headings.map(function (name, index) {<br></br>
+            return (&lt;Heading key={"heading-" + index} heading={name}/&gt;);<br></br>
+        });<br></br>
+<br></br>
+        return (&lt;tr className='table-th'&gt; {headings} &lt;/tr&gt;);<br></br>
+    }<br></br>
+});<br></br>
+var Row = React.createClass({<br></br>
+    render: function () {<br></br>
+        var trStyle = {backgroundColor: 'aliceblue'};<br></br>
+        return (&lt;tr style={trStyle}&gt;<br></br>
+            &lt;td&gt; {this.props.changeSet.when} &lt;/td&gt;<br></br>
+            &lt;td&gt; {this.props.changeSet.who} &lt;/td&gt;<br></br>
+            &lt;td&gt; {this.props.changeSet.description} &lt;/td&gt;<br></br>
+        &lt;/tr&gt;);<br></br>
+    }<br></br>
+});<br></br>
+var Rows = React.createClass({<br></br>
+    render: function () {<br></br>
+        var rows = this.props.changeSets.map(function (changeSet, index) {<br></br>
+            return (&lt;Row key={index} changeSet={changeSet}/&gt;);<br></br>
+        });<br></br>
+<br></br>
+        return (&lt;tbody&gt;{rows}&lt;/tbody&gt;);<br></br>
+    }<br></br>
+});<br></br>
+<br></br>
+var App = React.createClass({<br></br>
+    getInitialState: function () {<br></br>
+        return {changeSets: [];<br></br>
+    },<br></br>
+    mapOpenLibraryDataToChangeSet: function (data) {<br></br>
+        return data.map(function (change, index) {<br></br>
+            return {<br></br>
+                "when": jQuery.timeago(change.timestamp),<br></br>
+                "who": change.author.key,<br></br>
+                "description": change.comment<br></br>
+            }<br></br>
+        });<br></br>
+    },<br></br>
+    componentDidMount: function () {<br></br>
+        $.ajax({<br></br>
+            url: 'http://openlibrary.org/recentchanges.json?limit=10',<br></br>
+            context: this,<br></br>
+            dataType: 'json',<br></br>
+            type: 'GET'<br></br>
+        }).done(function (data) {<br></br>
+            var changeSets = this.mapOpenLibraryDataToChangeSet(data);<br></br>
+            this.setState({changeSets: changeSets});<br></br>
+        });<br></br>
+    },<br></br>
+<br></br>
+    render: function () {<br></br>
+        return (&lt;table className='table'&gt;<br></br>
+            &lt;Headings headings={this.props.headings}/&gt;<br></br>
+            &lt;Rows changeSets={this.state.changeSets}/&gt;<br></br>
+        &lt;/table&gt;);<br></br>
+    }<br></br>
+});<br></br>
+<br></br>
+var headings = ['Updated at ', 'Author', 'Change'];<br></br>
+React.render(&lt;App headings={headings} /&gt;, document.body);</pre></div><p class="it"><a class="indexterm">"Aquí está nuestro producto final!", Exclamó Mike.</a></p>
+
+
+<p class="p">"Here's our final product!", exclaimed Mike.</p><p class="it"><a class="indexterm">"Impresionante, no puedo esperar a ver lo que construimos más adelante!" Añadió Shawn.</a></p>
+
+
+<p class="p">"Awesome, I can't wait to see what we build next!" Shawn added.</p><p class="it"><a class="indexterm">Otro productivo </a><a id="id93" class="indexterm">día en Adequate. Mike y Shawn, muy contentos con el progreso.</a></p>
+
+
+<p class="p">Another productive <a class="indexterm"></a>day at Adequate. Mike and Shawn, happy with the progress, headed back.</p></div></body></html>

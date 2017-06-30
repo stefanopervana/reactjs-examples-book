@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 9. React Router and Data Models</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="chapter" title="Chapter 9. React Router and Data Models"><div class="titlepage"><div><div><h1 class="title"><a id="ch09"></a>Chapter 9. React Router and Data Models</h1></div></div></div><p class="it"><a>En el capítulo anterior, nos dimos un vistazo a la React herramientas de rendimiento que podes mejorar el rendimiento de nuestras aplicaciones React. Hemos explorado el uso de la PERF complemento, PureRenderMixin, y así sucesivamente y echamos un vistazo a algunos de los aspectos críticos relacionados con las herramientas de rendimiento proporcionados por React.</a></p>
+
+
+<p class="p">In the previous chapter, we took a look at the React performance tools that can improve performance of our React apps. We explored using the PERF add-on, PureRenderMixin, and so on and took a look at some of the gotchas related to the performance tools provided by React.</p><p class="it"><a>En este capítulo, vamos a echar un vistazo más de cerca a React-router y hacer encaminamiento a diferentes niveles. Vamos a echar un vistazo a enrutamiento anidada y que pasa alrededor de los parámetros, así como ver cómo React-router mantiene la historia cuando se realizan tareas de enrutamiento. También vamos a echar un vistazo a pasar y el uso de contexto para hacer React los componentes. Por último, vamos a explorar ficha modelos y mezclar y combinar con otros marcos de usar como modelos de datos en React, Backbone en este caso.</a></p>
+
+
+<p class="p">In this chapter, we will take a closer look at react-router and perform routing at different levels. We will take a look at nested routing and passing around parameters, as well as see how react-router maintains history when performing routing tasks. We will also take a look at passing and using context to render React Components. Finally, we will explore data-models and mix and match them with other frameworks to use as data models in React, Backbone in this case.</p><p class="it"><a>En este capítulo, vamos a cubrir los siguientes temas:</a></p>
+
+
+<p class="p">In this chapter, we will cover the following topics:</p><div class="itemizedlist"><ul class="itemizedlist">
+
+
+<li class="it"><a>React en sus aplicaciones</a></li>
+
+<li class="listitem" style="list-style-type: disc">React in your apps</li>
+
+
+<li class="it"><a>Enrutamiento con React-enrutador</a></li>
+
+<li class="listitem" style="list-style-type: disc">Routing with react-router</li>
+
+
+<li class="it"><a>Mecanismo de enrutamiento diferente</a></li>
+
+<li class="listitem" style="list-style-type: disc">Different routing mechanism</li>
+
+
+<li class="it"><a>Configuración de enrutamiento y que pasa alrededor del contexto de enrutamiento</a></li>
+
+<li class="listitem" style="list-style-type: disc">Setting up routing and passing around the routing context</li>
+
+
+<li class="it"><a>React y almacena datos / modelos</a></li>
+
+<li class="listitem" style="list-style-type: disc">React and data stores/models</li>
+
+
+<li class="it"><a>El uso de modelos / colecciones como almacenes de datos Backbone</a></li>
+
+<li class="listitem" style="list-style-type: disc">Using Backbone models/collections as data stores</li>
+
+
+</ul></div><p class="it"><a>Al final del capítulo, vamos a ser capaces de empezar a utilizar el React-router y diferentes patrones de enrutamiento y comenzar a pasar los datos de contexto en el encaminamiento. También vamos a ser capaces de reemplazar las piezas de los modelos de datos de civil con los gustos de Backbone.js.</a></p>
+
+
+<p class="p">At the end of chapter, we will be able to start using the react-router and different routing patterns and start passing around context data in routing. We will also be able to replace parts of plain data models with the likes of Backbone.js.</p><div class="section" title="A new adventure"><div class="titlepage"><div><div><h1 class="title"><a id="ch09lvl1sec70"></a>A new adventure</h1></div></div></div>div class="section" title="Una nueva aventura"&gt;<div class="titlepage"><div><div><h1 class="title"><a>Una nueva aventura</a></h1></div></div></div> <p class="it"><a>"Hola Shawn y Mike!" -exclamó Carla.</a></p>
+
+
+<p class="p">"Hi Shawn and Mike!" exclaimed Carla.</p><p class="it"><a>Shawn y Mike se sorprendieron. Acababan y estaban a punto de comenzar el día. Los últimos días habían sido una gran cantidad de React exploración para ellos.</a></p>
+
+
+<p class="p">Shawn and Mike were startled. They had just got in and were about to start their day. The past few days had been a lot of React exploration for them.</p><p class="it"><a>"Tengo buenas noticias para ustedes Tenemos un nuevo proyecto, en el que necesitamos para construir un sitio de interés basada en gato Algo como por ejemplo -..?. Pinterest Los usuarios podes recibir imágenes y perfiles de los gatos que podes entonces ver y como relacionados artículos para la venta, así," continuó Carla.</a></p>
+
+
+<p class="p">"I have some good news for you guys. We got a new project, where we need to build a cat-based interest site. Something like say – Pinterest? Users can like images and profiles of cats. They can then see and like related articles for sale, as well," continued Carla.</p><p class="it"><a>"Oh, bien," respondió Shawn.</a></p>
+
+
+<p class="p">"Oh, nice," replied Shawn.</p><p class="it"><a>Shawn y Mike se reagruparon y comenzaron una conversación sobre el nuevo proyecto que acabamos de escuchar de Carla.</a></p>
+
+
+<p class="p">Shawn and Mike regrouped and started a conversation about the new project that they just heard from Carla.</p><p class="it"><a>"Esto es bueno. Así que, supongo, queremos mostrar una pequeña galería de estilo Pinterest de imágenes en las formas del panel?" preguntó Shawn.</a></p>
+
+
+<p class="p">"This is nice. So, I guess, we want to display a small Pinterest-style gallery of images in panel shapes?" inquired Shawn.</p><p class="it"><a>"Correcta", continuó Mike. "También queremos mostrar las imágenes en gran escala, tal vez en un modal después de un usuario hace clic en la imagen. Carla dijo que quiere que los gatos al azar para ser presentado en el pie de página, que nos debe llevar a una página de pleno derecho de visualización gato. "</a></p>
+
+
+<p class="p">"Correct," continued Mike. "We also want to display the images in large scale, maybe in a modal after a user clicks on the image. Carla said she wants random cats to be featured in the footer, which should take us to a full-fledged cat display page."</p><p class="it"><a>"¿Sabes qué, sé que la cosa perfecta que vamos uso. Vamos a echar un vistazo a React-enrutador hoy! También sé el ejemplo perfecto para empezar. Vamos a mirar el </a><a id="id252" class="indexterm">ejemplo de Pinterest de React-enrutador en </a><a class="ulink" href="https://github.com/rackt/react-router/tree/master/examples/pinterest">https://github.com/rackt/react-router/tree/master/examples/pinterest</a> . a continuación, vamos a construir nuestra aplicación en la parte superior de la misma ".</p>
+
+
+<p class="p">"You know what, I know the perfect thing that we are going use. Let's take a look at react-router today! I also know the perfect example to start with. We are going to look at the <a class="indexterm"></a>Pinterest example from react-router at <a class="ulink" href="https://github.com/rackt/react-router/tree/master/examples/pinterest">https://github.com/rackt/react-router/tree/master/examples/pinterest</a>. We will then build our app on top of it."</p><p class="it">"Agradable", dijo Shawn. "Puedo ver el ejemplo existente tiene algunas de las cosas que hemos discutido, como la pantalla modal. Vamos a ver cómo se ve el ejemplo".</p>
+
+
+<p class="p">"Nice," said Shawn. "I can see the existing example has some of the things that we discussed, such as the modal display. Let me see how the example looks."</p><p class="it">Shawn miraba el ejemplo, que era como sigue:</p>
+
+
+<p class="p">Shawn looked at the example, which was as follows:</p><div class="informalexample"><pre class="programlisting">import React from 'react'
+import { render } from 'react-dom'
+import { browserHistory, Router, Route, IndexRoute, Link } from 'react-router'
+…
+const PICTURES = [
+  { id: 0, src: 'http://placekitten.com/601/601' },
+  { id: 1, src: 'http://placekitten.com/610/610' },
+  { id: 2, src: 'http://placekitten.com/620/620' }
+]
+const Modal = React.createClass({
+… // Modal Class implementation
+ })
+
+const App = React.createClass({
+  componentWillReceiveProps(nextProps) {
+// takes care of context in case of Modals
+  },
+  render() {
+// Main render for Modal or Cat Pages
+ }
+})
+
+const Index = React.createClass({
+  render() {
+// Index page render 
+..
+        &lt;div&gt;
+          {PICTURES.map(picture =&gt; (
+            &lt;Link key={picture.id}
+              to={{
+                pathname: `/pictures/${picture.id}`,
+                state: { modal: true, returnTo: this.props.location.pathname }
+              }}
+            &gt;
+              &lt;img style={{ margin: 10 }} src={picture.src} height="100" /&gt;
+            &lt;/Link&gt;
+          ))}
+        &lt;/div&gt;
+.. // Usage of React Router Links
+        &lt;p&gt;&lt;Link to="/some/123/deep/456/route"&gt;Go to some deep route&lt;/Link&gt;&lt;/p&gt;
+      &lt;/div&gt;
+    )
+  }
+})
+
+const Deep = React.createClass({
+  render() {
+// Render handler for some deep link
+   )
+  }
+})
+
+const Picture = React.createClass({
+  render() {
+    return (
+      &lt;div&gt;
+// Pictures display
+        &lt;img src={PICTURES[this.props.params.id].src} style={{ height: '80%' }} /&gt;
+      &lt;/div&gt;
+    )
+  }
+})
+
+// The actual Routing logic using Router Library.
+render((
+  &lt;Router history={browserHistory}&gt;
+    &lt;Route path="/" component={App}&gt;
+      &lt;IndexRoute component={Index}/&gt;
+      &lt;Route path="/pictures/:id" component={Picture}/&gt;
+      &lt;Route path="/some/:one/deep/:two/route" component={Deep}/&gt;
+    &lt;/Route&gt;
+  &lt;/Router&gt;
+), document.getElementById('example'))</pre></div><p class="it">"Parece interesante", dijo Shawn.</p>
+
+
+<p class="p">"Looks interesting," said Shawn.</p><p class="it">"Sí, vamos a ir a través de los componentes que necesitamos para crear uno por uno. Para empezar, vamos a ver cómo vamos a almacenar nuestros datos y mostrar los datos de gatos en todo el sistema. En la actualidad, las imágenes se almacenan en la <code class="literal">PICTURES</code> constante. nos gustaría para almacenar más que eso ".</p>
+
+
+<p class="p">"Yeah, let's go through the components that we need to create one by one. To begin with, let's see how we are going to store our data and display the cat data across the system. Currently, the images are stored in the <code class="literal">PICTURES</code> constant. We would like to store more than that."</p></div></div></body></html>

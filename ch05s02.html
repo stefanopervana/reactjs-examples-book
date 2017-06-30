@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Adding a modal</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Adding a modal"><div class="titlepage"><div><div><h1 class="title"><a id="ch05lvl1sec54"></a>Adding a modal</h1></div></div></div><p class="it"><a>"Está bien, esto </a><a id="id141" class="indexterm">funciona bien," continuó Mike.</a></p>
+
+
+<p class="p">"Alright, this <a class="indexterm"></a>works well," continued Mike.</p><p class="it"><a class="indexterm">"Sin embargo, es un poco torpe en este momento. Después de que el tiempo de espera, no hay nada que un usuario podes hacer. Podemos añadir una ventana emergente para notificar al usuario. En lugar de mostrar la página de error, vamos a mostrar un referente con una alerta y redirigir al usuario a la primera página de modo que el usuario podes reiniciar fluxe. se podes utilizar Bootstrap modal para lograrlo ".</a></p>
+
+
+<p class="p">"However, it's a bit clumsy right now. After the timeout, there's nothing a user can do. We can add a popup to notify the user. Instead of showing the error page, let's display a modal with an alert and redirect the user to the first page so that the user can restart the flow. We can use Bootstrap modal to achieve this."</p><p class="it"><a class="indexterm">"Entendido. ¿Quieres que darle una oportunidad?" Shawn se le preguntó.</a></p>
+
+
+<p class="p">"Got it. Want me to give it a try?" asked Shawn.</p>
+
+<p class="it"><a class="indexterm">"¡Adelante!"</a></p>
+
+
+<p class="p">"Go ahead!"</p>
+
+<p class="it"><a class="indexterm">"Permítanme comenzar con la creación de la modal primero. Voy a utilizar un simple modal de arranque para mostrarlo. Después de que se han hecho, necesitaré para invocar la pantalla de la modal del <code class="literal">alertCartTimeout</code>, yo </a><a id="id142" class="indexterm">supongo. También será la creación de para mostrar la primera página y formar Restablecer datos ".</a></p>
+
+
+<p class="p">"Let me start with setting up the modal first. I will use a simple bootstrap modal to display it. After that's done, I will need to invoke display of the modal from <code class="literal">alertCartTimeout</code>, I <a class="indexterm"></a>guess. I will also be setting up to display the first page and reset form data."</p><p class="it"><a class="indexterm">"Correcto."</a></p>
+
+
+<p class="p">"Correct."</p><p class="it"><a class="indexterm">"Así es como el modal se verá"</a></p>
+
+
+<p class="p">"This is how the modal will look"</p><div class="informalexample"><pre class="programlisting">import React from 'react';
+
+var ModalAlertTimeout = React.createClass({
+  render() {
+    return (
+
+      &lt;div className="modal fade" ref='timeoutModal'&gt;
+        &lt;div className="modal-dialog"&gt;
+          &lt;div className="modal-content"&gt;
+            &lt;div className="modal-header"&gt;
+              &lt;button type="button" className="close" data-dismiss="modal" aria-label="Close"&gt;&lt;span aria-hidden="true"&gt;×&lt;/span&gt;&lt;/button&gt;
+              &lt;h4 className="modal-title"&gt;Timeout&lt;/h4&gt;
+            &lt;/div&gt;
+            &lt;div className="modal-body"&gt;
+              &lt;p&gt;The cart has timed-out. Please try again!&lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+});
+module.exports = ModalAlertTimeout;</pre></div><p class="it"><a class="indexterm">"Niza. A continuación, será la actualización del <code class="literal">Bookstore</code> componente de <code class="literal">alertCartTimeout</code> método".</a></p>
+
+
+<p class="p">"Nice. Next, you will be updating the <code class="literal">Bookstore</code> component <code class="literal">alertCartTimeout</code> method."</p><p class="it"><a class="indexterm">"Sí, he añadido un nuevo elemento HTML con el vacío <code class="literal">modalAlertTimeout</code>.. De identificación para el cuerpo Esto se utiliza para mostrar la nueva modal y montaje de componentes en la parte superior de la misma que también modifica el método de tiempo de espera de alerta a lo siguiente:"</a></p>
+
+
+<p class="p">"Yeah, I added a new empty HTML element with the <code class="literal">modalAlertTimeout</code> ID to the body. This will be used to display new modal and mount component on top of it. I also changed alert timeout method to the following:"</p><div class="informalexample"><pre class="programlisting">alertCartTimeout(){
+    React.render(&lt;ModalAlertTimeout /&gt;, document.getElementById('modalAlertTimeout'));
+    this.setState({currentStep: 1, formValues: {}, cartTimeout: 1});
+  }</pre></div><p class="it"><a class="indexterm">"Ah, vamos a ver lo que esto significa", continuó Mike, comprobando los cambios que Shawn había hecho ".</a></p>
+
+
+  <p class="p">"Ah, let's see what this does" continued Mike, checking the changes that Shawn had done."</p><p class="it"><a class="indexterm">"Shawn, parece que el tiempo de espera nos lleva a la primera página, pero no es mostrar la alerta modal"</a></p>
+
+
+  <p class="p">"Shawn, looks like the timeout is taking us to the first page, but its not displaying the modal alert"</p><p class="it"><a class="indexterm">"Oh, está bien. Todavía tenemos que invocar la visualización de la modal desde el arranque."</a></p>
+
+
+  <p class="p">"Oh, right. We still need to invoke the display of the modal from bootstrap."</p><p class="it"><a class="indexterm">"Vamos correcta que me ocupe de </a><a id="id143" class="indexterm">eso, Shawn En nuestro. <code class="literal">ModalAlertTimeout</code>, Se añadirá una llamada a un método para visualizar el modal después de que el componente ha montado correctamente, de la siguiente manera:"</a></p>
+
+
+  <p class="p">"Correct. Let me take care of <a class="indexterm"></a>that, Shawn. In our <code class="literal">ModalAlertTimeout</code>, we will add a method call to display the modal after the component has successfully mounted, as follows:"</p><div class="informalexample"><pre class="programlisting">componentDidMount(){
+    setTimeout(()=&gt; {
+      let timeoutModal = this.refs.timeoutModal.getDOMNode();
+      $(timeoutModal).modal('show');
+    }, 100);
+  }</pre></div><p class="it"><a class="indexterm">"Ah, veo que estamos haciendo algunas cosas DOM aquí."</a></p>
+
+
+  <p class="p">"Ah, I see we are doing some DOM stuff here."</p><p class="it"><a class="indexterm">"Sí, me dejó ir sobre ellos."</a></p>
+
+
+  <p class="p">"Yeah, let me go over them."</p></div></body></html>

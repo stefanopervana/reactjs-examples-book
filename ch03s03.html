@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Specifying default props</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Specifying default props"><div class="titlepage"><div><div><h1 class="title"><a id="ch03lvl1sec30"></a>Specifying default props</h1></div></div></div>
+
+
+<p class="it"><a>"Shawn, React también </a><a id="id71" class="indexterm">nos permite definir algunos valores por defecto para los Props. Esto es útil cuando el componente padre está pasando props en base a alguna condición o no de pasar algunos props a todos debido a algún cambio", dijo Mike.</a></p>
+
+
+<p class="p">"Shawn, React also <a class="indexterm"></a>allows us to define some default values for props. This is useful when parent component is passing props based on some condition or not passing some props at all due to some change," Mike said.</p><div class="informalexample"><pre class="programlisting">var App = React.createClass({<br></br>
+<br></br>
+ getDefaultProps: function() {<br></br>
+    return {<br></br>
+      headings: ['When happened ', 'Who did it', 'What they change']<br></br>
+    };<br></br>
+  },<br></br>
+  <br></br>
+  render: function(){<br></br>
+            …<br></br>
+  }<br></br>
+});<br></br>
+<br></br>
+var data = [{ "when": "2 minutes ago",<br></br>
+              "who": "Jill Dupre",<br></br>
+              "description": "Created new account"<br></br>
+            },<br></br>
+            {<br></br>
+              "when": "1 hour ago",<br></br>
+              "who": "Lose White",<br></br>
+              "description": "Added first chapter"<br></br>
+            }];<br></br>
+<br></br>
+React.render(&lt;App changeSets={data}/&gt;, document.body);</pre></div><p class="it"><a class="indexterm">"Aquí, actualizamos el código para no enviar los encabezados de los Props. En lugar de ello, se utilizó la función <code class="literal">getDefaultProps</code> para definir los props por defecto que se utilizarán en caso de que no se pasen."</a></p>
+
+
+<p class="p">"Here, we updated the code to not send the headings from props. Instead, we used the <code class="literal">getDefaultProps</code> function to define the default props that will be used in case they are not passed."</p><div class="mediaobject"><img src="graphics/4730_03_02.jpg" alt="Specifying default props"/></div><p class="it"><a class="indexterm">"Por lo tanto, nuestra producción </a><a id="id72" class="indexterm">se parece a esto."</a></p>
+
+
+<p class="p">"Therefore, our output <a class="indexterm"></a>looks like this."</p><p class="it"><a class="indexterm">"Oh, está bien. En lugar de manipular las cláusulas if-else para comprobar si el prop está presente, los accesorios por defecto lo hacen lo suficientemente simple para predefinir nuestros datos", dijo Shawn.</a></p>
+
+
+<p class="p">"Oh, ok. Makes sense. Rather than fiddling with the if-else clauses to check whether the prop is present, default props make it simple enough to predefine our data." said Shawn.</p></div></body></html>

@@ -1,0 +1,433 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Setting up Redux</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Setting up Redux"><div class="titlepage"><div><div><h1 class="title"><a id="ch13lvl1sec88">Setting up Redux</a></h1></div></div></div><p class="it"><a>"Ahora, hay </a><a id="id355" class="indexterm">diferentes cosas que suceden aquí para configurar nuestra tienda. Vamos a ir a través de ellos, un ala :."</a></p>
+
+<p class="p">"Now, there are <a class="indexterm">different things happening here to set up our store. Let's go through them, one wing:."</a></p><div class="itemizedlist"><ul class="itemizedlist">
+<li class="it"><a class="indexterm"><code class="literal">mapStateToProps</code>: Utilizamos este método para definir cómo vamos a mapear el estado de la tienda de Redux a los props de ser enviado a los componentes conectados a escuchar a la tienda. Siempre que los nuevos cambios ocurren en la tienda, los componentes de recibir una notificación y se pasan a la carga útil objetivo de este método.</a></li>
+
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">mapStateToProps</code>: We use this method to define how we are going to map the state from the Redux store to the props being sent to the components connected to listen to the store. Whenever new changes happen in the store, the components get notified and are passed to the object payload from this method.</li><li class="it"><a class="indexterm"><code class="literal">mapDispatchToProps</code>: Este método se utiliza para asignar las acciones y pasarlos sobre los apoyos para que puedan ser utilizados dentro del componente.</a></li>
+
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">mapDispatchToProps</code>: This method is used to map the Actions and pass them on the props so that they can be used from within the component.</li><li class="it"><a class="indexterm"><code class="literal">bindActionCreators</code>: Esto se utiliza para envolver nuestra acciones creador ( <code class="literal">SocialActions</code>) en las llamadas de despacho para apoyar las acciones de llamar directamente. Esto ayuda a llamar a las acciones y notificar a la tienda para las actualizaciones, que se realizan debido a la expedición.</a></li>
+
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">bindActionCreators</code>: This is used to wrap our Actions creator (<code class="literal">SocialActions</code>) into dispatch calls to support calling the actions directly. This helps to call the actions and notify the store for updates, which are done due to the dispatch.</li><li class="it"><code class="literal">connect</code>: Por último, tenemos la llamada connect. En realidad, esto conecta el componente React a la tienda. No cambia el componente original, pero realza y crea una nueva. entonces podemos empezar a utilizar las acciones de nuestro componente.</li>
+
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">connect</code>: Finally, we have the connect call. This actually connects the React component to the store. It does not change the original component, but enhances and creates a new one. We can then start using the Actions from our component.</li></ul></div><p class="it"><a class="indexterm">"Entendido. Por lo tanto, estamos creando dos métodos para mapear cómo deben ponerse a disposición de las acciones y el estado de Redux al componente. Estamos entonces conectando la tienda a Redux con el fin de escuchar a los cambios y hacer las acciones y tiendas disponibles al componente cuando hay cambios a la tienda ".</a></p>
+
+<p class="p">"Got it. So, we are creating two methods to map how the actions and state from Redux should be made available to the component. We are then connecting the store to Redux in order to listen to the updates and make the actions and stores available to the component when there are updates to the store."</p><p class="it"><a class="indexterm">"Sí Estamos entonces vamos a empezar a utilizar esta configuración en el índice, como se muestra en el código siguiente:"</a></p>
+
+<p class="p">"Yup. We are then going to start using this setup in the index, as shown in the following code:"</p><div class="informalexample"><pre class="programlisting">import React from 'react'<br></br>
+import { render } from 'react-dom'<br></br>
+import { Provider } from 'react-redux'<br></br>
+import App from './containers/App'<br></br>
+import configureStore from './store/configureStore'<br></br>
+<br></br>
+const store = configureStore()<br></br>
+<br></br>
+render(<br></br>
+  &lt;Provider store={store}&gt;<br></br>
+    &lt;App /&gt;<br></br>
+  &lt;/Provider&gt;,<br></br>
+  document.getElementById('root')<br></br>
+)</pre></div><p class="it"><a class="indexterm">"El <code class="literal">Provider</code> componente del <code class="literal">react-redux</code> módulo nos permite conectar los componentes a las tiendas. Se acepta una tienda que estamos creando como el estado tienda inicial. El <code class="literal">Provider</code> componente pone a disposición de los componentes que están conectados a saber de la tienda de esta tienda. Esta es lo que hicimos en nuestro archivo anterior mediante la conexión a la tienda ".</a></p>
+
+<p class="p">"The <code class="literal">Provider</code> component from the <code class="literal">react-redux</code> module allows us to connect the components to the stores. It accepts a store that we are setting up as the initial store state. The <code class="literal">Provider</code> component makes this store available to the components that are connected to hear from the store. This is what we did in our previous file by connecting to the store."</p><p class="it"><a class="indexterm">"Entendido. Aquí es donde </a><a id="id356" class="indexterm"><span class="emphasis"><em>Redux como una sola tienda</em></span></a><a class="indexterm"> entra en el cuadro, supongo? Veo que tenemos una sola tienda que la aplicación completa se va a hacer uso de."</a><a class="indexterm"> <span class="emphasis"><em></em></span></a></p>
+
+<p class="p">"Got it. This is where <a class="indexterm">
+<span class="emphasis"><em>Redux as a single store</em></span> comes into picture, I assume? I see that we have a single store that the complete app is going to make use of."</a></p><p class="it"><a class="indexterm">"Sip."</a></p>
+
+<p class="p">"Yup."</p><p class="it"><a class="indexterm">"Por último, vamos a completar nuestra configuración mediante la definición de la tienda que estamos pasando a la <code class="literal">&lt;Provider&gt;</code> etiqueta, de la siguiente manera:"</a></p>
+
+<p class="p">"Finally, we are going to complete our setup by defining the store that we are passing to the <code class="literal">&lt;Provider&gt;</code> tag, as follows:"</p><div class="informalexample"><pre class="programlisting">import { createStore, applyMiddleware } from 'redux'<br></br>
+import thunk from 'redux-thunk'<br></br>
+import reducer from '../reducers'<br></br>
+<br></br>
+const createStoreWithMiddleware = applyMiddleware(<br></br>
+  thunk<br></br>
+)(createStore)<br></br>
+<br></br>
+export default function configureStore(initialState) {<br></br>
+  const store = createStoreWithMiddleware(reducer, initialState)<br></br>
+<br></br>
+  if (module.hot) {<br></br>
+    // Enable Webpack hot module replacement for reducers<br></br>
+    module.hot.accept('../reducers', () =&gt; {<br></br>
+      const nextReducer = require('../reducers')<br></br>
+      store.replaceReducer(nextReducer)<br></br>
+    })<br></br>
+  }<br></br>
+<br></br>
+  return store<br></br>
+}</pre></div><p class="it"><a class="indexterm">"Una vez más, la creación de una tienda requiere la realización de diferentes operaciones, vamos throuowing :."</a></p>
+
+<p class="p">"Again, setting up a store requires performing different operations, let's go throuowing:."</p><div class="itemizedlist"><ul class="itemizedlist">
+
+<li class="it"><a class="indexterm"><code class="literal">createStore</code>: Esto crea una tienda para nosotros representar el árbol completo estado de la aplicación. Se necesita en los argumentos de la reductora (nuestros reductores que veremos en breve) y el estado inicial de la tienda.</a></li>
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">createStore</code>: This creates a store for us to represent the complete state tree of the application. It takes in the arguments—the reducer (our reducers that we will see shortly) and initial state for the store.</li><li class="it"><code class="literal">applyMiddleware</code>: Esto se utiliza para mejorar Redux con el middleware. En este caso, estamos usando el middleware golpe seco, lo que nos permite hacer envíos asíncronos.</li>
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">applyMiddleware</code>: This is used to enhance Redux with middleware. Here, we are using the thunk middleware, which allows us to do asynchronous dispatches.</li><li class="it"><a class="indexterm"><code class="literal">configureStore</code>: Por último, en <code class="literal">configureStore</code>, estamos creando la tienda llamando a la mejorada </a><a id="id357" class="indexterm"><code class="literal">createStore</code>: <code class="literal">createStoreWithMiddleware</code>. Tenemos algunas condiciones para manejar el reemplazo del módulo caliente para recargar automáticamente los cambios en el código, que vimos en el HMR.</a></li>
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">configureStore</code>: Finally, in <code class="literal">configureStore</code>, we are creating the store by calling the enhanced <a class="indexterm"><code class="literal">createStore</code>: <code class="literal">createStoreWithMiddleware</code>. We have some conditions here to handle the hot module replacement to auto-reload the code changes, which we saw in HMR.</a></li></ul></div><p class="it"><a class="indexterm">"Lo tengo."</a></p>
+
+<p class="p">"Got it."</p><p class="it"><a class="indexterm">"A continuación, vamos a echar un vistazo a las siguientes acciones:"</a></p>
+
+<p class="p">"Next, let's take a look at the following actions:"</p><div class="informalexample"><pre class="programlisting">import JSONUtil from '../utils/jsonutil'<br></br>
+import ArrayUtil from '../utils/array'<br></br>
+<br></br>
+export const FILTER_BY_TWEETS = 'FILTER_BY_TWEETS';<br></br>
+export const FILTER_BY_REDDITS = 'FILTER_BY_REDDITS';<br></br>
+export const SYNC_TWEETS = 'SYNC_TWEETS';<br></br>
+export const SYNC_REDDITS = 'SYNC_REDDITS';<br></br>
+<br></br>
+export function filterTweets(event) {<br></br>
+  return {<br></br>
+    type: FILTER_BY_TWEETS,<br></br>
+    showTweets: event.target.checked<br></br>
+  }<br></br>
+}<br></br>
+<br></br>
+export function filterReddits(event) {<br></br>
+  return {<br></br>
+    type: FILTER_BY_REDDITS,<br></br>
+    showReddits: event.target.checked<br></br>
+  }<br></br>
+}<br></br>
+<br></br>
+<br></br>
+export function syncTweets(json) {<br></br>
+  return {<br></br>
+    type: SYNC_TWEETS,<br></br>
+    tweets: json.map((tweet) =&gt; {<br></br>
+      return {...tweet, type: 'tweet'}<br></br>
+    }),<br></br>
+    receivedAt: Date.now()<br></br>
+  }<br></br>
+}<br></br>
+<br></br>
+export function syncReddits(json) {<br></br>
+  return {<br></br>
+    type: SYNC_REDDITS,<br></br>
+    reddits: json.data.children.map((child) =&gt; {<br></br>
+      return {...child.data, type: 'reddit'}<br></br>
+    }),<br></br>
+    receivedAt: Date.now()<br></br>
+  }<br></br>
+}<br></br>
+<br></br>
+export function fetchTweets(username) {<br></br>
+  return dispatch =&gt; {<br></br>
+    fetch(`/tweets.json?username=${username}`)<br></br>
+        .then(JSONUtil.parseJSON)<br></br>
+        .then(json =&gt; dispatch(syncTweets(json))).catch(JSONUtil.handleParseException)<br></br>
+  }<br></br>
+}<br></br>
+<br></br>
+export function fetchReddits(topic) {<br></br>
+  return dispatch =&gt; {<br></br>
+    fetch(`https://www.reddit.com/r/${topic}.json`)<br></br>
+        .then(JSONUtil.parseJSON)<br></br>
+        .then(json =&gt; dispatch(syncReddits(json))).catch(JSONUtil.handleParseException)<br></br>
+  }<br></br>
+}</pre></div><p class="it"><a class="indexterm">"Estamos importando el código siguiente:"</a></p>
+
+<p class="p">"We are importing the following code:"</p><div class="informalexample"><pre class="programlisting">import JSONUtil from '../utils/jsonutil'
+import ArrayUtil from '../utils/array'</pre></div><p class="it"><a class="indexterm">El <code class="literal">JSONUtil</code> y </a><a id="id358" class="indexterm">clase como antes. </a><a class="indexterm">Me he movido que utilicen las clases en lugar de módulos ".</a><a class="indexterm"> <code class="literal">ArrayUtil</code></a></p>
+
+<p class="p">The <code class="literal">JSONUtil</code> and <a class="indexterm">
+<code class="literal">ArrayUtil</code> class as before. I have moved them to use the classes instead of modules."</a></p><p class="it"><a class="indexterm">"El código de <code class="literal">ArrayUtil</code> clase es la siguiente:"</a></p>
+
+<p class="p">"The code for <code class="literal">ArrayUtil</code> class is as follows:"</p><div class="informalexample"><pre class="programlisting">class ArrayUtil {<br></br>
+  static in_groups_of(arr, n) {<br></br>
+    var ret = [];<br></br>
+    var group = [];<br></br>
+    var len = arr.length;<br></br>
+    for (var i = 0; i &lt; len; ++i) {<br></br>
+      group.push(arr[i]);<br></br>
+      if ((i + 1) % n == 0) {<br></br>
+        ret.push(group);<br></br>
+        group = [];<br></br>
+      }<br></br>
+    }<br></br>
+    if (group.length) ret.push(group);<br></br>
+    return ret;<br></br>
+  };<br></br>
+}<br></br>
+<br></br>
+export {ArrayUtil as default};</pre></div><p class="it"><a class="indexterm">"El código de <code class="literal">JSONUtil</code> clase es la siguiente:"</a></p>
+
+<p class="p">"The code for <code class="literal">JSONUtil</code> class is as follows:"</p><div class="informalexample"><pre class="programlisting">class JSONUtil{<br></br>
+  static parseJSON(response){<br></br>
+    return response.json()<br></br>
+  }<br></br>
+<br></br>
+  static handleParseException(ex) {<br></br>
+    console.log('parsing failed', ex)<br></br>
+  }<br></br>
+}<br></br>
+<br></br>
+export { JSONUtil as default }</pre></div><p class="it"><a class="indexterm">"Ahora, en lugar de las acciones objeto de que hemos definido antes, vamos a definir las acciones como constantes que nos vamos a referir acrosscommand :."</a></p>
+
+<p class="p">"Now, instead of the actions object that we defined before, we will define the actions as constants that we are going to refer acrosscommand:."</p><div class="informalexample"><pre class="programlisting"><span class="strong"><strong>export const FILTER_BY_TWEETS = 'FILTER_BY_TWEETS';</strong></span>
+<span class="strong"><strong>export const FILTER_BY_REDDITS = 'FILTER_BY_REDDITS';</strong></span>
+<span class="strong"><strong>export const SYNC_TWEETS = 'SYNC_TWEETS';</strong></span>
+<span class="strong"><strong>export const SYNC_REDDITS = 'SYNC_REDDITS';</strong></span>
+</pre></div><p class="it"><a class="indexterm">"Para otros métodos, definimos los métodos simplemente como sigue:"</a></p>
+
+<p class="p">"For other methods, we define the methods simply as follows:"</p><div class="informalexample"><pre class="programlisting">export function filterTweets(event) {<br></br>
+  return {<br></br>
+    type: FILTER_BY_TWEETS,<br></br>
+    showTweets: event.target.checked<br></br>
+  }<br></br>
+}</pre></div><p class="it"><a class="indexterm">"Al igual que en nuestra aplicación anterior, nos envuelva y devolver la carga útil que será utilizado por el reductor de mutar la tienda."</a></p>
+
+<p class="p">"Similar to our previous implementation, we wrap and return the payload that will be used by the reducer to mutate the store."</p><p class="it"><a class="indexterm">"En caso de ir a buscar los datos </a><a id="id359" class="indexterm">de la API, envolvemos las llamadas reales en <code class="literal">dispatch</code> la forma siguiente:"</a></p>
+
+<p class="p">"In case of fetching data <a class="indexterm">from the API, we wrap the actual calls in <code class="literal">dispatch</code>, as follows:"</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">export function fetchTweets(username) {<br></br>
+  return dispatch =&gt; {<br></br>
+    fetch(`/tweets.json?username=${username}`)<br></br>
+        .then(JSONUtil.parseJSON)<br></br>
+        .then(json =&gt; dispatch(syncTweets(json))).catch(JSONUtil.handleParseException)<br></br>
+  }<br></br>
+}</a></pre></div><p class="it"><a class="indexterm">"Aquí, estamos despachando thods forma pagarés y sus childs recibirán encadenado y se llama cuando se devuelven los resultados Como hemos visto anteriormente, cuando llamamos al siguiente método de. <code class="literal">SocialActions</code>, Que nos envuelto en el despacho llama para notificar la tienda:"</a></p>
+
+<p class="p">"Here, we are dispatching thods ious manner and they will get chained and called when the results are returned. As we saw previously, when we call the following method from <code class="literal">SocialActions</code>, which we wrapped in the dispatch calls to notify the store:"</p><div class="informalexample"><pre class="programlisting">bindActionCreators(SocialActions, dispatch)</pre></div><p class="it"><a class="indexterm">"En el método anterior, ya que no está envuelto por defecto, vamos a envolver los métodos dentro <code class="literal">fetchTweets</code> de las <code class="literal">dispactch()</code> llamadas También vamos a envolver el siguiente código:".</a></p>
+
+<p class="p">"In the preceding method, as it's not wrapped by default, we will wrap the methods inside <code class="literal">fetchTweets</code> in the <code class="literal">dispactch()</code> calls. We will also wrap the following code:"</p><div class="informalexample"><pre class="programlisting">dispatch(syncTweets(json))</pre></div><p class="it"><a class="indexterm">"Una vez que se recibe una respuesta, que llamaremos syncTweets que también notifica a la tienda Redux".</a></p>
+
+<p class="p">"After a response is received, we will call syncTweets that also notifies the Redux store."</p><p class="it"><a class="indexterm">"Entendido. A continuación, se debe ver el reductor, supongo?"</a></p>
+
+<p class="p">"Got it. Next, we should see the reducer, I guess?"</p><p class="it"><a class="indexterm">"Sí, vamos a echar un vistazo a él:"</a></p>
+
+<p class="p">"Yup, let's take a look at it:"</p><div class="informalexample"><pre class="programlisting">import { FILTER_BY_TWEETS, FILTER_BY_REDDITS, SYNC_REDDITS, SYNC_TWEETS } from '../actions/social'<br></br>
+import _ from 'underscore'<br></br>
+<br></br>
+const mergeFeed = (tweets = [], reddits = [], showTweets = true, showReddits = true) =&gt; {<br></br>
+  let mergedFeed = []<br></br>
+  mergedFeed = showTweets ? mergedFeed.concat(tweets) : mergedFeed;<br></br>
+  mergedFeed = showReddits ? mergedFeed.concat(reddits) : mergedFeed;<br></br>
+<br></br>
+  mergedFeed = _.sortBy(mergedFeed, (feedItem) =&gt; {<br></br>
+    if (feedItem.type == 'tweet') {<br></br>
+      let date = new Date(feedItem.created_at);<br></br>
+      return date.getTime();<br></br>
+    } else if ((feedItem.type == 'reddit')) {<br></br>
+      return feedItem.created_utc * 1000;<br></br>
+    }<br></br>
+  })<br></br>
+  return mergedFeed;<br></br>
+};<br></br>
+<br></br>
+export default function social(state = {<br></br>
+  tweets: [],<br></br>
+  reddits: [],<br></br>
+  feed: [],<br></br>
+  showTweets: true,<br></br>
+  showReddits: true<br></br>
+}, action) {<br></br>
+  switch (action.type) {<br></br>
+    case FILTER_BY_TWEETS:<br></br>
+      return {...state, showTweets: action.showTweets, feed: mergeFeed(state.tweets,<br></br> state.reddits, action.showTweets, state.showReddits)};<br></br>
+    case FILTER_BY_REDDITS:<br></br>
+      return {...state, showReddits: action.showReddits, feed: mergeFeed(state.tweets, <br></br>state.reddits, state.showTweets, action.showReddits)};<br></br>
+    case SYNC_TWEETS:<br></br>
+      return {...state, tweets: action.tweets, feed: mergeFeed(action.tweets, state.reddits, <br></br>state.showTweets, state.showReddits)};<br></br>
+    case SYNC_REDDITS:<br></br>
+      return {...state, reddits: action.reddits, feed: mergeFeed(state.tweets, action.reddits,<br></br>  state.showTweets, state.showReddits)}<br></br>
+    default:<br></br>
+      return state<br></br>
+  }<br></br>
+}</pre></div><p class="it"><a class="indexterm">"Ya hemos visto <code class="literal">mergeFeed</code> antes. Al igual que en movimiento a clases, me trasladé a la implementación ES6. La </a><a id="id360" class="indexterm">lógica para determinar la alimentación es como antes, vamos a aceptar Twitter y Reddit alimenta y <code class="literal">showReddit</code>/ <code class="literal">showTwitter</code> banderas para determinar la forma de construir la alimentación."</a></p>
+
+<p class="p">"We already saw <code class="literal">mergeFeed</code> before. Similar to moving to classes, I moved the implementation to ES6. The <a class="indexterm">logic for determining the feed is as before, we will accept Twitter and Reddit feeds and <code class="literal">showReddit</code>/<code class="literal">showTwitter</code> flags to determine how to construct the feed."</a></p><p class="it"><a class="indexterm">"Ahora, el peculiar método es el siguiente:"</a></p>
+
+<p class="p">"Now, the peculiar method is as follows:"</p><div class="informalexample"><pre class="programlisting">export default function social(state = {<br></br>
+  tweets: [],<br></br>
+  reddits: [],<br></br>
+  feed: [],<br></br>
+  showTweets: true,<br></br>
+  showReddits: true<br></br>
+}, action) </pre></div><p class="it"><a class="indexterm">"El reductor se llama a los envíos de acción. Recibe el estado anterior de la carga útil del estado y la acción en la acción. El </a><a id="id361" class="indexterm">estado, como se podes ver aquí, tiene un valor predeterminado."</a></p>
+
+<p class="p">"The reducer gets called for action dispatches. It receives the previous state in state and action payload in action. The <a class="indexterm">state, as you can see here, has a default value."</a></p><p class="it"><a class="indexterm">"Ahora, con base en la carga útil de la acción, vamos a determinar lo que hay que correr con los datos, tal como lo hicimos anteriormente:"</a></p>
+
+<p class="p">"Now, based on the action payload, we will determine what needs to be run with the data, just as we did earlier:"</p><div class="informalexample"><pre class="programlisting">switch (action.type) {<br></br>
+    case FILTER_BY_TWEETS:<br></br>
+      return {...state, showTweets: action.showTweets, feed: mergeFeed(state.tweets,<br></br> state.reddits, action.showTweets, state.showReddits)};<br></br>
+  …<br></br>
+}</pre></div><p class="it"><a class="indexterm">"La diferencia aquí es que no estamos mutando el estado directamente. Basado en el estado anterior, nos fusionamos el estado computarizada anterior y el actual, basado en el tipo de acción y lo devuelve."</a></p>
+
+<p class="p">"The difference here is that we are not mutating the state directly. Based on the previous state, we merge the previous and current computed state, based on the action type and return it."</p><p class="it"><a class="indexterm">"Este es ahora el estado actual de la aplicación."</a></p>
+
+<p class="p">"This is now the current state of the app."</p><p class="it"><a class="indexterm">"Lo tengo, creo. Lo único que nos queda es la aplicación ahora."</a></p>
+
+<p class="p">"Got it, I believe. All that we are left with is the app now."</p><p class="it"><a class="indexterm">"Sí, vamos a ver cómo va a ser. He cambiado de utilizar la clase también."</a></p>
+
+<p class="p">"Yup, let's see how it will be. I have changed to use class as well."</p><div class="informalexample"><pre class="programlisting">class SocialTracker extends Component {<br></br>
+  constructor() {<br></br>
+    super();<br></br>
+    this.state = {twitter: 'twitter', reddit: 'twitter'}<br></br>
+  }<br></br>
+  componentDidMount() {<br></br>
+    this.syncFeed();<br></br>
+  }<br></br>
+  render() {<br></br>
+   let {filterTweets, filterReddits} = this.props;<br></br>
+    let {showTweets, showReddits} = this.props.social;<br></br>
+    return (<br></br>
+        &lt;Grid className="grid"&gt;<br></br>
+          &lt;Row&gt;<br></br>
+            &lt;Jumbotron className="center-text"&gt;<br></br>
+              &lt;h1&gt;Social Media Tracker&lt;/h1&gt;<br></br>
+            &lt;/Jumbotron&gt;<br></br>
+          &lt;/Row&gt;<br></br>
+          &lt;Row&gt;<br></br>
+            &lt;Col xs={8} md={8} mdOffset={2}&gt;<br></br>
+              &lt;Table striped  hover&gt;<br></br>
+                &lt;thead&gt;<br></br>
+                &lt;tr&gt;<br></br>
+                  &lt;th width='200'&gt;Feed Type&lt;/th&gt;<br></br>
+                  &lt;th&gt;Feed Source&lt;/th&gt;<br></br>
+                &lt;/tr&gt;<br></br>
+                &lt;/thead&gt;<br></br>
+                &lt;tbody&gt;<br></br>
+                &lt;tr&gt;<br></br>
+                  &lt;td&gt;&lt;Input id='test' type="checkbox" label="Twitter"<br></br> onChange={filterTweets} checked={showTweets}/&gt;&lt;/td&gt;<br></br>
+                  &lt;td&gt;&lt;Input onChange={::this.changeTwitterSource} type="text"<br></br> addonBefore="@" value={this.state.twitter}/&gt;&lt;/td&gt;<br></br>
+                &lt;/tr&gt;<br></br>
+                &lt;tr&gt;<br></br>
+                  &lt;th&gt;&lt;Input type="checkbox" label="Reddit" onChange={filterReddits}<br></br> checked={showReddits}/&gt;&lt;/th&gt;<br></br>
+                  &lt;td&gt;&lt;Input onChange={::this.changeRedditSource} type="text" <br></br>addonBefore="@" value={this.state.twitter}/&gt;&lt;/td&gt;<br></br>
+                &lt;/tr&gt;<br></br>
+                &lt;tr&gt;<br></br>
+                  &lt;th&gt;&lt;/th&gt;<br></br>
+                  &lt;td&gt;&lt;Button bsStyle="primary" bsSize="large" onClick={::this.syncFeed}&gt;Sync Feed&lt;/Button&gt;<br></br>
+                  &lt;/td&gt;<br></br>
+                &lt;/tr&gt;<br></br>
+                &lt;/tbody&gt;<br></br>
+              &lt;/Table&gt;<br></br>
+            &lt;/Col&gt;<br></br>
+          &lt;/Row&gt;<br></br>
+          {this.renderFeed()}<br></br>
+        &lt;/Grid&gt;<br></br>
+    )<br></br>
+  }<br></br>
+<br></br>
+  changeTwitterSource(event) {<br></br>
+    this.setState({twitter: event.target.value});<br></br>
+  }<br></br>
+<br></br>
+  changeRedditSource(event) {<br></br>
+    this.setState({reddit: event.target.value});<br></br>
+  }<br></br>
+<br></br>
+  syncFeed() {<br></br>
+    const { fetchTweets, fetchReddits } = this.props;<br></br>
+    fetchReddits(this.state.reddit);<br></br>
+    fetchTweets(this.state.twitter);<br></br>
+    console.log('syncFeed was called');<br></br>
+  }<br></br>
+<br></br>
+  renderFeed() {<br></br>
+    let {feed} = this.props.social;<br></br>
+    let feedCollection = ArrayUtil.in_groups_of(feed, 3);<br></br>
+    if (feed.length &gt; 0) {<br></br>
+      return feedCollection.map((feedGroup, index) =&gt; {<br></br>
+        return &lt;Row key={`${feedGroup[0].id}${index}`}&gt;<br></br>
+          {feedGroup.map((feed) =&gt; {<br></br>
+            if (feed.type == 'tweet') {<br></br>
+              return &lt;Col md={4} key={feed.id}&gt;&lt;div className="well twitter"&gt;&lt;p&gt;<br></br>{feed.text}&lt;/p&gt;&lt;/div&gt;&lt;/Col&gt;;<br></br>
+            } else {<br></br>
+              let display = feed.selftext == "" ? `${feed.title}: ${feed.url}` : feed.selftext;<br></br>
+              return &lt;Col md={4} key={feed.id}&gt;&lt;div className="well reddit"&gt;&lt;p&gt;<br></br>{display}&lt;/p&gt;&lt;/div&gt;&lt;/Col&gt;;<br></br>
+            }<br></br>
+<br></br>
+          })}<br></br>
+        &lt;/Row&gt;<br></br>
+      });<br></br>
+    } else {<br></br>
+      return &lt;div&gt;&lt;/div&gt;<br></br>
+    }<br></br>
+  }<br></br>
+<br></br>
+}<br></br>
+<br></br>
+export default SocialTracker</pre></div>
+
+ <p class="it"><a class="indexterm">"Por lo tanto, comenzamos estableciendo el </a><a id="id362" class="indexterm">estado local para gestionar el usuario de Twitter y nos Reddit de la siguiente manera :."</a></p>
+
+<p class="p">"So, we start by setting the <a class="indexterm">local state to manage the Twitter user and Reddit us as follows:."</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">constructor() {
+    super();
+    this.state = {twitter: 'twitter', reddit: 'twitter'}
+  }</a></pre></div><p class="it"><a class="indexterm">"En el método <code class="literal">render</code>, buscamos a los valores (la tienda) que están siendo transmitido como accesorios por Redux al componente con el fin de aparecer:"</a></p>
+
+  <p class="p">"In the <code class="literal">render</code> method, we fetch the values (the store) that are being passed down as props by Redux to the component in order to be displayed:"</p><div class="informalexample"><pre class="programlisting">    let {filterTweets, filterReddits} = this.props;
+    let {showTweets, showReddits} = this.props.social;</pre></div><p class="it"><a class="indexterm">"Ahora, si usted recuerda lo siguiente:"</a></p>
+
+    <p class="p">"Now, if you recall the following:"</p><div class="informalexample"><pre class="programlisting">function mapStateToProps(state) {<br></br>
+  return {<br></br>
+    social: state.social<br></br>
+  }<br></br>
+}</pre></div><p class="it"><a class="indexterm">"Estamos convirtiendo el estado de Redux para pasar el almacén de objetos sociales de Redux como un apoyo al componente. Estamos entonces ir a buscar los valores como <code class="literal">showTweets</code>, <code class="literal">showReddits</code> y así sucesivamente desde el valor del apoyo social".</a></p>
+
+<p class="p">"We are converting the state from Redux to pass the social object store from Redux as a prop to the component. We are then fetching the values such as <code class="literal">showTweets</code>, <code class="literal">showReddits</code>, and so on from the social prop value."</p><p class="it"><a class="indexterm">"Del mismo modo, tenemos el siguiente código:"</a></p>
+
+<p class="p">"Similarly, we have the following code:"</p><div class="informalexample"><pre class="programlisting">function mapDispatchToProps(dispatch) {
+  return bindActionCreators(SocialActions, dispatch)
+}</pre></div><p class="it"><a class="indexterm">"Esto convierte a las acciones y </a><a id="id363" class="indexterm">los pasa hacia abajo como los props Estamos recibiendo como. <code class="literal">filterTweets</code> y <code class="literal">filterReddits</code> en los apoyos A continuación, la Fata estas acciones como el. <code class="literal">onclock</code> controlador de eventos, como sigue:"</a></p>
+
+<p class="p">"This converts the actions and <a class="indexterm">passes them down as the props. We are receiving them as <code class="literal">filterTweets</code> and <code class="literal">filterReddits</code> on props. We then meof these actions as the <code class="literal">onclock</code> event handler, as follows:"</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">&lt;Input id='test' type="checkbox" label="Twitter" onChange={filterTweets} checked={showTweets}/&gt;</a></pre></div><p class="it"><a class="indexterm">"Finalmente, tenemos la pantalla de la propia alimentación por ir a buscar los valores de los props de la misma manera:"</a></p>
+
+<p class="p">"Finally, we have the display of the feed itself by fetching the values from the props in the same way:"</p><div class="informalexample"><pre class="programlisting">renderFeed() {
+    let {feed} = this.props.social;<br></br>
+    let feedCollection = ArrayUtil.in_groups_of(feed, 3);<br></br>
+    if (feed.length &gt; 0) {<br></br>
+      return feedCollection.map((feedGroup, index) =&gt; {<br></br>
+        console.log(feedGroup);<br></br>
+        return &lt;Row key={`${feedGroup[0].id}${index}`}&gt;<br></br>
+          {feedGroup.map((feed) =&gt; {<br></br>
+            if (feed.type == 'tweet') {<br></br>
+              return &lt;Col md={4} key={feed.id}&gt;&lt;div className="well twitter"&gt;&lt;p&gt;<br></br>{feed.text}&lt;/p&gt;&lt;/div&gt;&lt;/Col&gt;;<br></br>
+            } else {<br></br>
+              let display = feed.selftext == "" ? `${feed.title}: ${feed.url}` : feed.selftext;<br></br>
+              return &lt;Col md={4} key={feed.id}&gt;&lt;div className="well reddit"&gt;&lt;p&gt;<br></br>{display}&lt;/p&gt;&lt;/div&gt;&lt;/Col&gt;;<br></br>
+            }<br></br>
+<br></br>
+          })}<br></br>
+        &lt;/Row&gt;<br></br>
+      });<br></br>
+    } else {<br></br>
+      return &lt;div&gt;&lt;/div&gt;<br></br>
+    }<br></br>
+  }</pre></div><p class="it"><a class="indexterm">"Vamos a buscar a la alimentación de la hélice social que se pasó a nosotros, de la siguiente manera:"</a></p>
+
+  <p class="p">"We will fetch the feed from the social prop being passed to us, as follows:"</p><div class="informalexample"><pre class="programlisting">    let {feed} = this.props.social;</pre></div><p class="it"><a class="indexterm">"Por último, para sincronizar los </a><a id="id364" class="indexterm">contenidos que tenemos el siguiente código:"</a></p>
+
+  <p class="p">"Finally, to sync the <a class="indexterm">contents we have the following code:"</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">  syncFeed() {<br></br>
+    const { fetchTweets, fetchReddits } = this.props;<br></br>
+    fetchReddits(this.state.reddit);<br></br>
+    fetchTweets(this.state.twitter);<br></br>
+    console.log('syncFeed was called');<br></br>
+  }</a></pre></div><p class="it"><a class="indexterm">"Impresionante. Supongo que con esto, hemos terminado!"</a></p>
+
+  <p class="p">"Awesome. I guess that with this, we are done!"</p><p class="it"><a class="indexterm">"Sí. ¿Quieres volver a tapar la configuración?"</a></p>
+
+  <p class="p">"Yup. Would you like to recap the setup?"</p><p class="it"><a class="indexterm">"Claro. Empezamos por la creación de la forma en que queremos mapear las acciones y las tiendas a los props de ser enviado a los componentes. A continuación, la configuración del almacén y conectarlo con el componente."</a></p>
+
+  <p class="p">"Sure. We started by setting up how we want to map the actions and stores to the props being sent to the components. We then set up the store and connect it to the component."</p><p class="it"><a class="indexterm">"Para configurar la tienda, hicimos uso de y aplicamos el módulo de procesador de middleware para mejorar Redux con el fin de permitir que enviemos las acciones de forma asíncrona."</a></p>
+
+  <p class="p">"To set up the store, we made use of and applied the thunk middleware module to enhance Redux in order to allow us to dispatch the actions asynchronously."</p><p class="it"><a class="indexterm">"Entonces creamos acciones que se llamará a partir del componente y envolver las cargas útiles y tipo de acción para ser entregado a la tienda."</a></p>
+
+  <p class="p">"We then created actions to be called from the component and wrap the payloads and action type to be delivered to the store."</p><p class="it"><a class="indexterm">"También hemos creado el reductores-sociales-reductor para manipular realidad, crear y volver nuevos estados Redux".</a></p>
+
+  <p class="p">"We also created the reducers—social reducer—to actually manipulate, create, and return new Redux states."</p>
+  
+  
+  <p class="it"><a class="indexterm">"Eso es correcto! Vamos a echar un vistazo a cómo se ve, ¿de acuerdo?"</a></p>
+
+  <p class="p">"That's right! Let's take a look at how it looks, shall we?"</p><a class="indexterm"><img src="graphics/4730_13_01.jpg" alt="La creación de Redux"/></a></div> <p class="it"><a class="indexterm">"Impresionante! Carla se </a><a id="id365" class="indexterm">va a amar esto."</a></p>
+
+  <p class="p">"Awesome! Carla is <a class="indexterm">going to love this."</a></p><a class="indexterm">
+</a></body></html>

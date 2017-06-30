@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 12. Flux</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="chapter" title="Chapter 12. Flux"><div class="titlepage"><div><div><h1 class="title"><a id="ch12"></a>Chapter 12. Flux</h1></div></div></div><p class="it"><a>En el capítulo anterior, tomamos un vistazo a las diversas herramientas en el ecosistema React que son útiles en todo el tiempo de vida de una aplicación de desarrollo, prueba y producción. También hemos visto cómo React mejora la experiencia del desarrollador utilizando herramientas de desarrollo. Hemos aprendido acerca de las diversas herramientas de prueba que se podes utilizar con React. Para resumir, hemos visto cómo utilizar herramientas de construcción, tales como webpack y Browserify y la forma en que se podes utilizar con React.</a></p>
+
+<p class="p">In the previous chapter, we took a look at the various tools in the React ecosystem that are useful in the whole lifetime of an application—development, testing, and production. We also saw how React improves the developer experience using developer tools. We learned about the various testing tools that can be used with React. To summarize it, we saw how to use build tools such as Webpack and Browserify and how they can be used with React.</p><p class="it"><a>En este capítulo, vamos a bucear profundamente en fluxe como una arquitectura. Hemos visto cómo surgen problemas durante el intercambio de datos entre los componentes. Vamos a ver cómo podemos superarlos por tener un único punto de almacén de datos. A continuación, vamos a comprobar cómo usar React a superar esto.</a></p>
+
+<p class="p">In this chapter, we are going to dive deep in Flux as an architecture. We have seen how problems arise during data sharing across components. We will see how we can overcome them by having a single point of data store. Next, we will check out how to use React to overcome this.</p><p class="it"><a>actos Dispatcher como un eje central para gestionar este flujo de datos y la comunicación y cómo los invocan acciones. Por último, vamos a echar un vistazo al flujo de datos completa que tiene lugar, mientras que la construcción de nuestra aplicación de Social Media Tracker.</a></p>
+
+<p class="p">Dispatcher acts as a central hub to manage this data flow and communication and how Actions invoke them. Finally, we will we take a look at the complete data flow that takes place, while building our Social Media Tracker application.</p><p class="it"><a>En este capítulo, vamos a cubrir los siguientes temas:</a></p>
+
+<p class="p">In this chapter, we will cover the following topics:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">Flux architecture</li><li class="listitem" style="list-style-type: disc">Stores</li><li class="listitem" style="list-style-type: disc">Actions</li><li class="listitem" style="list-style-type: disc">Dispatcher</li><li class="listitem" style="list-style-type: disc">Flux implementations</li></ul></div><p class="it"><a>Al final del capítulo, vamos a ser capaces de comenzar a reemplazar partes de nuestra aplicación que tiene los datos de acoplamiento apretado, con Flux seremos capaces de establecer las bases necesarias para Flux y fácilmente empezar a utilizar el mismo en nuestros puntos de vista React.</a></p>
+
+<p class="p">At the end of chapter, we will be able to start replacing parts of our application that have tight data coupling, with Flux We will be able to set up the necessary groundwork for Flux and easily start using the same in our React views.</p><div class="section" title="Flux architecture and unidirectional flow"><div class="titlepage"><div><div><h1 class="title"><a id="ch12lvl1sec83"></a>Flux architecture and unidirectional flow</h1></div></div></div><p class="it"><a>"Hey </a><a id="id315" class="indexterm">Mike y Shawn!" Carla entrado, en una mañana brillante.</a></p>
+
+<p class="p">"Hey <a class="indexterm"></a>Mike and Shawn!" entered Carla, on a bright morning.</p><p class="it"><a class="indexterm">"Hola Carla, ¿cómo estás hoy?"</a></p>
+
+<p class="p">"Hi Carla, how are you today?"</p><p class="it"><a class="indexterm">"Maravilloso. La aplicación anterior que se genera era agradable, los clientes les gustó. Dentro de poco añadir más características a la misma. Mientras tanto, tenemos otra pequeña aplicación para construir."</a></p>
+
+<p class="p">"Wonderful. The previous app that you build was nice, the clients liked it. They will soon add more features to it. Meanwhile, we have got another small app to build."</p><p class="it"><a class="indexterm">"Oh, bien. ¿Qué estamos planeando construir?" preguntó Mike.</a></p>
+
+<p class="p">"Oh, nice. What are we planning to build?" inquired Mike.</p><p class="it"><a class="indexterm">"Tenemos que construir una especie de rastreador social. Para empezar, mostramos reddits de un usuario, tweets, y así sucesivamente. Nosotros tarde extenderlo a mostrar otra información."</a></p>
+
+<p class="p">"We need to build a kind of social tracker. To start with, we show a user's reddits, tweets, and so on. We will later extend it to display other information."</p><p class="it"><a class="indexterm">"Lo tengo", reiteró Shawn.</a></p>
+
+<p class="p">"Got it," iterated Shawn.</p><p class="it"><a class="indexterm">"Que tenga un buen día, lo dejaré a ti."</a></p>
+
+<p class="p">"Have a good day; I will leave it to you."</p><p class="it"><a class="indexterm">"Entonces, Shawn, ¿qué opinas sobre el nuevo proyecto?"</a></p>
+
+<p class="p">"So Shawn, what do you think about the new project?"</p><p class="it"><a class="indexterm">"Debe ser emocionante. Um ... ¿podemos explorar Flux y lo usamos en la aplicación? Habíamos discutido </a><a id="id316" class="indexterm">cuando estábamos construyendo la última aplicación."</a></p>
+
+<p class="p">"It should be exciting. Umm… can we explore Flux and use it in the app? We had discussed it <a class="indexterm"></a>when we were building the last app."</p><p class="it"><a class="indexterm">"Sí, podemos. Esta será la oportunidad perfecta para ver cómo funciona Flux. Antes de empezar a usarlo, vamos a ir a través de lo Flux es en realidad."</a></p>
+
+<p class="p">"Yeah, we can. This will be the perfect opportunity to see how Flux works. Before we start using it, let's go through what Flux actually is."</p><p class="it"><a class="indexterm">"Flux es una arquitectura simple para React a hacer uso de flujo unidireccional. Ya hemos discutido cómo Reactn los trajes de flujo unidireccional. React sigue el modelo de renderización siempre cuando hay cualquier cambio realizado en los datos. Los datos no van revés, Como en el caso de las fijaciones de dos vías ".</a></p>
+
+<p class="p">"Flux is a simple architecture for React to make use of unidirectional flow. We have discussed previously how unidirectional flow suits React. React follows the render-always model when there are any changes made to data. Data doesn't go other way around, like in the case of two-way bindings."</p><p class="it"><a class="indexterm">"No es exactamente el </a><a id="id317" class="indexterm"><span class="strong"><strong>Modelo-Vista-Controlador</strong></span></a><a class="indexterm"> ( </a><a class="indexterm"><span class="strong"><strong>MVC</strong></span></a><a class="indexterm"> forma de trabajar). Consiste en Modelo (tiendas), acciones y despachadores, y, finalmente, Vistas (React Vistas)."</a><a class="indexterm"> <span class="strong"><strong></strong></span><span class="strong"><strong></strong></span></a></p>
+
+<p class="p">"It's not exactly the <a class="indexterm"></a>
+<span class="strong"><strong>Model-View-Controller</strong></span> (<span class="strong"><strong>MVC</strong></span>) way of working. It consists of Model (Stores), Actions and Dispatchers, and finally Views (React Views)."</p><p class="it"><a class="indexterm">"No hay un módulo para fluxe completo como un marco, ya que no está destinado a ser. Facebook ofrece el módulo Flux, que consiste en el <span class="strong"><strong>Dispatcher</strong></span> . Otras partes, tales como <span class="strong"><strong>Ver</strong></span> y <span class="strong"><strong>tiendas</strong></span> se podes hacer sin mucho apoyo. Vamos a repasar uno por uno, ¿de acuerdo?"</a></p>
+
+<p class="p">"There is no module for complete Flux as a framework as it's not meant to be. Facebook provides the Flux module, which consists of the <span class="strong"><strong>Dispatcher</strong></span>. Other parts such as <span class="strong"><strong>View</strong></span> and <span class="strong"><strong>Stores</strong></span> can be done without much support. Let's go over them one by one, shall we?"</p><p class="it"><a class="indexterm">"Claro. Creo que podemos ir sobre cómo se correlacionan y por qué son exactamente útil cuando una aplicación comienza a crecer."</a></p>
+
+<p class="p">"Sure. I believe we can go over how they correlate and why exactly are they useful when an app starts to grow."</p><p class="it"><a class="indexterm">"Sip."</a></p>
+
+<p class="p">"Yup."</p><p class="it"><a class="indexterm">"Como se podes ver en la siguiente imagen, los diversos componentes están unidas entre sí y funcionan claramente. Los datos fluyen en una sola dirección en un ciclo."</a></p>
+
+<p class="p">"As you can see in the following image, the various components are tied together and function distinctly. Data flows in a single direction in a cycle."</p><p class="it"><a class="indexterm">"Como ya he mencionado anteriormente, un </a><a id="id318" class="indexterm"><span class="strong"><strong>despachador</strong></span></a><a class="indexterm"> actúa como el eje central. Cada vez que tiene lugar un acontecimiento de la vista, como por ejemplo un usuario hace clic en un botón o una llamada Ajax se completa, una acción de las acciones se llama. La </a><a class="indexterm"><span class="strong"><strong>acción</strong></span></a><a class="indexterm"> también se podes conseguí llamado desde el </a><a class="indexterm"><span class="strong"><strong>despachador</strong></span></a><a class="indexterm"> ".</a><a class="indexterm"> <span class="strong"><strong></strong></span><span class="strong"><strong></strong></span><span class="strong"><strong></strong></span></a></p>
+
+<p class="p">"As I mentioned previously, a <a class="indexterm"></a>
+<span class="strong"><strong>Dispatcher</strong></span> acts as the central hub. Whenever an event takes place from the View, such as a user clicks a button or an Ajax call is completed, an action from the Actions is called. The <span class="strong"><strong>Action</strong></span> may also get called from the <span class="strong"><strong>Dispatcher</strong></span>."</p><p class="it"><a class="indexterm">"Las acciones son construcciones simples que ofrecen la carga útil al <span class="strong"><strong>despachador</strong></span> , que identifican lo que la <span class="strong"><strong>acción</strong></span> es y </a><a id="id319" class="indexterm">otros detalles de la acción y los datos necesarios para actualizar el estado actual".</a></p>
+
+<p class="p">"The Actions are simple constructs that deliver the payload to the <span class="strong"><strong>Dispatcher</strong></span>, which identify what the <span class="strong"><strong>Action</strong></span> is and <a class="indexterm"></a>other details from the action and data needed to update current state."</p><div class="mediaobject"><img src="graphics/4730_12_01.jpg" alt="Flux architecture and unidirectional flow"/></div><p class="it"><a class="indexterm">"El <span class="strong"><strong>despachador</strong></span> se propaga entonces a las tiendas. <span class="strong"><strong>Dispatcher</strong></span> actúa como un registro de devolución de llamada, en donde todas las tiendas se registran. <span class="strong"><strong>Despachador</strong></span> notifica a las tiendas y devoluciones de llamada cada vez que alguna acción tiene </a><a id="id320" class="indexterm">lugar. Con independencia de la acción, se entrega a todas las tiendas."</a></p>
+
+<p class="p">"The <span class="strong"><strong>Dispatcher</strong></span> then propagates it to the stores. <span class="strong"><strong>Dispatcher</strong></span> acts like a callback registry, where all stores register themselves. <span class="strong"><strong>Dispatcher</strong></span> notifies and callbacks stores whenever some action takes <a class="indexterm"></a>place. Irrespective of the action, it is delivered to all the stores."</p><p class="it"><a class="indexterm">"El <span class="strong"><strong>despachador</strong></span> no está haciendo ninguna actividad complejas, simplemente reenvía la carga útil a las tiendas registradas, y no procesa ningún dato".</a></p>
+
+<p class="p">"The <span class="strong"><strong>Dispatcher</strong></span> is not doing any complex activities, it just forwards the payload to registered stores, and it doesn't process any data."</p><p class="it"><a class="indexterm">"La responsabilidad para llevar a cabo decisiones lógicas y complejas y los cambios de datos se encarga de las tiendas. Esto ayuda a que el punto de cambios de datos en un solo lugar y evitar cambios de todo la aplicación, que son más difíciles de rastrear."</a></p>
+
+<p class="p">"The responsibility to perform logical and complex decisions and data changes is entrusted with the stores. This helps to make the point of data changes at a single place and avoid changes all around the application, which are harder to track."</p><p class="it"><a class="indexterm">"Al recibir una devolución de llamada del </a><a id="id321" class="indexterm"><span class="strong"><strong>despachador</strong></span></a><a class="indexterm"> , la </a><a class="indexterm"><span class="strong"><strong>tienda</strong></span></a><a class="indexterm"> decide si se necesita realizar ninguna acción o no, en base a la </a><a class="indexterm"><span class="strong"><strong>acción</strong></span></a><a class="indexterm"> tipo. Sobre la base de la devolución de llamada, se podes actualizar la tienda actual. También podes esperar a que otras tiendas que actualizarse . Después de que se haga con los cambios, sigue adelante y notifica a la vista. Esto se podes lograr en nuestra versión simple dfluxe mediante el uso </a><a id="id322" class="indexterm">de un </a><a class="indexterm">módulo que está disponible </a><a id="id323" class="indexterm">desde el módulo de eventos ".</a><a class="indexterm"> <span class="strong"><strong></strong></span><span class="strong"><strong></strong></span><span class="strong"><strong></strong></span></a><a class="indexterm"><code class="literal">EventEmitter</code></a><a class="indexterm"></a></p>
+
+<p class="p">"On receiving a callback from the <a class="indexterm"></a>
+<span class="strong"><strong>Dispatcher</strong></span>, the <span class="strong"><strong>Store</strong></span> decides whether it needs to perform any action or not, based on the <span class="strong"><strong>Action</strong></span> type. Based on the callback, it can update the current store. It can also wait for other stores to be updated. After it is done with the changes, it goes ahead and notifies the view. This can be achieved in our simple Flux version by making use <a class="indexterm"></a>of an <code class="literal">EventEmitter</code> module which is available <a class="indexterm"></a>from the events module."</p><p class="it"><a class="indexterm">"Al igual que en acciones, las vistas </a><a id="id324" class="indexterm">se registran para escuchar los cambios en las tiendas. En algunos cambios, un evento es emitida por <code class="literal">EventEmitter</code>. Basado en el tipo de evento, se llamará a un <code class="literal">View</code> método, que ha registrado para escuchar a un evento".</a></p>
+
+<p class="p">"Similar to Actions, the Views <a class="indexterm"></a>register themselves to hear changes in stores. On some changes, an event is emitted by <code class="literal">EventEmitter</code>. Based on the event type, it will call a <code class="literal">View</code> method, which has registered to listen to an event."</p><p class="it"><a class="indexterm">"La <span class="strong"><strong>Ver</strong></span> recibir el evento </a><a id="id325" class="indexterm">a continuación, podes actualizar su propio estado, en función del estado actual de las tiendas que están a su disposición. La actualización de estado a continuación, activa la <span class="strong"><strong>Vista</strong></span> de actualización."</a></p>
+
+<p class="p">"The <span class="strong"><strong>View</strong></span> receiving the event <a class="indexterm"></a>can then update its own state, based on the current state of any stores that are available to it. The state update then triggers the <span class="strong"><strong>View</strong></span> update."</p><p class="it"><a class="indexterm">"Este proceso continúa con una <span class="strong"><strong>vista</strong></span> de eventos, dando lugar a las llamadas a las <span class="strong"><strong>acciones</strong></span> y <span class="strong"><strong>Dispatcher</strong></span> y así sucesivamente."</a></p>
+
+<p class="p">"This process continues with a <span class="strong"><strong>View</strong></span> event, resulting in calls to the <span class="strong"><strong>Actions</strong></span> and <span class="strong"><strong>Dispatcher</strong></span> and so forth."</p><p class="it"><a class="indexterm">"La esperanza, esto es algo claro ahora?" Queried Mike.</a></p>
+
+<p class="p">"Hope, this is somewhat clear now?" queried Mike.</p><p class="it"><a class="indexterm">"Um ... sí, me dejó envolver mi cabeza alrededor de ella. Tenemos las acciones a llevar a cabo una <span class="strong"><strong>acción</strong></span> , basado en un evento. Se notifica al </a><a id="id326" class="indexterm"><span class="strong"><strong>despachador</strong></span></a><a class="indexterm"> , que a su vez notifica a cualquier tienda registrada para escuchar los cambios. Las tiendas y luego actualizar a sí mismos, basado en el tipo de acción </a><a id="id327" class="indexterm">y notificar al React </a><a id="id328" class="indexterm">Vistas ponerse al día ".</a><a class="indexterm"> <span class="strong"><strong></strong></span></a><a class="indexterm"></a><a class="indexterm"></a></p>
+
+<p class="p">"Umm… yeah, let me wrap my head around it. We have actions to perform an <span class="strong"><strong>Action</strong></span>, based on an event. It then notifies the <a class="indexterm"></a>
+<span class="strong"><strong>Dispatcher</strong></span>, which then notifies any store registered to listen for the changes. The Stores then update themselves, based on the action type <a class="indexterm"></a>and notify the React <a class="indexterm"></a>Views to update themselves."</p><p class="it"><a class="indexterm">"! Correcta Vamos a </a><a id="id329" class="indexterm">bucear en la aplicación de inmediato. Basaremos nuestra aplicación del </a><a id="id330" class="indexterm">ejemplo Flux oficial. Se estructurará como este."</a></p>
+
+<p class="p">"Correct! Let's <a class="indexterm"></a>dive in the app right away. We will base our app from the <a class="indexterm"></a>official Flux example. It will be structured like this."</p><p class="it"><a class="indexterm"> <code class="literal">js/</code> </a></p>
+
+<p class="p">
+<code class="literal">js/</code>
+</p><p class="it"><a class="indexterm"> <code class="literal">├── actions</code> </a></p>
+
+<p class="p">
+<code class="literal">├── actions</code>
+</p>
+
+<p class="p">
+<code class="literal">│   └── SocialActions.js</code>
+</p>
+
+<p class="p">
+<code class="literal">├── app.js</code>
+</p>
+
+<p class="p">
+<code class="literal">├── components</code>
+</p>
+
+<p class="p">
+<code class="literal">│   └── SocialTracker.react.js</code>
+</p>
+
+<p class="p">
+<code class="literal">├── constants</code>
+</p>
+
+<p class="p">
+<code class="literal">│   └── SocialConstants.js</code>
+</p>
+
+<p class="p">
+<code class="literal">├── dispatcher</code>
+</p>
+
+<p class="p">
+<code class="literal">│   └── AppDispatcher.js</code>
+</p>
+
+<p class="p">
+<code class="literal">├── stores</code>
+</p>
+
+<p class="p">
+<code class="literal">│   └── SocialStore.js</code>
+</p>
+
+<p class="p">
+<code class="literal">└── utils</code>
+</p>
+
+<p class="p">
+<code class="literal">    └── someutil.js</code>
+</p><p class="it"><a class="indexterm">"Ahora, como se ha mencionado Carla, tenemos que mostrar los datos del usuario de Twitter y Reddit. Para Reddit, que está disponible públicamente a través de llamadas a la API, como veremos en breve."</a></p>
+
+<p class="p">"Now, as Carla mentioned, we need to show the user's data from Twitter and Reddit. For Reddit, it's available openly via API calls, as we will see shortly."</p><p class="it"><a class="indexterm">"Para Twitter, vamos a tener que establecer algunas bases y crear una aplicación de Twitter. Podemos crear una nueva en </a><a class="ulink" href="https://apps.twitter.com/">https://apps.twitter.com/</a> . Ya he creado una para nuestra aplicación."</p>
+
+<p class="p">"For Twitter, we are going to need to set up some groundwork and create a Twitter app. We can create a new one on <a class="ulink" href="https://apps.twitter.com/">https://apps.twitter.com/</a>. I have already created one for our app."</p><div class="mediaobject"><img src="graphics/4730_12_02.jpg" alt="Flux architecture and unidirectional flow"/></div><p class="it">"Estamos a continuación, vamos <a id="id331" class="indexterm">a hacer uso del <code class="literal">twitter</code> módulo para acceder a Twitter y </a><a id="id332" class="indexterm">ir a buscar tweets de los usuarios Vamos a crear una. <code class="literal">config.js</code> archivo para almacenar los tokens de acceso anteriores que hemos creado, de la siguiente manera:"</a></p>
+
+<p class="p">"We are then going <a class="indexterm"></a>to make use of the <code class="literal">twitter</code> module to access Twitter and <a class="indexterm"></a>fetch tweets from users. Let's set up a <code class="literal">config.js</code> file to store the preceding access tokens that we have created, as follows:"</p><div class="informalexample"><pre class="programlisting">module.exports ={
+  twitter_consumer_key: 'xxxx',
+  twitter_consumer_secret: 'xxxx',
+  twitter_access_token_key: 'xxxx',
+  twitter_access_token_secret: 'xxxx'
+}</pre></div><p class="it"><a class="indexterm">"Estos corresponden a las claves relativos y los secretos que hemos creado en nuestra aplicación. A continuación, vamos a crear un cliente para acceder a los datos utilizando las credenciales anteriores."</a></p>
+
+<p class="p">"These correspond to the relative keys and secrets that we created in our app. Next, we will create a client to access the data using the preceding credentials."</p><div class="informalexample"><pre class="programlisting">var Twitter = require('twitter');
+var config = require('./config');
+
+var client = new Twitter({
+  consumer_key: config.twitter_consumer_key,
+  consumer_secret: config.twitter_consumer_secret,
+  access_token_key: config.twitter_access_token_key,
+  access_token_secret: config.twitter_access_token_secret
+});</pre></div><p class="it"><a class="indexterm">"Vamos a hacer uso de este cliente en nuestra aplicación de servidor expreso. Como ya he dicho, por Reddit, podemos golpear </a><a id="id333" class="indexterm">API Reddit directamente a reddits de acceso. Para Twitter, será </a><a id="id334" class="indexterm">el primer éxito de nuestro nodo <code class="literal">App</code> y tweets a nuestros componentes React volver. "</a></p>
+
+<p class="p">"We are going to make use of this client in our express server application. As I said, for Reddit, we can hit <a class="indexterm"></a>Reddit API directly to access reddits. For Twitter, it will <a class="indexterm"></a>first hit our node <code class="literal">App</code> and return tweets to our React Components."</p><p class="it"><a class="indexterm">"¿Le gustaría definir esto, Shawn?"</a></p>
+
+<p class="p">"Would you like to define this, Shawn?"</p><p class="it"><a class="indexterm">"Por supuesto."</a></p>
+
+<p class="p">"Sure."</p><div class="informalexample"><pre class="programlisting">var express= require('express');
+var app = new (require('express'))();
+var port = 3000
+
+app.get('/tweets.json', function (req, res) {
+  var params = {screen_name: req.query.username};
+  client.get('statuses/user_timeline', params, function (error, tweets, response) {
+    if (!error) {
+      res.json(tweets);
+    } else {
+      res.json({error: error});
+    }
+  });
+});</pre></div><p class="it"><a class="indexterm">"He definido un punto final JSON llamado aquí <code class="literal">tweets.json</code>. Se llamará al <code class="literal">client.get()</code> método, que es un envoltorio de API REST para llamar a la API de Twitter. Invocamos la <code class="literal">statuses/user_timeline</code> aPI para buscar a la línea de tiempo del usuario para un usuario, que se transmite a nosotros de la solicitud.</a></p>
+
+<p class="p">"I defined a JSON endpoint here called <code class="literal">tweets.json</code>. It will call the <code class="literal">client.get()</code> method, which is a REST API wrapper to call Twitter API. We invoke the <code class="literal">statuses/user_timeline</code> API to fetch the user timeline for a user, which is passed to us from the request.</p><p class="it"><a class="indexterm">Al recibir la respuesta, enviará de nuevo a este componente React llamándolo ".</a></p>
+
+<p class="p">On receiving the response, it will send this back to the React component calling it."</p><p class="it"><a class="indexterm">"Se ve bien. Ahora, vamos a empezar con la App. Vamos a empezar por definir el despachador."</a></p>
+
+<p class="p">"Looks good. Now, let's start with the App. We will start by defining the Dispatcher."</p><div class="informalexample"><pre class="programlisting">// AppDispatcher.js
+var Dispatcher = require('flux').Dispatcher;
+
+module.exports = new Dispatcher();</pre></div><p class="it"><a class="indexterm">"Definimos nuestra despachador exigiendo desde <code class="literal">flux.Dispatcher</code>. A continuación, utilizaremos esta en varios lugares."</a></p>
+
+<p class="p">"We define our dispatcher by requiring it from <code class="literal">flux.Dispatcher</code>. We will then use this at various places."</p></div></div></body></html>

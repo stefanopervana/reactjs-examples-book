@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 8. Performance of React Apps</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="chapter" title="Chapter 8. Performance of React Apps"><div class="titlepage"><div><div><h1 class="title"><a id="ch08"></a>Chapter 8. Performance of React Apps</h1></div></div></div>
+
+<p class="it"><a>En el capítulo anterior, hemos aprendido a utilizar diferentes React complementos. Vimos complementos que van desde ayudantes inmutabilidad para poner a prueba los servicios públicos.</a></p>
+
+<p class="p">In the previous chapter, we learned to use various React add-ons. We saw add-ons ranging from immutability helpers to test utilities.</p>
+
+<p class="it"><a>En este capítulo, vamos a ver React herramientas de rendimiento que podes mejorar el rendimiento de nuestras aplicaciones React. En particular, vamos a utilizar el PERF complemento, <code class="literal">PureRenderMixin</code> y <code class="literal">shouldComponentUpdate</code>. También vamos a ver algunas de las trampas que debe tenerse en cuenta durante el uso de las herramientas de rendimiento proporcionados por React.</a></p>
+
+<p class="p">In this chapter, we will look at React performance tools that can improve the performance of our React apps. In particular, we will be using the PERF add-on, <code class="literal">PureRenderMixin</code> and <code class="literal">shouldComponentUpdate</code>. We will also look at some of the gotchas that needs to be considered while using the performance tools provided by React.</p><div class="section" title="Performance of React apps"><div class="titlepage"><div><div><h1 class="title"><a id="ch08lvl1sec63"></a>Performance of React apps</h1></div></div></div>
+
+<p class="it"><a>"Hola Mike, tengo algunas preguntas para ti hoy. He estado pensando en nuestra aplicación de búsqueda durante el fin de semana. Tienes un poco de tiempo para hablar de ellos?" pidió a Shawn.</a></p>
+
+<p class="p">"Hey Mike, I have few questions for you today. I have been thinking about our search app over the weekend. Do you have some time to discuss them?" Shawn asked.</p>
+
+<p class="it"><a>"Claro, pero voy a buscar un poco de café en primer lugar. Bien, estoy listo ahora. Shoot!" dijo Mike.</a></p>
+
+<p class="p">"Sure, but let me get some coffee first. Okay, I am ready now. Shoot!" said Mike.</p>
+
+<p class="it"><a>"Tengo algunas </a><a id="id214" class="indexterm">preguntas sobre el rendimiento de React aplicaciones. Sé que Reactn es muy bueno en la re-haciendo que el árbol de componentes siempre que los cambios de estado. React ha hecho que sea muy fácil de entender para mí y la razón de mi código. Sin embargo, ¿no es así obstaculizar el desempeño? re-renderización parece ser un asunto muy costoso, especialmente cuando se vuelva a prestar grandes árboles de componentes ". Pidió a Shawn.</a></p>
+
+<p class="p">"I have few <a class="indexterm"></a>questions about the performance of React apps. I know React is very good at re-rendering the component tree whenever the state changes. React has made it very easy for me to understand and reason my code. However, does it not hamper the performance? Re-rendering seems like a very costly affair, especially when re-rendering large component trees." Shawn asked.</p>
+
+<p class="it"><a class="indexterm">"Shawn, la re-renderización podes ser costoso. Sin embargo, React es inteligente al respecto. Sólo hace que la parte que se ha cambiado. No es necesario volver a hacer todo en la página. También es inteligente en el mantenimiento de la manipulación del DOM como menos posible ".</a></p>
+
+<p class="p">"Shawn, the re-rendering can be expensive. Nevertheless, React is smart about it. It only renders the part that is changed. It does not need to re-render everything on the page. It's also smart at keeping the DOM manipulation as least as possible."</p>
+
+<p class="it"><a class="indexterm">"¿Cómo es posible? ¿Cómo sabe qué parte de la página se cambia? ¿No depende de las interacciones del usuario o estados entrantes y utilería?" Shawn cuestionado.</a></p>
+
+<p class="p">"How is that possible? How does it know which part of the page is changed? Does it not depend on user interactions or incoming states and props?" questioned Shawn.</p>
+
+<p class="it"><a class="indexterm">"El DOM virtuales viene al rescate aquí. Lo hace todo el trabajo pesado de llevar la cuenta de lo que ha cambiado y ayudar React hacer cambios solo mínimos en el DOM real". Mike explicó.</a></p>
+
+<p class="p">"The virtual DOM comes to the rescue here. It does all the heavy lifting of keeping track of what changed and helping React make only minimal changes to the real DOM." Mike explained.</p></div></div></body></html>

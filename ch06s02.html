@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>On the server</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="On the server"><div class="titlepage"><div><div><h1 class="title"><a id="ch06lvl1sec58"></a>On the server</h1></div></div></div><p class="it"><a>"Ahora Shawn, vamos a </a><a id="id167" class="indexterm">pre-dibujar el componente en el servidor. Lo que esto significa es que crear un elemento HTML del componente React y rinden </a><a id="id168" class="indexterm">su contenido en nuestra opinión, al cargar la primera página en sí. En la actualidad, se toma la carga del elemento atendidos por el código del lado del cliente ".</a></p>
+
+<p class="p">"Now Shawn, let's <a class="indexterm"></a>pre-render the component on the server. What this means is that create an HTML element out of the React component and render <a class="indexterm"></a>its contents in our view on first page load itself. Currently, the loading of the element is taken care of by the client-side code."</p><div class="informalexample"><pre class="programlisting">app.renderToDOM(attachElement);</pre></div><p class="it"><a class="indexterm">"En lugar de esto, vamos a hacer que el elemento de React de la misma acción Express."</a></p>
+
+<p class="p">"Instead of this, we will render the React element in the Express action itself."</p><p class="it"><a class="indexterm">"En primer lugar, vamos a configurar una <code class="literal">.ejs</code> vista para mostrar el contenido HTML a cabo junto con contenidos generados dinámicamente-React."</a></p>
+
+<p class="p">"First, let's set up an <code class="literal">.ejs</code> view to display out HTML contents along with dynamically-generated React contents."</p><div class="informalexample"><pre class="programlisting">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head lang="en"&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Search&lt;/title&gt;
+
+  &lt;link href="styles/main.css" rel="stylesheet" /&gt;
+  &lt;link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"&gt;
+  &lt;link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"&gt;
+  &lt;link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="app"&gt;
+  &lt;%- reactOutput %&gt;
+  &lt;/div&gt;
+  &lt;script src="bundle.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></div><p class="it"><a class="indexterm">"Aquí, vamos a pasar <code class="literal">reactOutput</code> a la vista como una variable que pasarán a ser."</a></p>
+
+<p class="p">"Here, we will pass <code class="literal">reactOutput</code> to the view as a variable to be rendered."</p>
+
+<p class="it"><a class="indexterm">"Ahora vamos a </a><a id="id169" class="indexterm">cambiar nuestro <code class="literal">server.js</code> archivo para incluir el componente necesario para la representación y React."</a></p>
+
+<p class="p">"We will now <a class="indexterm"></a>change our <code class="literal">server.js</code> file to include the required component and React for rendering."</p><div class="informalexample"><pre class="programlisting">import AppRoot from '../app/components/AppRoot'
+import React from 'react/addons';</pre></div><p class="it"><a class="indexterm">"Nuestra acción conseguíá </a><a id="id170" class="indexterm">cambiado a:"</a></p>
+
+<p class="p">"Our action will get <a class="indexterm"></a>changed to:"</p><div class="informalexample"><pre class="programlisting">app.get('/', (req, res) =&gt; {
+  var reactAppContent = React.renderToString(&lt;AppRoot state={{} }/&gt;);
+  console.log(reactAppContent);
+  res.render(path.resolve(__dirname, '../client/index.ejs'), {reactOutput: reactAppContent});
+});</pre></div><p class="it"><a class="indexterm">"Nuestro código de servidor definitiva se vería así."</a></p>
+
+<p class="p">"Our final server code would look like."</p><div class="informalexample"><pre class="programlisting">import path from 'path';
+import Express from 'express';
+
+import AppRoot from '../app/components/AppRoot'
+import React from 'react/addons';
+
+var app = Express();
+var server;
+
+const PATH_STYLES = path.resolve(__dirname, '../client/styles');
+const PATH_DIST = path.resolve(__dirname, '../../dist');
+
+app.use('/styles', Express.static(PATH_STYLES));
+app.use(Express.static(PATH_DIST));
+
+app.get('/', (req, res) =&gt; {
+  var reactAppContent = React.renderToString(&lt;AppRoot state={{} }/&gt;);
+  console.log(reactAppContent);
+  res.render(path.resolve(__dirname, '../client/index.ejs'), {reactOutput: reactAppContent});
+});
+
+server = app.listen(process.env.PORT || 3000, () =&gt; {
+  var port = server.address().port;
+
+  console.log('Server is listening at %s', port);
+});</pre></div><p class="it"><a class="indexterm">"Aquí lo tienes! Nosotros </a><a id="id171" class="indexterm">utilizamos de React <code class="literal">renderToString</code> método </a><a id="id172" class="indexterm">para hacer un componente, que pasa a cualquier estado, si es necesario, para acompañarlo."</a></p>
+
+<p class="p">"Here you have it! We <a class="indexterm"></a>are using React's <code class="literal">renderToString</code> method <a class="indexterm"></a>to render a component, passing any state if required, to accompany it."</p></div></body></html>

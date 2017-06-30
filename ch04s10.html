@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Form validation</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Form validation"><div class="titlepage"><div><div><h1 class="title"><a id="ch04lvl1sec49"></a>Form validation</h1></div></div></div><p class="it"><a>"Shawn, creo que </a><a id="id119" class="indexterm">hay que añadir la validación básica para el <code class="literal">BookList</code> componente para que el usuario no podes ir al siguiente paso sin seleccionar un libro," dijo Mike.</a></p>
+
+
+<p class="p">"Shawn, I think <a class="indexterm"></a>we should also add basic validation to the <code class="literal">BookList</code> component so that the user can't go to the next step without selecting a book," said Mike.</p><p class="it"><a class="indexterm">"Acepto. Déjenme darles una oportunidad." Shawn contestado.</a></p>
+
+
+<p class="p">"Agree. Let me give it a try." answered Shawn.</p><div class="informalexample"><pre class="programlisting">// src/BookStore.js
+// Updating BookList component
+
+var BookList = React.createClass({
+  getInitialState() {
+    return (
+      { books: [
+        { id: 1, name: 'Zero to One', author: 'Peter Thiel' },
+        { id: 2, name: 'Monk who sold his Fearrary', author: 'Robin Sharma' },
+        { id: 3, name: 'Wings of Fire', author: 'A.P.J. Abdul Kalam' }
+      ],
+        selectedBooks: [],
+        error: false
+      }
+    );
+  },
+
+  _renderError() {
+    if (this.state.error) {
+      return (
+        &lt;div className="alert alert-danger"&gt;
+          {this.state.error}
+        &lt;/div&gt;
+      );
+    }
+  },
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    if(this.state.selectedBooks.length === 0) {
+      this.setState({error: 'Please choose at least one book to continue'});
+    } else {
+      this.setState({error: false});
+      this.props.updateFormData({ selectedBooks: this.state.selectedBooks });
+    }
+  },
+
+  render() {
+    var errorMessage = this._renderError();
+
+    return (
+      &lt;div&gt;
+        &lt;h3&gt; Choose from wide variety of books available in our store &lt;/h3&gt;
+        {errorMessage}
+        &lt;form onSubmit={this.handleSubmit}&gt;
+          { this.state.books.map((book) =&gt; { return (this._renderBook(book)); })}
+          &lt;input type="submit" className="btn btn-success" /&gt;
+        &lt;/form&gt;
+      &lt;/div&gt;
+    );
+  }
+});</pre></div><p class="it"><a class="indexterm">"He añadido el estado para manejar el error de validación. Inicialmente, se establece en <code class="literal">false</code>. Después de que el usuario envía el formulario, comprobaremos si el usuario no ha seleccionado nada y establecer un mensaje de error apropiado. Estado se actualizará y lo hará mostrar el mensaje de error correspondiente. Si el usuario ha seleccionado al menos un libro, entonces el estado de error se establece en <code class="literal">false</code> y el mensaje de error no </a><a id="id120" class="indexterm">se mostrará. Tenemos un buen mensaje de error con la ayuda de las clases Bootstrap ". dijo Shawn.</a></p>
+
+
+<p class="p">"I added the state to manage the validation error. Initially, it will be set to <code class="literal">false</code>. After the user submits the form, we will check whether the user has not selected anything and set an appropriate error message. State will be updated and it will display the error message accordingly. If the user has selected at least one book, then the error state will be set to <code class="literal">false</code> and the error message won't <a class="indexterm"></a>be displayed. We get a nice error message with some help from the Bootstrap classes." said Shawn.</p><div class="mediaobject"><img src="graphics/4730_04_03.jpg" alt="Form validation"/></div><p class="it"><a class="indexterm">"Impresionante. Vamos a pasar a la segunda forma ahora. Queremos aceptar detalles de envío del usuario, tales como la </a><a id="id121" class="indexterm">dirección e información de contacto". dijo Mike.</a></p>
+
+
+<p class="p">"Awesome. Let's move to the second form now. We want to accept the user's shipping details such as the <a class="indexterm"></a>address and contact information." said Mike.</p></div></body></html>

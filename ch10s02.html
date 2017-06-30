@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Model updates</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Model updates"><div class="titlepage"><div><div><h1 class="title"><a id="ch10lvl1sec76"></a>Model updates</h1></div></div></div><p class="it"><a>"Entonces, Shawn, en lugar de utilizar la colección Backbone de manera aislada, vamos a pasar a una clase para gestionar </a><a id="id263" class="indexterm">la adición de nuevos gatos al azar y dotarla de otras utilidades, como sigue:"</a></p>
+
+<p class="p">"So Shawn, instead of using the Backbone collection in an isolated fashion, let's move it to a class to manage <a class="indexterm"></a>adding of new cats randomly and provide it with some other utilities, as follows:"</p><div class="informalexample"><pre class="programlisting">const PictureModel = Backbone.Model.extend({
+  defaults: {
+    src: 'http://lorempixel.com/601/600/cats/',
+    name: 'Pusheen',
+    details: 'Pusheen is a Cat',
+    faved: false
+  }
+});</pre></div><p class="it"><a class="indexterm">"Nuestro <code class="literal">PictureModel</code> sigue siendo el mismo. Estamos añadiendo un nuevo <code class="literal">faved</code> atributo para mantener el estado acerca de si el gato fue agregado a favoritos por el usuario o no.</a></p>
+
+<p class="p">"Our <code class="literal">PictureModel</code> stays the same. We are adding a new <code class="literal">faved</code> attribute here to maintain state about whether the cat was faved by the user or not.</p><p class="it"><a class="indexterm">"Vamos a llamar a esta nueva clase de la nuestra <code class="literal">CatGenerator</code>, que proporcionará el componente que se utiliza para mostrar los gatos, con los datos para visualizar, buscar, y añadir nuevos gatos."</a></p>
+
+<p class="p">"We will call this new class of ours <code class="literal">CatGenerator</code>, which will provide the component that we use to display the cats, with the data to display, fetch, and add new cats."</p><p class="it"><a class="indexterm">"Entendido. ¿Quieres que darle una oportunidad?"</a></p>
+
+<p class="p">"Got it. Want me to give it a try?"</p><p class="it"><a class="indexterm">"Por supuesto."</a></p>
+
+<p class="p">"Sure."</p><div class="informalexample"><pre class="programlisting">import Backbone from 'backbone';
+import Faker from 'faker';
+import _ from 'underscore';
+…
+
+class CatGenerator {
+  constructor() {
+    this.Cats = new Backbone.Collection;
+    [600, 601, 602, 603, 604, 605].map( (height)=&gt;{
+      this.createCat(height, 600);
+    })
+  }
+
+  createCat(height = _.random(600, 650), width = 600) {
+    console.log('Adding new cat');
+    this.Cats.add(new PictureModel({
+      src: `http://lorempixel.com/${height}/${width}/cats/`,
+      name: Faker.Name.findName(),
+      details: Faker.Lorem.paragraph()
+    }));
+  }
+}</pre></div><p class="it"><a class="indexterm">"Nice Shawn."</a></p>
+
+<p class="p">"Nice Shawn."</p><p class="it"><a class="indexterm">"Gracias. Me movía <code class="literal">createCat</code> como un método propio para que podamos añadir a la colección de los gatos sobre la marcha. Estoy añadiendo al azar en este momento, teniendo una altura aleatoria de 600-650 y una anchura al azar para crear un nuevo <code class="literal">PictureModel</code> ejemplo."</a></p>
+
+<p class="p">"Thanks. I moved <code class="literal">createCat</code> as a method of its own so that we can add cats to the collection on the fly. I am just adding a random one right now, taking a random height of 600-650 and a random width to create a new <code class="literal">PictureModel</code> instance."</p><p class="it"><a class="indexterm">"Además, para empezar, estoy creando <code class="literal">cats</code> colección como un atributo de la clase. A continuación, he añadido seis gatos, para empezar."</a></p>
+
+<p class="p">"Also, to start with, I am creating <code class="literal">cats</code> collection as an attribute on the class. Next, I have added six cats to begin with."</p><p class="it"><a class="indexterm">"Cool. Estamos ahora </a><a id="id264" class="indexterm">vamos a empezar a cambiar su uso en nuestros componentes."</a></p>
+
+<p class="p">"Cool. We are now <a class="indexterm"></a>going to start changing its use in our Components."</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="tip06"></a>Tip</h3><p class="it"><a>Recordemos que vamos a actualizar los componentes cuando llegan nuevos datos. Una forma sencilla de hacerlo es comenzar a almacenar el <code class="literal">CatGenerator</code> como un objeto de estado en el <code class="literal">Home</code> componente.</a></p>
+
+<p class="p">Remember that we are going to update the components when new data comes in. Easy way to do this is to start storing the <code class="literal">CatGenerator</code> as a state object on the <code class="literal">Home</code> component.</p></div></div><p class="it"><a>"Vamos a empezar a definir y cambiar nuestro <code class="literal">Home</code> componente, de la siguiente manera:"</a></p>
+
+<p class="p">"Let's start defining and changing our <code class="literal">Home</code> component, as follows:"</p><div class="informalexample"><pre class="programlisting">class Home extends React.Component {
+  constructor() {
+    super();
+    this.timer = null;
+    this.state = {catGenerator: new CatGenerator()};
+  }
+
+  componentDidMount() {
+    this.timer = setInterval(::this.generateCats, 1000);
+  }
+
+  generateCats() {
+    let catGenerator = this.state.catGenerator;
+    catGenerator.createCat();
+    clearInterval(this.timer);
+    this.timer = setInterval(::this.generateCats, catGenerator.randRange());
+
+    this.setState({catGenerator: catGenerator});
+  }
+…</pre></div><p class="it"><a>"Por lo tanto, lo que estamos haciendo aquí es la creación de un temporizador para realizar un seguimiento de los intervalos de tiempo. Vamos a utilizar un intervalo de tiempo aleatorio para simular la adición de una nueva corriente de gatos aquí."</a></p>
+
+<p class="p">"So, what we are doing here is creating a timer to track time intervals. We are going to use a random time interval to simulate the addition of a new stream of cats here."</p><p class="it"><a>"Lo tengo", seguido por Shawn.</a></p>
+
+<p class="p">"Got it," followed up Shawn.</p><p class="it"><a>"Para ello, he añadido el <code class="literal">generateCats()</code> método. En nuestra <code class="literal">componentDidMount</code>, estamos añadiendo y ajustar el temporizador para llamar a este método después de la primera creación."</a></p>
+
+<p class="p">"To do this, I have added the <code class="literal">generateCats()</code> method. In our <code class="literal">componentDidMount</code>, we are adding and setting the timer to call this method after the first creation."</p><p class="it"><a>"En el método en sí, he añadido la limpieza de la vieja intervalo y estamos llamando a la <code class="literal">catGenerator.createCat()</code> método para crear realmente el gato de nuestra <code class="literal">CatGenerator</code> clase."</a></p>
+
+<p class="p">"In the method itself, I have added clearing of the old interval and we are calling the <code class="literal">catGenerator.createCat()</code> method to actually create the cat from our <code class="literal">CatGenerator</code> class."</p><p class="it"><a>"A continuación, está reposicionando el temporizador y el establecimiento de una nueva, basada en un intervalo de tiempo aleatorio he añadido el <code class="literal">catGenerator.randRange()</code> método para generar el intervalo de tiempo aleatorio Así es como se ve. </a><a id="id265" class="indexterm">En la <code class="literal">CatGenerator</code> clase:"</a></p>
+
+<p class="p">"We are then resetting the timer and setting a new one, based on a random time interval. I added the <code class="literal">catGenerator.randRange()</code> method to generate the random time interval. Here's how it looks <a class="indexterm"></a>in the <code class="literal">CatGenerator</code> class:"</p><div class="informalexample"><pre class="programlisting">randRange() {
+    return _.random(5000, 10000);
+  }</pre></div><p class="it"><a class="indexterm">"Entendido. Esta debe ser la creación de una nueva corriente de gatos en el rango de 5-10 segundos."</a></p>
+
+  <p class="p">"Got it. This should be creating a new stream of cats in the range of 5-10 seconds."</p><p class="it"><a class="indexterm">"A continuación, vamos a echar un vistazo a cómo nuestra render método busca. Voy a añadir una estrella al lado de los gatos."</a></p>
+
+  <p class="p">"Next, let's take a look at how our render method looks. I am going to add a star next to the cats."</p><div class="informalexample"><pre class="programlisting">render() {
+    let Cats = this.state.catGenerator.Cats;
+
+    return (
+        &lt;div&gt;
+          &lt;div&gt;
+
+              {Cats.map(cat =&gt; (
+                  &lt;div key={cat.cid} style={{float: 'left'}}&gt;
+                    &lt;Link to={`/pictures/${cat.cid}`}
+                          state={{ modal: true, returnTo: this.props.location.pathname, cat: cat }}&gt;
+                      &lt;img style={{ margin: 10 }} src={cat.get('src')} height="100"/&gt;
+                    &lt;/Link&gt;
+                    &lt;span key={`${cat.cid}`} className="fa fa-star"&gt;&lt;/span&gt;
+                  &lt;/div&gt;
+              ))}
+
+          &lt;/div&gt;
+        &lt;/div&gt;
+    )
+  }</pre></div><p class="it"><a class="indexterm">"Hay dos cambios que estoy haciendo aquí. En primer lugar, he añadido la estrella, que se unfaved por defecto."</a></p>
+
+  <p class="p">"There are two changes that I am doing here. First of all, I added the star, which is unfaved by default."</p><div class="informalexample"><pre class="programlisting">                    &lt;span key={`${cat.cid}`} className="fa fa-star"&gt;&lt;/span&gt;</pre></div><p class="it"><a class="indexterm">"En segundo lugar, empecé a pasar el objeto gato sobre el estado del enlace modal."</a></p>
+
+  <p class="p">"Secondly, I started passing the cat object on the modal link's state."</p><div class="informalexample"><pre class="programlisting">                    &lt;Link to={`/pictures/${cat.cid}`}
+                          state={{ modal: true, 
+                                       returnTo: this.props.location.pathname,  
+                                       cat: cat }}&gt;</pre></div><p class="it"><a class="indexterm">"En nuestra <code class="literal">PictureModel</code> caja, antes teníamos el acceso a la colección mundial de los gatos. A partir de ahora, que no será el caso y que necesitaríamos el objeto gato para ser pasado al <code class="literal">Picture</code> componente."</a></p>
+
+                                       <p class="p">"In our <code class="literal">PictureModel</code> box, we previously had the access to the global collection of cats. From now on, that won't be the case and we would need the cat object to be passed to the <code class="literal">Picture</code> component."</p><p class="it"><a class="indexterm">"Eso es ordenada, somos capaces de pasar los objetos también, para el componente de un router <code class="literal">&lt;Link/&gt;</code> objeto."</a></p>
+
+                                       <p class="p">"That's neat, we are able to pass the objects too, to the component from a router <code class="literal">&lt;Link/&gt;</code> object."</p><p class="it"><a class="indexterm">"Sí, vamos a seguí adelante y </a><a id="id266" class="indexterm">cambiar el componente de la imagen con el fin de que funcione correctamente con este nuevo cambio de paso, los datos Nuestro. <code class="literal">Modal</code> sigue siendo el mismo:"</a></p>
+
+                                       <p class="p">"Yup, let's go ahead and <a class="indexterm"></a>change the picture component in order for it to work properly with this new change in passing the data. Our <code class="literal">Modal</code> stays the same:"</p><div class="informalexample"><pre class="programlisting">const Modal = React.createClass({
+  styles: {
+…   
+  },
+
+  render() {
+     return (
+      &lt;div style={this.styles}&gt;
+        &lt;p&gt;&lt;Link to={this.props.returnTo}&gt;Back&lt;/Link&gt;&lt;/p&gt;
+        {this.props.children}
+      &lt;/div&gt;
+    )
+  }
+})
+…
+export {Modal as default}</pre></div><p class="it"><a class="indexterm">"El <code class="literal">Picture</code> componente ahora comienza a utilizar el objeto de gato."</a></p>
+
+<p class="p">"The <code class="literal">Picture</code> component now starts using the cat object."</p><div class="informalexample"><pre class="programlisting">import React from 'react'
+import { PictureModel } from './models';
+
+const Picture = React.createClass({
+  render() {
+    let { location } = this.props;
+    let cat = location.state.cat;
+    console.log(this.props);
+    return (
+        &lt;div&gt;
+          &lt;div style={{ float: 'left', width: '40%' }}&gt;
+            &lt;img src={cat.get('src')} style={{ height: '80%' }}/&gt;
+          &lt;/div&gt;
+          &lt;div style={{ float: 'left', width: '60%' }}&gt;
+            &lt;h3&gt;Name: {cat.get('name')}.&lt;/h3&gt;
+            &lt;p&gt;Details: {cat.get('details')} &lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+    )
+  }
+});
+
+export {Picture as default}</pre></div><p class="it"><a class="indexterm">"Como se podes ver, el objeto gato se recibe en el <code class="literal">location.state</code> objeto a partir de los apoyos."</a></p>
+
+<p class="p">"As you can see, the cat object is received on the <code class="literal">location.state</code> object from props."</p><p class="it"><a class="indexterm">"He ampliado la imagen para mostrar más detalles sobre el gato, como el nombre y así sucesivamente, en lugar de mostrarlo en una página separada. Anteriormente, se ve bastante en blanco."</a></p>
+
+<p class="p">"I have extended the picture to display more details about the cat, such as the name and so on, instead of showing it on a separate page. Previously, it looked pretty blank."</p><p class="it"><a class="indexterm">"Cool, vamos a echar un vistazo a </a><a id="id267" class="indexterm">cómo se ve, ¿de acuerdo?"</a></p>
+
+<p class="p">"Cool, let's take a look at <a class="indexterm"></a>how it looks, shall we?"</p><div class="mediaobject"><img src="graphics/4730_10_02.jpg" alt="Model updates"/></div><p class="it"><a class="indexterm">"Agradable, las estrellas se ven bien. Tendremos que comprobar los estilos que he añadido para este pronto."</a></p>
+
+<p class="p">"Nice, the stars look good. We will need to check the styles that I added for this soon."</p><p class="it"><a class="indexterm">"El modal parece estar en buenas condiciones, así, y mirar a todos estos gatos que se generan como una corriente!"</a></p>
+
+<p class="p">"The modal seems to be looking good as well, and look at all these cats being generated as a stream!"</p><p class="it"><a class="indexterm">"¡Bonito!" Mike y Shawn regocijaron.</a></p>
+
+<p class="p">"Nice!" Mike and Shawn rejoiced.</p><div class="mediaobject"><img src="graphics/4730_10_03.jpg" alt="Model updates"/></div></div></body></html>

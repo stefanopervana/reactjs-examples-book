@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>The PERF addon</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="The PERF addon"><div class="titlepage"><div><div><h1 class="title"><a id="ch08lvl1sec65"></a>The PERF addon</h1></div></div></div><p class="it"><a>"Vamos a empezar con la instalación del complemento PERF."</a></p>
+
+<p class="p">"Let's start with installing the PERF addon."</p><div class="informalexample"><pre class="programlisting">
+<span class="strong"><strong>$ npm install react-addons-perf --save-dev</strong></span>
+</pre></div><p class="it"><a>"Necesitamos este </a><a id="id216" class="indexterm">complemento sólo en el modo de desarrollo. Este es un punto importante a recordar, porque en la producción, no necesitamos la información de depuración, ya que podes hacer que nuestra aplicación lenta." informó Mike.</a></p>
+
+<p class="p">"We need this <a class="indexterm"></a>add-on only in the development mode. This is an important point to remember because in production, we don't need the debugging information as it may make our app slow." informed Mike.</p><p class="it"><a class="indexterm">"Shawn, el PERF add-on se podes utilizar para ver qué cambios React está haciendo con el DOM, dónde está gastando el tiempo al intentar mostrar nuestra aplicación, es que perdiendo algo de tiempo mientras que la renderización, y así sucesivamente. Esta información podes ser utilizada para mejorar el rendimiento de la aplicación ". dijo Mike.</a></p>
+
+<p class="p">"Shawn, the PERF add-on can be used to see what changes React is doing with the DOM, where is it spending time while rendering our app, is it wasting some time while rendering, and so on. This information can then be used to improve the performance of the app." said Mike.</p><p class="it"><a class="indexterm">"Vamos a empezar exponiendo el PERF complemento como un objeto global. Podemos utilizarlo en la consola del navegador, mientras que nuestra aplicación se está ejecutando para ver cómo Reactn los está haciendo cambios como por las interacciones de los usuarios." explica Mike.</a></p>
+
+<p class="p">"Let's start by exposing the PERF add-on as a global object. We can use it in the browser console while our app is running to see how React is making changes as per the user interactions." explained Mike.</p><div class="informalexample"><pre class="programlisting">// index.js
+import ReactDOM from 'react-dom';
+import React from 'react';
+import App from './App';
+import Perf from 'react-addons-perf';
+
+window.Perf = Perf;
+
+ReactDOM.render(&lt;App /&gt;, document.getElementById('rootElement'));</pre></div><p class="it"><a class="indexterm">"Hemos </a><a id="id217" class="indexterm">importado el PERF add-on en nuestro <code class="literal">index.js</code> archivo, que es el punto de partida de la aplicación. Podemos acceder al <code class="literal">Perf</code> objeto en la consola del navegador como hemos unido a <code class="literal">window.Perf</code>". Mike añadió.</a></p>
+
+<p class="p">"We have <a class="indexterm"></a>imported the PERF add-on in our <code class="literal">index.js</code> file, which is the starting point of the app. We can access the <code class="literal">Perf</code> object in the browser console as we have attached it to <code class="literal">window.Perf</code>." Mike added.</p><div class="mediaobject"><img src="graphics/4730_08_01.jpg" alt="The PERF addon"/></div><p class="it"><a class="indexterm">"El PERF complemento viene con métodos que podes ayudar a entender lo que React está haciendo con el DOM cuando cambia algo. Vamos a medir algunas estadísticas de rendimiento. Vamos a empezar el proceso de medición llamando <code class="literal">Perf.start()</code> en la consola del navegador. Después de eso, vamos a interactuar con la aplicación. vamos a escribir una consulta para buscar un libro, pulse enviar, y se mostrarán los resultados de búsqueda. vamos a detener la medición del desempeño llamando <code class="literal">Perf.stop()</code> en la consola del navegador. Después de eso, vamos a analizar la información que hemos reunido. " Mike explicó el proceso.</a></p>
+
+<p class="p">"The PERF add-on comes with methods that can help us understand what React is doing with the DOM when something changes. Let's measure some performance statistics. We will start the measurement process by calling <code class="literal">Perf.start()</code> in the browser console. After that, we will interact with the app. We will type in a query to search a book, hit submit, and the search results will be displayed. We will stop the performance measurement by calling <code class="literal">Perf.stop()</code> in the browser console. After that, let's analyze the information that we gathered." Mike explained the process.</p><div class="mediaobject"><img src="graphics/4730_08_02.jpg" alt="The PERF addon"/></div><p class="it"><a class="indexterm">"Vamos a buscar libros escritos por Dan Brown."</a></p>
+
+<p class="p">"Let's search for books written by Dan Brown."</p><div class="mediaobject"><img src="graphics/4730_08_03.jpg" alt="The PERF addon"/></div><p class="it"><a class="indexterm">"Una vez que los </a><a id="id218" class="indexterm">que aparecen los resultados, dejemos de las medidas de rendimiento."</a></p>
+
+<p class="p">"Once the <a class="indexterm"></a>results are displayed, let's stop the performance measurements."</p><div class="mediaobject"><img src="graphics/4730_08_04.jpg" alt="The PERF addon"/></div></div></body></html>

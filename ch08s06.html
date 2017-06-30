@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Immutable data</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Immutable data"><div class="titlepage"><div><div><h1 class="title"><a id="ch08lvl1sec68"></a>Immutable data</h1></div></div></div><p class="it"><a>"Mike, he </a><a id="id249" class="indexterm">una pregunta sin embargo. Todo dicho y hecho, ¿por qué <code class="literal">PureRenderMixin</code> realizar la comparación de poca profundidad en el primer lugar? ¿No debería realizar una comparación de profundidad, así que siempre vamos a tener un mejor rendimiento?" Shawn no era muy feliz con <code class="literal">PureRenderMixin</code>.</a></p>
+
+<p class="p">"Mike, I have <a class="indexterm"></a>a question though. All said and done, why does <code class="literal">PureRenderMixin</code> perform shallow comparison in the first place? Should it not perform a deep comparison so that we will always have better performance?" Shawn was not very happy with <code class="literal">PureRenderMixin</code>.</p><p class="it"><a class="indexterm">"Bueno, hay una razón para ello. Comparación superficial es muy barato. No se necesita mucho tiempo. Comparación profundo siempre es caro. Por lo tanto, <code class="literal">PureRenderMixin</code> hace la comparación superficial, que es lo suficientemente bueno para la mayoría de los casos de uso simple", dijo Mike .</a></p>
+
+<p class="p">"Well, there is a reason for this. Shallow comparison is very cheap. It does not take much time. Deep comparison is always expensive. Therefore, <code class="literal">PureRenderMixin</code> does shallow comparison, which is good enough for most of the simple use cases," said Mike.</p><p class="it"><a class="indexterm">"Sin embargo, React nos provee una opción de definir nuestra propia versión de <code class="literal">shouldComponentUpdate</code> como hemos visto anteriormente. Podemos por completo un cortocircuito en la re-renderizado proceso por el que acaban de volver <code class="literal">false</code> a partir <code class="literal">shouldComponentUpdate</code>, o podemos comparar únicamente los apoyos que son requeridos por nuestro componente."</a></p>
+
+<p class="p">"However, React does provide us an option of defining our own version of <code class="literal">shouldComponentUpdate</code> as we saw earlier. We can completely short-circuit the re-rendering process by just returning <code class="literal">false</code> from <code class="literal">shouldComponentUpdate</code> or we can compare only those props that are required by our component."</p><p class="it"><a class="indexterm">"Es cierto que, al igual que había escrito <code class="literal">shouldComponentUpdate</code> para el <code class="literal">BookRow</code> derecho componente?" Shawn se le preguntó.</a></p>
+
+<p class="p">"True, just like we had written <code class="literal">shouldComponentUpdate</code> for the <code class="literal">BookRow</code> component right?" asked Shawn.</p><div class="informalexample"><pre class="programlisting">// src/BookRow.js
+
+export default React.createClass({
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.title !== this.props.title ||
+           nextProps.author_name !== this.props.author_name ||
+           nextProps.edition_count !== this.props.edition_count;
+  },
+
+  render() {
+    return(
+      &lt;tr style={this.props.style}&gt;
+        ..
+      &lt;/tr&gt;
+    );
+  }
+});</pre></div><p class="it"><a class="indexterm">"Exactamente, Shawn. Si es necesario, también se podes realizar una comparación de profundidad según las necesidades de su componente cuando sea necesario."</a></p>
+
+<p class="p">"Exactly, Shawn. If needed, you can also perform a deep comparison as per the requirements of your component when needed."</p><div class="informalexample"><pre class="programlisting">// custom deep comparison as per requirement
+shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.book.review === props.book.review;
+}</pre></div><p class="it"><a class="indexterm">"Shawn, otra opción que tenemos es el uso de datos inmutables. Comparando los datos inmutables entre sí es muy fácil, ya que siempre va a crear nuevos objetos de datos o en lugar de la mutación de los ya existentes."</a></p>
+
+<p class="p">"Shawn, another option we have is using immutable data. Comparing immutable data with each other is very easy as it will always create new data or objects instead of mutating the existing ones."</p><div class="informalexample"><pre class="programlisting">// pseudo code 
+book_ids = [1, 2, 3]
+new_book_ids = book_ids.push(4)
+book_ids === new_book_ids # false</pre></div><p class="it"><a class="indexterm">"Por lo tanto, </a><a id="id250" class="indexterm">sólo tenemos que comparar la referencia del nuevo objeto con el objeto antiguo, siempre son iguales cuando los valores son iguales y siempre son diferentes cuando los valores no son iguales. Por lo tanto, si utilizamos los datos inmutables para nuestros accesorios y Estado , entonces <code class="literal">PureRenderMixin</code> va a funcionar como se espera ". dijo Mike.</a></p>
+
+<p class="p">"Therefore, we<a class="indexterm"></a> just have to compare the reference of the new object with the old object, they are always same when the values are equal and they are always different when values are unequal. Therefore, if we use immutable data for our props and state, then <code class="literal">PureRenderMixin</code> will work as expected." said Mike.</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note14"></a>Note</h3><p class="it"><a>Compruebe </a><a class="ulink" href="http://facebook.github.io/immutable-js/">http://facebook.github.io/immutable-js/</a> como una opción para el uso de <a id="id251" class="indexterm">los datos inmutables de Estado y accesorios.</a></p>
+
+<p class="p">Check <a class="ulink" href="http://facebook.github.io/immutable-js/">http://facebook.github.io/immutable-js/</a> as an option for using<a class="indexterm"></a> immutable data for state and props.</p></div></div></div></body></html>

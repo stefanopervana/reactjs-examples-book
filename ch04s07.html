@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Getting started with form wizard</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Getting started with form wizard"><div class="titlepage"><div><div><h1 class="title"><a id="ch04lvl1sec46">Getting started with form wizard</a></h1></div></div></div><p class="it"><a>"Shawn, nuestra tarea </a><a id="id105" class="indexterm">hoy es construir un asistente de formulario, el modelado de todos los pasos que el usuario va a tomar durante el uso de la librería en línea."</a></p>
+
+<p class="p">"Shawn, our task <a class="indexterm">today is to build a form wizard, modeling all the steps that the user will take while using the online bookstore."</a></p><a class="indexterm">
+
+</a><div class="itemizedlist"><a class="indexterm"></a><ul class="itemizedlist"><a class="indexterm"></a><li class="it"><a class="indexterm">Vamos a empezar con un formulario, donde el usuario selecciona el libro que quieren comprar</a></li>
+
+
+<li class="listitem" style="list-style-type: disc">We will start with a form, where the user selects the book that they want to buy</li><li class="it"><a class="indexterm">En el siguiente paso, el usuario deberá introducir la información relacionada con la dirección de facturación y envío</a></li>
+
+
+<li class="listitem" style="list-style-type: disc">In the next step, the user will enter the information related to the billing and shipping address</li><li class="it">Después de esto, el usuario tiene que elegir un mecanismo de entrega</li>
+
+
+<li class="listitem" style="list-style-type: disc">After this, the user needs to choose a delivery mechanism</li><li class="indexterm">Al final, el usuario deberá confirmar la transacción y realizar el pedido</li>
+
+
+<li class="listitem" style="list-style-type: disc">In the end, the user will confirm the transaction and place the order</li></ul></div><p class="it"><a class="indexterm">"¿Vamos a diseñar cuatro formas diferentes, entonces?" Shawn se le preguntó.</a></p>
+
+<p class="p">"Will we design four different forms then?" asked Shawn.</p><p class="it"><a class="indexterm">"Sí. Pero todos ellos será controlado por un solo padre. El componente principal será mantener un seguimiento del estado que se encuentra el usuario y tomará una forma para este paso." explica Mike.</a></p>
+
+<p class="p">"Yes. But all of them will be controlled by a single parent. The parent component will keep a track of the state that the user is in and will render a form for this step." explained Mike.</p><div class="informalexample"><pre class="programlisting">// src/BookStore.js
+
+import React from 'react';
+
+var BookStore = React.createClass({
+  render() {
+    switch (step) {
+      case 1:
+        return &lt;BookList /&gt;;
+      case 2:
+        return &lt;ShippingDetails /&gt;;
+      case 3:
+        return &lt;DeliveryDetails /&gt;;
+    }
+  }
+});</pre></div><p class="it"><a class="indexterm">"¿Cómo vamos a controlar el paso?" Shawn se le preguntó.</a></p>
+
+<p class="p">"How will we control the step?" asked Shawn.</p><p class="it"><a class="indexterm">"Discutiremos este punto más adelante. Vamos a completar algunos detalles antes de eso. Vamos a añadir los markupres de posición para todos </a><a id="id106" class="indexterm">de nuestras formas." dijo Mike.</a></p>
+
+<p class="p">"We will discuss this point later. Let's fill in some details before that. Let's add the placeholders for all <a class="indexterm">of our forms." said Mike.</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">// src/BookStore.js
+
+
+var BookList = React.createClass({
+  render() {
+    return(
+      &lt;h1&gt; 
+        Choose from wide variety of books available in our store.
+      &lt;/h1&gt;
+    );
+  }
+});
+
+var ShippingDetails = React.createClass({
+  render() {
+    return(
+      &lt;h1&gt;Enter your shipping information.&lt;/h1&gt;
+    );
+  }
+});
+
+var DeliveryDetails = React.createClass({
+  render() {
+    return (
+      &lt;h1&gt;Choose your delivery options here.&lt;/h1&gt;
+    );
+  }
+});</a></pre></div><p class="it"><a class="indexterm">"Grande. Ahora, vamos a asegurarnos de que siempre empezamos desde el primer paso." explica Mike.</a></p>
+
+<p class="p">"Great. Now, let's make sure that we always start from the first step." explained Mike.</p><div class="informalexample"><pre class="programlisting">// src/BookStore.js
+
+……
+
+var BookStore = React.createClass({
+  getInitialState() {
+    return ({ currentStep: 1 });
+  },
+
+  render() {
+    switch (this.state.currentStep) {
+      case 1:
+        return &lt;BookList /&gt;;
+      case 2:
+        return &lt;ShippingDetails /&gt;;
+      case 3:
+        return &lt;DeliveryDetails /&gt;;
+    }
+  }
+……
+
+});</pre></div><p class="it"><a class="indexterm">"Ahora que nos hemos asegurado de que el usuario siempre estará en el primer paso en el inicio, vamos a seguí adelante y </a><a id="id107" class="indexterm">terminar la tienda de libros." dijo Mike.</a></p>
+
+<p class="p">"Now that we have made sure that the user will always be on the first step at the start, let's go ahead and <a class="indexterm">finish the book store." said Mike.</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">// src/BookStore.js
+
+var BookList = React.createClass({
+  getInitialState() {
+    return (
+      { books: [
+        { name: 'Zero to One', author: 'Peter Thiel' },
+        { name: 'Monk who sold his Ferrari', author: 'Robin Sharma' },
+        { name: 'Wings of Fire', author: 'A.P.J. Abdul Kalam' }
+      ] }
+    )
+  },
+
+  _renderBook(book) {
+    return(
+      &lt;div className="checkbox"&gt;
+        &lt;label&gt;
+          &lt;input type="checkbox" /&gt; {book.name} -- {book.author}
+        &lt;/label&gt;
+      &lt;/div&gt;
+    );
+  },
+
+  render() {
+    return(
+      &lt;div&gt;
+        &lt;h3&gt; Choose from wide variety of books available in our store &lt;/h3&gt;
+        &lt;form&gt;
+          {this.state.books.map((book) =&gt; { 
+             return this._renderBook(book); })
+          }
+
+          &lt;input type="submit" className="btn btn-success" /&gt;
+        &lt;/form&gt;
+      &lt;/div&gt;
+    );
+  }
+});</a></pre></div><p class="it"><a class="indexterm">"Esta es nuestra forma estática. No sirve de nada en la interacción del usuario. El siguiente paso será hacer que responder a los eventos." Mike añadió.</a></p>
+
+<p class="p">"This is our static form. It doesn't do anything on user interaction. The next step will be to make it respond to the events." Mike added.</p><p class="it"><a class="indexterm">"Cool, estoy interesado en la forma en que nos movemos al siguiente paso." dijo Shawn.</a></p>
+
+<p class="p">"Cool, I am interested in how we move to the next step." said Shawn.</p><p class="it"><a class="indexterm">"Vamos a llegar allí </a><a id="id108" class="indexterm">pronto. Vamos a terminar otras cosas primero." informó Mike.</a></p>
+
+<p class="p">"We will reach there <a class="indexterm">soon. Let's finish other things first." informed Mike.</a></p><p class="it"><a class="indexterm">"OK. Antes de eso, ¿qué está pasando aquí?"</a></p>
+
+<p class="p">"OK. Before that, what's happening here?"</p><div class="informalexample"><pre class="programlisting">this.state.books.map((book) =&gt; { return (this._renderBook(book)) })</pre></div><p class="it"><a class="indexterm">"Esto se llama como una </a><a id="id109" class="indexterm"><span class="strong"><strong>sintaxis de grasa flecha</strong></span></a><a class="indexterm"> para definir funciones. Es otra característica ES6. Es una forma abreviada de la escritura de funciones."</a><a class="indexterm"> <span class="strong"><strong></strong></span></a></p>
+
+<p class="p">"This is called as a <a class="indexterm">
+<span class="strong"><strong>fat arrow syntax</strong></span> to define functions. It is another ES6 feature. It's a shorthand for writing functions."</a></p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note08">Note</a></h3><p class="it"><a>Más detalles acerca de las </a><a id="id110" class="indexterm">funciones fat arrow se podes encontrar en </a><a class="ulink" href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions">https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions</a> .</p>
+
+<p class="p">More details about fat <a class="indexterm">arrow functions can be found at </a><a class="ulink" href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions">https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions</a>.</p></div></div></div>
+</body></html>

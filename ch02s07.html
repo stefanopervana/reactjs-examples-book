@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Namespaced components</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Namespaced components"><div class="titlepage"><div><div><h1 class="title"><a id="ch02lvl1sec21"></a>Namespaced components</h1></div></div></div><p class="it"><a>"Shawn, debes </a><a id="id51" class="indexterm">haber utilizado los módulos y paquetes en lenguajes como Ruby y Java. La idea detrás de estos conceptos es crear una jerarquía de espacio de nombres de código de tal manera que el código de un módulo o paquete no interfiere con el otro."</a></p>
+
+<p class="p">"Shawn, you must <a class="indexterm"></a>have used modules and packages in languages such as Ruby and Java. The idea behind these concepts is to create a namespace hierarchy of code such that the code from one module or package doesn't interfere with another."</p><p class="it"><a class="indexterm">"Sí. Hay algo como esto disponible en React?" pidió a Shawn.</a></p>
+
+<p class="p">"Yes. Is something like this available with React?" Shawn asked.</p><p class="it"><a class="indexterm">"Sí. React permite la creación de espacios de nombres de componentes que están bajo un componente parent para que no interfieran con otros componentes o funciones globales."</a></p>
+
+<p class="p">"Yes. React allows creating components that are namespaced under a parent component so that they don't interfere with other components or global functions."</p><p class="it"><a class="indexterm">"Estamos utilizando nombres muy genéricos como Rows y Headings que pueden ser utilizados posteriormente en otras partes de la aplicación también. Por lo tanto, tiene sentido para los espacios de nombres ahora, en lugar de más tarde." explica Mike.</a></p>
+
+<p class="p">"We are using very generic names such as Rows and Headings that can be used later in other parts of the app too. So it makes sense to namespace them now, rather than later." explained Mike.</p><p class="it"><a class="indexterm">"De acuerdo. Vamos a hacerlo de inmediato", Shawn.</a></p>
+
+<p class="p">"Agreed. Let's do it right away," Shawn.</p><p class="it"><a class="indexterm">"Tenemos que representar el componente de nivel superior como componente personalizado en lugar de utilizar el elemento <code class="literal">&lt;table&gt;</code>."</a></p>
+
+<p class="p">"We need to represent the top-level component as custom component rather than using the <code class="literal">&lt;table&gt;</code> element."</p><div class="informalexample"><pre class="programlisting">var RecentChangesTable = React.createClass({<br></br>
+  render: function() {<br></br>
+    return &lt;table&gt;<br></br>
+             {this.props.children}<br></br>
+           &lt;/table&gt;;<br></br>
+  } <br></br>
+});</pre></div><p class="it"><a class="indexterm">"Ahora, podemos reemplazar el <code class="literal">App</code> componente para utilizar <code class="literal">RecentChangesTable</code> en lugar de <code class="literal">&lt;table&gt;.</code>"</a></p>
+
+<p class="p">"Now, we can replace the <code class="literal">App</code> component to use <code class="literal">RecentChangesTable</code> instead of <code class="literal">&lt;table&gt;.</code>"</p><div class="informalexample"><pre class="programlisting">var App = React.createClass({<br></br>
+  render: function(){<br></br>
+    return(&lt;RecentChangesTable&gt;<br></br>
+                &lt;Headings headings = {this.props.headings} /&gt;<br></br>
+                &lt;Rows changeSets = {this.props.changeSets} /&gt;<br></br>
+           &lt;/RecentChangesTable&gt;);<br></br>
+    }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Esperá, Mike. Nos acaba de reemplazar <code class="literal">&lt;table&gt;</code> por un componente personalizado. Todo lo que hace es simplemente renderizar <code class="literal">this.props.children</code>. ¿Cómo llegan todas las headings y rows?" Preguntó Shawn.</a></p>
+
+<p class="p">"Hang on, Mike. We just replaced <code class="literal">&lt;table&gt;</code> with a custom component. All it does is just render <code class="literal">this.props.children</code>. How does it get all the headings and rows?" Shawn asked.</p>
+
+<p class="it"><a class="indexterm">"Ah! Linda observación. React, por defecto, captura todos los nodos secundarios entre las etiquetas de apertura y cierre de un componente en una array y lo añade a los props de dicho componente como <code class="literal">this.props.children</code>. Así que podemos hacerlo usando <code class="literal">{this.props.children}</code>. Nos pondremos todos los encabezamientos y filas como <code class="literal">this.props.children</code> en el componente <code class="literal">RecentChangesTable</code>. La salida es la misma que antes, cuando se utilizó directamente la etiqueta <code class="literal">&lt;table&gt;</code>".</a></p>
+
+<p class="p">"Ah! Nice observation. React, by default, captures all the child nodes between open and close tags of a component in an array and adds it to the props of that component as <code class="literal">this.props.children</code>. So we can render it using <code class="literal">{this.props.children}</code>. We will get all Headings and Rows as <code class="literal">this.props.children</code> in the <code class="literal">RecentChangesTable</code> component. The output is the same as before, when we used the <code class="literal">&lt;table&gt;</code> tag directly."</p><p class="it"><a class="indexterm">"¡Increíble!" exclamó Shawn.</a></p>
+
+<p class="p">"Awesome!" exclaimed Shawn.</p><p class="it"><a class="indexterm">"Cool. Vamos </a><a id="id52" class="indexterm">al paso siguiente, escribiendo los demás componentes en <code class="literal">RecentChangesTable</code>."</a></p>
+
+<p class="p">"Cool. Let's move <a class="indexterm"></a>on next step by namespacing all other components under <code class="literal">RecentChangesTable</code>."</p><div class="informalexample"><pre class="programlisting">RecentChangesTable.Headings = React.createClass({<br></br>
+  render: function() {<br></br>
+    var headings = this.props.headings.map(function(name) {<br></br>
+      return(&lt;RecentChangesTable.Heading heading = {name}/&gt;);<br></br>
+    });<br></br>
+<br></br>
+   return (&lt;thead&gt;&lt;tr&gt;{headings}&lt;/tr&gt;&lt;/thead&gt;);<br></br>
+  }<br></br>
+});<br></br>
+<br></br>
+RecentChangesTable.Heading = React.createClass({<br></br>
+  render: function() {<br></br>
+    return(&lt;th&gt;<br></br>
+             {this.props.heading}<br></br>
+           &lt;/th&gt;);<br></br>
+  }<br></br>
+});<br></br>
+<br></br>
+<br></br>
+RecentChangesTable.Row = React.createClass({<br></br>
+  render: function() {<br></br>
+    return(&lt;tr&gt;<br></br>
+             &lt;td&gt;{this.props.changeSet.when}&lt;/td&gt;<br></br>
+             &lt;td&gt;{this.props.changeSet.who}&lt;/td&gt;<br></br>
+             &lt;td&gt;{this.props.changeSet.description}&lt;/td&gt;<br></br>
+          &lt;/tr&gt;);<br></br>
+  }<br></br>
+});<br></br>
+<br></br>
+RecentChangesTable.Rows = React.createClass({<br></br>
+  render: function() {<br></br>
+    var rows = this.props.changeSets.map(function(changeSet) {<br></br>
+      return(&lt;RecentChangesTable.Row changeSet = {changeSet}/&gt;);<br></br>
+    });<br></br>
+<br></br>
+    return (&lt;tbody&gt;{rows}&lt;/tbody&gt;);<br></br>
+  }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"También vamos a necesitar actualizar el componente <code class="literal">App</code> para utilizar componentes de espacios de nombres ahora."</a></p>
+
+<p class="p">"We will also need to update the <code class="literal">App</code> component to use namespaced components now."</p><div class="informalexample"><pre class="programlisting">var App = React.createClass({<br></br>
+  render: function(){<br></br>
+    return(&lt;RecentChangesTable&gt;<br></br>
+                 &lt;RecentChangesTable.Headings headings = {this.props.headings} /&gt;<br></br>
+                 &lt;RecentChangesTable.Rows changeSets = {this.props.changeSets} /&gt;<br></br>
+               &lt;/RecentChangesTable&gt;);<br></br>
+    }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Ahora estamos </a><a id="id53" class="indexterm">listos. Ahora está todo bajo el namespace <code class="literal">RecentChangesTable</code>", dijo Mike.</a></p>
+
+<p class="p">"We are now <a class="indexterm"></a>done. Everything is namespaced under <code class="literal">RecentChangesTable</code> now", said Mike.</p></div></body></html>

@@ -1,0 +1,411 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 5. Mixins and the DOM</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="chapter" title="Chapter 5. Mixins and the DOM"><div class="titlepage"><div><div><h1 class="title"><a id="ch05"></a>Chapter 5. Mixins and the DOM</h1></div></div></div><p class="it"><a>En el capítulo anterior, tomamos una inmersión profunda en React Formas. Tomamos un vistazo a la construcción de múltiples componentes y la interactividad entre ellos, el controlador y los componentes no controlados, las formas de construcción y elementos de formulario, y eventos de formulario y manejadores para los eventos. Construimos una forma de capturar fluxe de la compra-pago y órdenes de ser colocado en una forma de múltiples pasos.</a></p>
+
+<p class="p">In the previous chapter, we took a deep dive into React Forms. We took a look at building multiple components and interactivity between them, Controller and Uncontrolled Components, building Forms and Form elements, and Form events and handlers for the events. We build a form to capture cart-checkout flow and orders being placed in a multi-step form.</p><p class="it"><a>En este capítulo, nos centraremos en la abstracción de contenido utilizando mixins y táctil durante la manipulación del DOM.</a></p>
+
+<p class="p">In this chapter, we will focus on abstracting content using mixins and touch upon DOM handling.</p><p class="it"><a>A continuación, vamos a cubrir los siguientes puntos:</a></p>
+
+<p class="p">Here, we will cover the following points:</p><div class="itemizedlist"><ul class="itemizedlist">
+
+<li class="listitem" style="list-style-type: disc">Mixins</li>
+
+<li class="listitem" style="list-style-type: disc">PureRender mixin</li>
+
+<li class="listitem" style="list-style-type: disc">React and the DOM</li>
+
+<li class="listitem" style="list-style-type: disc">Refs</li>
+</ul>
+</div>
+
+<p class="it"><a>Al final de este capítulo, vamos a ser capaces de abstraer y reutilizar la lógica a través de nuestros componentes y aprender cómo manejar DOM desde el interior de los componentes.</a></p>
+
+<p class="p">At the end of this chapter, we will be able to abstract and reuse logic across our components and learn how to handle DOM from within the components.</p><div class="section" title="Back at the office"><div class="titlepage"><div><div><h1 class="title"><a id="ch05lvl1sec53"></a>Back at the office</h1></div></div></div><p class="it"><a>El dúo estaba de vuelta en </a><a id="id131" class="indexterm">el trabajo. Mike entró con una taza de café. Era por la mañana y de la oficina apenas había comenzado a zumbar.</a></p>
+
+<p class="p">The duo was back at <a class="indexterm"></a>work. Mike entered with a cup of coffee. It was morning and the office had just started to buzz.</p><p class="it"><a class="indexterm">"Entonces, Shawn, hemos hecho un montón de formas complejas cosas de última hora. Nuestro flujo de la compra se ha completado. Sin embargo, ahora se nos ha pedido agregar un tiempo de espera para el carro. Tenemos que mostrar un contador de tiempo para el usuario que necesitan comprobación y completar el pedido en 15 minutos ".</a></p>
+
+<p class="p">"So Shawn, we did a lot of complex forms stuff last time. Our cart flow is now complete. However, now we have been asked to add a timeout to the cart. We need to show a timer to the user that they need to checkout and complete the order in 15 minutes."</p><p class="it"><a class="indexterm">"¿Alguna idea de cómo podemos hacer esto?"</a></p>
+
+<p class="p">"Any idea how we can do this?"</p><p class="it"><a class="indexterm">"Umm, mantener un estado de temporizador y mantener la actualización cada segundo? Tomar alguna acción cuando el temporizador llega a cero."</a></p>
+
+<p class="p">"Umm, maintain a state for timer and keep updating every second? Take some action when the timer hits zero."</p><p class="it"><a class="indexterm">"En este! Vamos a utilizar intervalos para reducir los valores de tiempo de espera y mantener la actualización de nuestros puntos de vista para mostrar el temporizador. Como hemos sido el almacenamiento de los datos del formulario en un solo lugar, nuestro <code class="literal">Bookstore</code> componente, vamos a seguí adelante y añadir un valor de estado que hará un seguimiento de este . timeout valor Vamos a cambiar nuestro estado inicial a algo similar a lo siguiente:"</a></p>
+
+<p class="p">"Right! We will use intervals to reduce the timeout values and keep updating our views to display the timer. As we have been storing the form data in a single place, our <code class="literal">Bookstore</code> component, let's go ahead and add a state value that will track this timeout value. Let's change our initial state to something similar to the following:"</p><div class="informalexample"><pre class="programlisting">getInitialState() {
+    return ({currentStep: 1, formValues: {}, cartTimeout: 60 * 15});
+  }</pre></div><p class="it"><a class="indexterm">"60 X 15, que es de 15 minutos en el valor de los segundos. También será necesario añadir un método para mantener la actualización de este estado para que podamos utilizarlo libremente desde aquí, así como los componentes childs."</a></p>
+
+  <p class="p">"60 X 15, that's 15 minutes in seconds value. We will also need to add a method to keep updating this state so that we can use it freely from here as well as the child components."</p><div class="informalexample"><pre class="programlisting">updateCartTimeout(timeout){
+    this.setState({cartTimeout: timeout});
+}</pre></div><p class="it"><a class="indexterm">"Guay."</a></p>
+
+<p class="p">"Cool."</p><p class="it"><a class="indexterm">"Ahora, lo que vamos a hacer es definir lo que se denomina como mixins."</a></p>
+
+<p class="p">"Now, what we will do is define what are called as mixins."</p><p class="it"><a class="indexterm">"Mixins?"</a></p>
+
+<p class="p">"Mixins?"</p><p class="it"><a class="indexterm">"Sí, mixins nos permiten </a><a id="id132" class="indexterm">compartir un código a través de componentes. Vamos a echar un vistazo a cómo vamos a usarlo antes de seguí adelante."</a></p>
+
+<p class="p">"Yeah, mixins allow us to <a class="indexterm"></a>share a code across components. Let's take a look at how we are going to use it before moving ahead."</p><div class="informalexample"><pre class="programlisting">var SetIntervalMixin = {
+
+  componentWillMount: function() {
+    this.intervals = [];
+  },
+
+  setInterval: function() {
+    this.intervals.push(setInterval.apply(null, arguments));
+  },
+
+  componentWillUnmount: function() {
+    this.intervals.map(clearInterval);
+  }
+};
+
+module.exports = SetIntervalMixin;</pre></div><p class="it"><a class="indexterm">"Así que lo que estamos haciendo aquí no es nada mucho, pero la definición de un objeto. Veremos cómo la utilizamos en nuestros componentes."</a></p>
+
+<p class="p">"So what we are doing here is nothing much but defining an object. We will see how we use it in our components."</p><p class="it"><a class="indexterm">"Como se podes ver, lo que estamos tratando de lograr aquí es añadir una manera de seguí todos nuestros manejadores de intervalo, de la siguiente manera:"</a></p>
+
+<p class="p">"As you can see, what we are trying to achieve here is add a way to track all our interval handlers, as follows:"</p><div class="informalexample"><pre class="programlisting">componentWillMount: function() {
+    this.intervals = [];
+  }
+  </pre></div><p class="it"><a class="indexterm">"Aquí, estamos inicializando primero una matriz para contener las instancias a intervalos que estaremos creando continuación, vamos a definir un método que se podes utilizar para definir nuevos intervalos, como sigue:"</a></p>
+
+  <p class="p">"Here, we are first initializing an array to hold instances to intervals that we will be creating. Next, we will define a method that can be used to define new intervals, as follows:"</p><div class="informalexample"><pre class="programlisting">  setInterval: function() {
+    this.intervals.push(setInterval.apply(null, arguments));
+  }</pre></div><p class="it"><a class="indexterm">"Lo tengo que ver el último bit es definir el. <code class="literal">componentWillUnmount</code> método y ya hemos definido <code class="literal">componentWillMount</code>, pero esto no es un componente React ¿Por qué tenemos estos métodos aquí.?"</a></p>
+
+  <p class="p">"Got it. I see the last bit is defining the <code class="literal">componentWillUnmount</code> method and we have already defined <code class="literal">componentWillMount</code>; but this isn't a React component. Why do we have these method here?"</p><p class="it"><a class="indexterm">"Oh, bien Vamos a echar un vistazo </a><a id="id133" class="indexterm">en el siguiente método en primer lugar:"</a></p>
+
+  <p class="p">"Oh right. Let's take a look <a class="indexterm"></a>at the following method first:"</p><div class="informalexample"><pre class="programlisting">  componentWillUnmount: function() {
+    this.intervals.map(clearInterval);
+  }</pre></div><p class="it"><a class="indexterm">"Lo que hace este método es limpiar los intervalos, lo que podríamos haber creado, antes de desmontar nuestro componente."</a></p>
+
+  <p class="p">"What this method does is clean up the intervals, which we might have created, before we unmount our component."</p><p class="it"><a class="indexterm">"Lo tengo."</a></p>
+
+  <p class="p">"Got it."</p><p class="it"><a class="indexterm">"Ahora, como usted ha mencionado, tenemos dos métodos de ciclo de vida aquí- <code class="literal">componentWillMount</code> y <code class="literal">componentWillUnmount</code>."</a></p>
+
+  <p class="p">"Now, as you mentioned, we have two life cycle methods here—<code class="literal">componentWillMount</code> and <code class="literal">componentWillUnmount</code>."</p><p class="it"><a class="indexterm">"Cuando empezamos a usar esto en nuestro componente, que se llaman igual que los otros métodos similares, que tenemos en nuestro componente de ciclo de vida."</a></p>
+
+  <p class="p">"When we start using this in our component, they are called just like the other similar methods, which we have in our component for life cycle."</p><p class="it"><a class="indexterm">"Oh agradable. Será tanto esto como el método existente llamará?" pidió a Shawn.</a></p>
+
+  <p class="p">"Oh nice. Will both this and the existing method get called?" Shawn asked.</p><p class="it"><a class="indexterm">"Exactamente. Ahora que hemos definido la mezcla, vamos a empezar a usarlo!"</a></p>
+
+  <p class="p">"Exactly. Now that we have the mixing defined, let's start using it!"</p><p class="it"><a class="indexterm">"El primer lugar queremos empezar a usar este está en la página de detalles de la entrega Esto es tan simple como hacer lo siguiente:"</a></p>
+
+  <p class="p">"The first place we want to start using this is on the delivery details page. This is as simple as doing the following:"</p><div class="informalexample"><pre class="programlisting">var DeliveryDetails = React.createClass({
+…
+mixins: [SetIntervalMixin]
+…</pre></div><p class="it"><a class="indexterm">"Impresionante, al lado nos gustaría empezar a utilizar esta para cuidar de almacenar <code class="literal">cartTimout</code> los valores y actualizarlos. Se podes definir un mixin de hacer eso?" preguntó Mike.</a></p>
+
+<p class="p">"Awesome, next we would like to start using this to take care of storing <code class="literal">cartTimout</code> values and updating them. Can you define a mixin to do just that?" asked Mike.</p><p class="it"><a class="indexterm">"Está bien, primero a definir un método para disminuir el contador de tiempo de la compra, algo que va a mantener la actualización de estado. A continuación, tendrá que establecer realmente el tiempo de espera, para llamar al método en un intervalo de modo que se llama cada segundo para disminuir ¿el tiempo?"</a></p>
+
+<p class="p">"Okay, I will first define a method to decrement the cart timer, something that will keep updating the state. Next, we will need to actually set the timeout, to call the method at an interval so that it is called every second to decrement the time?"</p><p class="it"><a class="indexterm">"Exactamente, vamos a ver cómo lo haría."</a></p>
+
+<p class="p">"Exactly, let's see how you would do it."</p><div class="informalexample"><pre class="programlisting">var CartTimeoutMixin = {
+  componentWillMount: function () {
+    this.setInterval(this.decrementCartTimer, 1000);
+  },
+
+  decrementCartTimer(){
+    if (this.state.cartTimeout == 0) {
+      this.props.alertCartTimeout();
+      return;
+    }
+    this.setState({cartTimeout: this.state.cartTimeout - 1});
+  },
+
+};</pre></div><p class="it"><a class="indexterm">"Bueno, eso es exactamente lo que necesitamos, pero que se perdió una sola pieza;.. Tenemos que ser capaces de enviar esto a que el componente principal para almacenar el valor del temporizador de vuelta que estamos actualizando aquí"</a></p>
+
+<p class="p">"Nice, that's exactly what we need. But we missed one piece; we need to be able to send this back to that parent component to store back the timer value that we are updating here."</p><p class="it"><a class="indexterm">"También vamos a cuidar de </a><a id="id134" class="indexterm">pasar del estado actual del contador de tiempo de los padres a los childs."</a></p>
+
+<p class="p">"We will also take care of <a class="indexterm"></a>passing the current state of timer from the parent to the children."</p><p class="it"><a class="indexterm">"Correcto."</a></p>
+
+<p class="p">"Oh, right."</p><p class="it"><a class="indexterm">"Volvamos a nuestro componente de los padres a comenzar a pasar el valor de la compra temporizador para los childs Así es como nuestro método render debe mirar ahora:".</a></p>
+
+<p class="p">"Let's go back to our parent component to start passing the cart timer value to the children. Here's how our render method should look now:"</p><div class="informalexample"><pre class="programlisting">……
+render() {
+    switch (this.state.currentStep) {
+
+      case 1:
+        return &lt;BookList updateFormData={this.updateFormData}/&gt;;
+
+      case 2:
+        return &lt;ShippingDetails updateFormData={this.updateFormData}
+                                cartTimeout={this.state.cartTimeout}
+                                updateCartTimeout={this.updateCartTimeout} /&gt;;
+
+      case 3:
+        return &lt;DeliveryDetails updateFormData={this.updateFormData}
+                                cartTimeout={this.state.cartTimeout}
+                                updateCartTimeout={this.updateCartTimeout} /&gt;;
+                              
+……</pre></div><p class="it"><a class="indexterm">"Tené en cuenta que estamos </a><a id="id135" class="indexterm">pasando el <code class="literal">updateCartTimeout</code> método aquí. Esto es algo que vamos a empezar a utilizar el siguiente en nuestra mixin."</a></p>
+
+<p class="p">"Notice that we are <a class="indexterm"></a>passing the <code class="literal">updateCartTimeout</code> method here. This is something that we will start using next in our mixin."</p><p class="it"><a class="indexterm">"A continuación, vamos a actualizar el <code class="literal">DeliveryDetails</code> componente para comenzar a almacenar el <code class="literal">cartTimeout</code> valor."</a></p>
+
+<p class="p">"Next, we are going to update the <code class="literal">DeliveryDetails</code> component to start storing the <code class="literal">cartTimeout</code> value."</p><div class="informalexample"><pre class="programlisting">getInitialState() {
+    return { deliveryOption: 'Primary', cartTimeout: this.props.cartTimeout };
+ } </pre></div><p class="it"><a class="indexterm">"Con esta configuración, ahora podemos establecer nuestro método para hacer que la página de opciones de entrega, esto debería ser similar al siguiente:"</a></p>
+
+ <p class="p">"With this setup, we can now set up our render method for the delivery options page, this should now look similar to the following:"</p><div class="informalexample"><pre class="programlisting">  render() {
+
+    var minutes = Math.floor(this.state.cartTimeout / 60);
+    var seconds = this.state.cartTimeout - minutes * 60;
+
+    return (
+      &lt;div&gt;
+        &lt;h1&gt;Choose your delivery options here.&lt;/h1&gt;
+        &lt;div style={{width:200}}&gt;
+          &lt;form onSubmit={this.handleSubmit}&gt;
+            &lt;div className="radio"&gt;
+              &lt;label&gt;
+
+                &lt;input type="radio"
+                       checked={this.state.deliveryOption === "Primary"}
+                       value="Primary"
+                       onChange={this.handleChange} /&gt;
+                Primary -- Next day delivery
+              &lt;/label&gt;
+            &lt;/div&gt;
+
+            &lt;div className="radio"&gt;
+              &lt;label&gt;
+                &lt;input type=e"radio"
+                       checked={this.state.deliveryOption === "Normal"}
+                       value="Normal"
+                       onChange={this.handleChange} /&gt;
+                Normal -- 3-4 days
+              &lt;/label&gt;
+            &lt;/div&gt;
+
+            &lt;button className="btn btn-success"&gt;
+              Submit
+            &lt;/button&gt;
+
+          &lt;/form&gt;
+        &lt;/div&gt;
+
+        &lt;div className="well"&gt;
+          &lt;span className="glyphicon glyphicon-time" aria-hidden="true"&gt;&lt;/span&gt; You have {minutes} Minutes, {seconds} Seconds, before confirming order
+        &lt;/div&gt;
+
+      &lt;/div&gt;
+    );
+  }</pre></div><p class="it"><a class="indexterm">"También tenemos que empezar a utilizar el <code class="literal">CartMixin</code>, por lo que nuestra <code class="literal">mixins</code> importación debe ser similar a la siguiente:"</a></p>
+
+  <p class="p">"We also need to start using the <code class="literal">CartMixin</code>, so our <code class="literal">mixins</code> import should look similar to the following:"</p><div class="informalexample"><pre class="programlisting">…
+mixins: [SetIntervalMixin, CartTimeoutMixin],
+…</pre></div><p class="it"><a class="indexterm">"Bueno, vamos a ver cómo el envío de </a><a id="id136" class="indexterm">la información se ve como ahora".</a></p>
+
+<p class="p">"Nice, let me see how the shipping <a class="indexterm"></a>information looks like now."</p><div class="mediaobject"><img src="graphics/4730_05_01.jpg" alt="Back at the office"/></div><p class="it"><a class="indexterm">"¡Funciona!" exclamó Shawn.</a></p>
+
+<p class="p">"It works!" exclaimed Shawn.</p><p class="it"><a class="indexterm">"Impresionante. Recordá, Shawn, ahora tenemos que pasar la información de vuelta a nuestro componente de los padres cuando se cambia a otra página."</a></p>
+
+<p class="p">"Awesome. Remember, Shawn, now we need to pass the information back to our parent component when we change to some other page."</p><p class="it"><a class="indexterm">"Sí, hay que añadir a los componentes, en los que se utilizó el mixin?"</a></p>
+
+<p class="p">"Yeah, we should add it to the components, where we used the mixin?"</p><p class="it"><a class="indexterm">"Mejor aún, vamos a añadir el siguiente código a la mixin:"</a></p>
+
+<p class="p">"Better yet, let's add the following code to the mixin:"</p><div class="informalexample"><pre class="programlisting">….
+componentWillUnmount(){
+    this.props.updateCartTimeout(this.state.cartTimeout);
+  }
+….</pre></div><p class="it"><a class="indexterm">"Ahora nuestro mixin debe ser similar a la siguiente:"</a></p>
+
+<p class="p">"Now our mixin should look similar to the following:"</p><div class="informalexample"><pre class="programlisting">var CartTimeoutMixin = {
+  componentWillMount: function () {
+    this.setInterval(this.decrementCartTimer, 1000);
+  },
+
+  decrementCartTimer(){
+    if (this.state.cartTimeout == 0) {
+      this.props.alertCartTimeout();
+      return;
+    }
+    this.setState({cartTimeout: this.state.cartTimeout - 1});
+  },
+
+  componentWillUnmount(){
+    this.props.updateCartTimeout(this.state.cartTimeout);
+  }
+
+};
+
+module.exports = CartTimeoutMixin;</pre></div><p class="it"><a class="indexterm">"Nuestra mixin se actualizará </a><a id="id137" class="indexterm">el valor actual de la cesta cuando se pone sin montar."</a></p>
+
+<p class="p">"Our mixin will now update <a class="indexterm"></a>the current cart value when it gets unmounted."</p><p class="it"><a class="indexterm">"Hemos perdido una cosa que es parte de este mixin. Llamamos <code class="literal">this.props.alertCartTimeout()</code> cuando el temporizador llega a cero."</a></p>
+
+<p class="p">"We missed one thing that is part of this mixin. We call <code class="literal">this.props.alertCartTimeout()</code> when the timer hits zero."</p><p class="it"><a class="indexterm">"Vamos a definir esto en el <span class="emphasis"><em>componente de los padres</em></span> y pasarlo en torno a llamarse a partir componente secundario, de la siguiente manera:"</a></p>
+
+<p class="p">"We are going to define this on the <span class="emphasis"><em>parent component</em></span> and pass it around to be called from child component, as follows:"</p><div class="informalexample"><pre class="programlisting">  alertCartTimeout(){
+    this.setState({currentStep: 10});
+  },</pre></div><p class="it"><a class="indexterm">"A continuación, actualizar nuestra renderizado método para cuidar cuando llegamos al paso de tiempo de espera, como se muestra en la siguiente:"</a></p>
+
+  <p class="p">"Then update our render method to take care when we reach the timeout step, as shown in the following:"</p><div class="informalexample"><pre class="programlisting">render() {
+    switch (this.state.currentStep) {
+      case 1:
+        return &lt;BookList updateFormData={this.updateFormData}/&gt;;
+      case 2:
+        return &lt;ShippingDetails updateFormData={this.updateFormData}
+                                cartTimeout={this.state.cartTimeout}
+                                updateCartTimeout={this.updateCartTimeout}
+                                alertCartTimeout={this.alertCartTimeout}/&gt;;
+      case 3:
+        return &lt;DeliveryDetails updateFormData={this.updateFormData}
+                                cartTimeout={this.state.cartTimeout}
+                                updateCartTimeout={this.updateCartTimeout}
+                                alertCartTimeout={this.alertCartTimeout}/&gt;;
+      case 4:
+        return &lt;Confirmation data={this.state.formValues}
+                             updateFormData={this.updateFormData}
+                             cartTimeout={this.state.cartTimeout}/&gt;;
+      case 5:
+        return &lt;Success data={this.state.formValues} cartTimeout={this.state.cartTimeout}/&gt;;
+
+      case 10:
+       /* Handle the case of Cart timeout */
+        return &lt;div&gt;&lt;h2&gt;Your cart timed out, Please try again!&lt;/h2&gt;&lt;/div&gt;;
+      default:
+        return &lt;BookList updateFormData={this.updateFormData}/&gt;;
+    }
+  }</pre></div><p class="it"><a class="indexterm">Vamos a ver cómo el </a><a id="id138" class="indexterm">componente se ve después de completarlo, ahora:"</a><a class="indexterm"> <code class="literal">DeliveryDetails</code></a></p>
+
+  <p class="p">Let's see how the <a class="indexterm"></a>
+<code class="literal">DeliveryDetails</code> component looks after completing it, now:"</p><div class="informalexample"><pre class="programlisting">import React from 'react';
+import SetIntervalMixin from './mixins/set_interval_mixin'
+import CartTimeoutMixin from './mixins/cart_timeout_mixin'
+
+var DeliveryDetails = React.createClass({
+  propTypes: {
+    alertCartTimeout: React.PropTypes.func.isRequired,
+    updateCartTimeout: React.PropTypes.func.isRequired,
+    cartTimeout: React.PropTypes.number.isRequired
+  },
+
+  mixins: [SetIntervalMixin, CartTimeoutMixin],
+
+  getInitialState() {
+    return { deliveryOption: 'Primary', cartTimeout: this.props.cartTimeout };
+  },
+
+  componentWillReceiveProps(newProps){
+    this.setState({cartTimeout: newProps.cartTimeout});
+  },
+
+
+  handleChange(event) {
+    this.setState({ deliveryOption: event.target.value});
+  },
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.updateFormData(this.state);
+  },
+
+  render() {
+    var minutes = Math.floor(this.state.cartTimeout / 60);
+    var seconds = this.state.cartTimeout - minutes * 60;
+    return (
+      &lt;div&gt;
+        &lt;h1&gt;Choose your delivery options here.&lt;/h1&gt;
+        &lt;div style={{width:200}}&gt;
+          &lt;form onSubmit={this.handleSubmit}&gt;
+            &lt;div className="radio"&gt;
+              &lt;label&gt;
+                &lt;input type="radio"
+                       checked={this.state.deliveryOption === "Primary"}
+                       value="Primary"
+                       onChange={this.handleChange} /&gt;
+                Primary -- Next day delivery
+              &lt;/label&gt;
+            &lt;/div&gt;
+            &lt;div className="radio"&gt;
+              &lt;label&gt;
+                &lt;input type="radio"
+                       checked={this.state.deliveryOption === "Normal"}
+                       value="Normal"
+                       onChange={this.handleChange} /&gt;
+                Normal -- 3-4 days
+              &lt;/label&gt;
+            &lt;/div&gt;
+
+            &lt;button className="btn btn-success"&gt;
+              Submit
+            &lt;/button&gt;
+          &lt;/form&gt;
+        &lt;/div&gt;
+        &lt;div className='well'&gt;
+          &lt;span className="glyphicon glyphicon-time" aria-hidden="true"&gt;&lt;/span&gt; You have {minutes} Minutes, {seconds} Seconds, before confirming order
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+});
+
+module.exports = DeliveryDetails;</pre></div><p class="it"><a class="indexterm">"También vamos a </a><a id="id139" class="indexterm">actualizar nuestro <code class="literal">ShippingDetails</code> componente a ser similar a la siguiente:"</a></p>
+
+<p class="p">"We are also going to <a class="indexterm"></a>update our <code class="literal">ShippingDetails</code> component to look similar to the following:"</p><div class="informalexample"><pre class="programlisting">import React from 'react';
+import SetIntervalMixin from './mixins/set_interval_mixine'
+import CartTimeoutMixin from './mixins/cart_timeout_mixin'
+
+
+
+var ShippingDetails = React.createClass({
+  propTypes: {
+    alertCartTimeout:React.PropTypes.func.isRequired,
+    updateCartTimeout: React.PropTypes.func.isRequired,
+    cartTimeout: React.PropTypes.number.isRequired
+  },
+
+  mixins: [SetIntervalMixin, CartTimeoutMixin],
+
+  getInitialState() {
+    return {fullName: '', contactNumber: '', shippingAddress: '', error: false, cartTimeout: this.props.cartTimeout};
+  },
+  _renderError() {
+    if (this.state.error) {
+      return (
+        &lt;div className=e"alert alert-danger"&gt;
+          {this.state.error}
+        &lt;/div&gt;
+      );
+    }
+  },
+
+  _validateInput() { 
+  …..
+  },
+
+  handleSubmit(event) {
+  ….
+  },
+
+  handleChange(event, attribute) {
+    var newState = this.state;
+    newState[attribute] = event.target.value;
+    this.setState(newState);
+    console.log(this.state);
+  },
+
+  render() {
+    var errorMessage = this._renderError();
+    var minutes = Math.floor(this.state.cartTimeout / 60);
+    var seconds = this.state.cartTimeout - minutes * 60;
+
+    return (
+      &lt;div&gt;
+        &lt;h1&gt;Enter your shipping information.&lt;/h1&gt;
+           …..
+      
+      
+        &lt;div className='well'&gt;
+          &lt;span className="glyphicon glyphicon-time" aria-hidden="true"&gt;&lt;/span&gt; You have {minutes} Minutes, {seconds} Seconds, before confirming order
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+});
+
+module.exports = ShippingDetails;</pre></div><p class="it"><a class="indexterm">Se debe comenzar </a><a id="id140" class="indexterm">mirando similar a la siguiente captura de pantalla ahora:</a></p>
+
+<p class="p">It should start <a class="indexterm"></a>looking similar to the following screenshot now:</p><div class="mediaobject"><img src="graphics/4730_05_02.jpg" alt="Back at the office"/></div><p class="it"><a class="indexterm">"Impresionante", exclamó Shawn.</a></p>
+
+<p class="p">"Awesome," exclaimed Shawn.</p><p class="it"><a class="indexterm">"En caso de tiempos de espera, tenemos una pantalla sencilla:"</a></p>
+
+<p class="p">"In case of timeouts, we have a simple display:"</p><div class="mediaobject"><img src="graphics/4730_05_03.jpg" alt="Back at the office"/></div></div></div></body></html>

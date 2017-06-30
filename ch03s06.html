@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Setting initial state</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Setting initial state"><div class="titlepage"><div><div><h1 class="title"><a id="ch03lvl1sec33"></a>Setting initial state</h1></div></div></div><p class="it"><a>"El estado inicial se puede </a><a id="id79" class="indexterm">ajustar mediante la función <code class="literal">getInitialState</code>". Dijo Mike.</a></p>
+
+<p class="p">"The initial state can be <a class="indexterm"></a>set using the <code class="literal">getInitialState</code> function." said Mike.</p><div class="informalexample"><pre class="programlisting">var App = React.createClass({<br></br>
+  getInitialState: function() {<br></br>
+    return {<br></br>
+      changeSets: []<br></br>
+    };<br></br>
+  },<br></br>
+  <br></br>
+  render: function(){<br></br>
+    console.log(this.state.changeSets); // prints []<br></br>  
+});</pre></div><p class="it"><a class="indexterm">"El estado puede tener similar acceso </a><a id="id80" class="indexterm">a los props que utilizan <code class="literal">this.state</code>." Mike lo explica con más detalle.</a></p>
+
+<p class="p">"State can be accessed <a class="indexterm"></a>similar to props using <code class="literal">this.state</code>." Mike explained further.</p></div></body></html>

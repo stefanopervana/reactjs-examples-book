@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Form events</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Form events"><div class="titlepage"><div><div><h1 class="title"><a id="ch04lvl1sec47"></a>Form events</h1></div></div></div><p class="it"><a>"Vamos a manejar </a><a id="id111" class="indexterm">enviar el formulario ahora. React ofrece el <code class="literal">onSubmit</code> evento para este fin." dijo Mike.</a></p>
+
+<p class="p">"Let's handle <a class="indexterm"></a>submitting the form now. React provides the <code class="literal">onSubmit</code> event for this purpose." said Mike.</p><div class="informalexample"><pre class="programlisting">// src/BookStore.js
+……
+// Updating BookStore component
+
+render() {
+    return(
+      &lt;div&gt;
+        &lt;h3&gt; Choose from wide variety of books available in our store &lt;/h3&gt;
+        &lt;form onSubmit={this.handleSubmit}&gt;
+          {this.state.books.map((book) =&gt; { return (this._renderBook(book)) })}
+
+          &lt;input type="submit" className="btn btn-success" /&gt;
+        &lt;/form&gt;
+      &lt;/div&gt;
+    );
+  },
+
+handleSubmit(event) {
+    console.log(event);
+    event.preventDefault();
+    console.log("Form submitted");
+   }
+   ……</pre></div><p class="it"><a class="indexterm">"Ahora, el siguiente paso </a><a id="id112" class="indexterm">es conseguí el asimiento de todos los libros seleccionados por el usuario. Podemos utilizar <code class="literal">state</code> para lograrlo." explica Mike.</a></p>
+
+   <p class="p">"Now, the next task <a class="indexterm"></a>is to get hold of all the books selected by the user. We can use <code class="literal">state</code> to achieve this." explained Mike.</p><div class="informalexample"><pre class="programlisting">// src/BookStore.js
+……
+
+// Updating BookStore component
+
+getInitialState() {
+    return (
+      { books: [
+        { id: 1, name: 'Zero to One', author: 'Peter Thiel' },
+        { id: 2, name: 'Monk who sold his Fearrary', author: 'Robin Sharma' },
+        { id: 3, name: 'Wings of Fire', author: 'A.P.J. Abdul Kalam' }
+      ],
+        selectedBooks: []
+      }
+    );
+  },
+
+_renderBook(book) {
+    return (
+      &lt;div className="checkbox" key={book.id}&gt;
+        &lt;label&gt;
+          &lt;input type="checkbox" value={book.name}
+                 onChange={this.handleSelectedBooks}/&gt;
+          {book.name} -- {book.author}
+        &lt;/label&gt;
+      &lt;/div&gt;
+    );
+  },
+
+  handleSelectedBooks(event) {
+    var selectedBooks = this.state.selectedBooks;
+    var index = selectedBooks.indexOf(event.target.value);
+
+    if (event.target.checked) {
+      if (index === -1)
+        selectedBooks.push(event.target.value);
+    } else {
+      selectedBooks.splice(index, 1);
+    }
+
+    this.setState({selectedBooks: selectedBooks });
+}</pre></div><p class="it"><a class="indexterm">"Hemos añadido un <code class="literal">onChange</code> controlador para las casillas de verificación. También proporcionamos el <code class="literal">value</code> prop de las casillas de verificación que será el nombre del libro. Inicialmente, el <code class="literal">selectedBooks</code> estado será una array vacía establecido a través de la <code class="literal">getInitialState</code> función. El <code class="literal">handleSelectedBooks</code> método comprobará si está marcada la casilla de verificación o no . Estamos utilizando el prop comprobado proporcionada por React para las entradas de casilla de verificación. al igual que en valor, también se actualiza </a><a id="id113" class="indexterm">con la interacción del usuario.</a></p>
+
+<p class="p">"We added an <code class="literal">onChange</code> handler for the checkboxes. We also provided the <code class="literal">value</code> prop to the checkboxes which will be name of the book. Initially, the <code class="literal">selectedBooks</code> state will be an empty array set through the <code class="literal">getInitialState</code> function. The <code class="literal">handleSelectedBooks</code> method will check whether the checkbox is checked or not. We are using the checked prop provided by React for checkbox inputs. Similar to value, it also gets updated <a class="indexterm"></a>with user interaction.</p><p class="it"><a class="indexterm">Al final, estamos actualizando el estado con el nuevo valor de <code class="literal">selectedBooks</code>. Por lo tanto, en cualquier punto del tiempo, tendremos bodega de libros seleccionados en <code class="literal">this.state.selectedBooks</code>." Explica Mike.</a></p>
+
+<p class="p">At the end, we are updating the state with the new value of <code class="literal">selectedBooks</code>. Therefore, at any point of time, we will have hold of selected books in <code class="literal">this.state.selectedBooks</code>." explained Mike.</p><p class="it"><a class="indexterm">"¡Perfecto!" dijo Shawn.</a></p>
+
+<p class="p">"Perfect!" said Shawn.</p></div></body></html>

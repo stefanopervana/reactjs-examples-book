@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Back to work</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Back to work"><div class="titlepage"><div><div><h1 class="title"><a id="ch01lvl1sec11"></a>Back to work</h1></div></div></div>
+
+
+<p class="it"><a>"Eso es bueno para comenzar, Shawn. Vamos a volver a la tarea de construir nuestra aplicación para el uso de los recientes cambios de la API de Open Library's </a><a id="id13" class="indexterm">. Ya tenemos un prototipo básico preparado y sin usar de ReactJS."</a></p>
+
+<p class="p">"That's good to start, Shawn. Let's move back to the task of building our app using Open Library's Recent changes <a class="indexterm"></a>API now. We already have a basic prototype ready without using ReactJS."</p>
+
+<p class="it">"Vamos a sustituir poco a poco partes de él utilizando ReactJS."</p>
+
+<p class="p">"We will be slowly replacing parts of it using ReactJS."</p>
+
+<p class="it">"Se trata de cómo se muestra la información en este momento, usando la lógica del lado del servidor, de la siguiente manera:"</p>
+
+<p class="p">"This is how the information is displayed right now, using server-side logic, as follows:"</p><div class="mediaobject"><img src="graphics/4730_01_04.jpg" alt="Back to work"/></div>
+
+<p class="it">"La primera tarea que tenemos es mostrar la información recuperada de los recientes cambios de la API de Open Library's en una tabla usando ReactJS de forma similar a cómo se visualiza en este momento utilizando el lado del servidor."</p>
+
+<p class="p">"First task that we have is to display the information retrieved from the Open Library Recent Changes API in a table using ReactJS similar to how it's displayed right now using server-side."</p>
+
+<p class="it"><a class="indexterm">"Vamos a ir a buscar los </a><a id="id14" class="indexterm">datos de la Open Library API similares a lo siguiente:"</a></p>
+
+<p class="p">"We will be fetching the <a class="indexterm"></a>data from the Open Library API similar to the following:"</p><div class="informalexample">
+<pre class="programlisting">var data = [{ "when": "2 minutes ago",<br></br>
+              "who": "Jill Dupre",<br></br>
+              "description": "Created new account"<br></br>
+            },<br></br>
+            {<br></br>
+              "when": "1 hour ago",<br></br>
+              "who": "Lose White",<br></br>
+              "description": "Added fist chapter"<br></br>
+            },<br></br>
+            {<br></br>
+              "when": "2 hours ago",<br></br>
+              "who": "Jordan Whash",<br></br>
+              "description": "Created new account"<br></br>
+            }];</pre></div>
+
+            <p class="it">"Vamos a usar esto para crear prototipos de nuestra aplicación, por ahora. Antes de eso, vamos a echar un vistazo a la versión HTML sencilla de esta aplicación, En nuestro.. método <code class="literal">React.render</code>, comenzamos a devolver un elemento de la tabla, de la siguiente manera:"</p>
+
+            <p class="p">"Let's use this to prototype our app for now. Before that, let's take a look at the simple HTML version of this app. In our <code class="literal">React.render</code> method, we start returning a table element, as follows:"</p><div class="informalexample">
+            <pre class="programlisting">var App = React.createClass({<br></br>
+<br></br>
+  render: function(){<br></br>
+ return &lt;table&gt;<br></br>
+ &lt;thead&gt;<br></br>
+   &lt;th&gt;When&lt;/th&gt;<br></br>
+   &lt;th&gt;Who&lt;/th&gt;<br></br>
+   &lt;th&gt;Description&lt;/th&gt;<br></br>
+ &lt;/thead&gt; <br></br> 
+   &lt;tr&gt;<br></br>
+     &lt;td&gt;2 minutes ago&lt;/td&gt;<br></br>
+     &lt;td&gt;Jill Dupre&lt;/td&gt;<br></br>
+     &lt;td&gt;Created new account&lt;/td&gt;<br></br>
+   &lt;/tr&gt;<br></br>
+   &lt;tr&gt;<br></br>
+     &lt;td&gt;1 hour ago&lt;/td&gt;<br></br>
+     &lt;td&gt;Lose White&lt;/td&gt;<br></br>
+     &lt;td&gt;Added fist chapter&lt;/td&gt;<br></br>
+   &lt;/tr&gt;  <br></br>
+   &lt;tr&gt;<br></br>
+     &lt;td&gt;2 hours ago&lt;/td&gt;<br></br>
+     &lt;td&gt;Jordan Whash&lt;/td&gt;<br></br>
+     &lt;td&gt;Created new account&lt;/td&gt;<br></br>
+   &lt;/tr&gt; <br></br> 
+ &lt;/table&gt;<br></br>
+  }<br></br>
+});</pre></div>
+
+<p class="it"><a class="indexterm">"Esto debe comenzar </a><a id="id15" class="indexterm">mostrando nuestra tabla con tres filas Ahora, seguí adelante y añadir un encabezado en la parte superior de esta tabla desde el. <code class="literal">React App</code>, De la siguiente manera:"</a></p>
+
+<p class="p">"This should start <a class="indexterm"></a>displaying our table with three rows. Now, go ahead and add a heading at top of this table from the <code class="literal">React App</code>, as follows:"</p><div class="informalexample"><pre class="programlisting">…
+return &lt;h1&gt;Recent Changes&lt;/h1&gt;
+           &lt;table&gt;
+          ….
+          &lt;/table&gt;
+…</pre></div>
+
+<p class="it">"No, algo por el estilo?" Shawn se le preguntó. "Oh, eso no funcionó."</p>
+
+<p class="p">"There, something like that?" asked Shawn. "Oh, that didn't work."</p>
+
+<p class="it">"Eso es porque React gasta nuestro método render para devolver siempre un solo elemento HTML. En este caso, después de agregar el título <code class="literal">h1</code>, nuestra aplicación comenzó a regresar dos elementos, lo cual es incorrecto. Habrá muchos casos, cuando se llega a través de esto. Para evitar esto, simplemente envolvé los elementos en una etiqueta <code class="literal">div</code> o <code class="literal">span</code>. La idea principal es que sólo queremos devolver un solo elemento del método render".</p>
+
+<p class="p">"That's because React expends our render method to always return a single HTML element. In this case, after you added the <code class="literal">h1</code> heading, our app started returning two elements, which is wrong. There'll be many cases when you will come across this. To avoid this, just wrap the elements in a <code class="literal">div</code> or <code class="literal">span</code> tag. The main idea is that we just want to return a single element from the render method."</p>
+
+<p class="it">"Entendido. Algo como esto?"</p>
+
+<p class="p">"Got it. Something like this?"</p><div class="informalexample"><pre class="programlisting">…<br></br>
+return &lt;div&gt;<br></br>
+         &lt;h1&gt;Recent Changes&lt;/h1&gt;<br></br>
+           &lt;table&gt;<br></br>
+          ….<br></br>
+          &lt;/table&gt;<br></br>
+         &lt;/div&gt;<br></br>
+…</pre></div></div></body></html>

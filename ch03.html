@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 3. Data Flow and Life Cycle Events</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="chapter" title="Chapter 3. Data Flow and Life Cycle Events"><div class="titlepage"><div><div><h1 class="title"><a id="ch03"></a>Chapter 3. Data Flow and Life Cycle Events</h1></div></div></div><p class="it"><a>En el capítulo anterior, vimos el poder de JSX. JSX hace que sean fáciles de escribir los componentes React.</a></p>
+
+<p class="p">In the previous chapter, we saw the power of JSX. JSX makes it easy to write the React components.</p><p class="it"><a>En este capítulo, nos centraremos en el flujo de datos entre los componentes y la forma de gestionar el ciclo de estado y la vida de los componentes.</a></p>
+
+<p class="p">In this chapter, we will focus on the data flow between components and how to manage state and life cycle of components.</p><p class="it"><a>En este capítulo, vamos a cubrir los siguientes puntos:</a></p>
+
+<p class="p">In this chapter, we will cover the following points:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">Data flow in React</li><li class="listitem" style="list-style-type: disc">Props</li><li class="listitem" style="list-style-type: disc">PropTypes</li><li class="listitem" style="list-style-type: disc">State</li><li class="listitem" style="list-style-type: disc">State versus props</li><li class="listitem" style="list-style-type: disc">When to use state and props</li><li class="listitem" style="list-style-type: disc">Component life cycle overview</li><li class="listitem" style="list-style-type: disc">Component life cycle methods</li></ul></div><p class="it"><a>Al final del capítulo, vamos a familiarizarnos con el flujo de datos en los componentes React y las formas de mantenimiento y gestión del estado. También nos acostumbraremos al ciclo de vida de un componente y varios hooks de ciclo de vida proporcionados por React.</a></p>
+
+<p class="p">At the end of the chapter, we will get familiar with the data flow in the React components and the ways of maintaining and managing state. We will also get used to the life cycle of a component and various life cycle hooks provided by React.</p><div class="section" title="Data flow in React"><div class="titlepage"><div><div><h1 class="title"><a id="ch03lvl1sec28"></a>Data flow in React</h1></div></div></div><p class="it"><a>Shawn y Mark </a><a id="id66" class="indexterm">estaban a punto de empezar a trabajar en un día lluvioso con una taza de café.</a></p>
+
+<p class="p">Shawn and Mark <a class="indexterm"></a>were getting ready to start working on a rainy day with a cup of coffee.</p><p class="it"><a class="indexterm">"Hola Mike, tengo una pregunta acerca de los Props que hemos utilizado para pasar los datos <code class="literal">headings</code> y <code class="literal">changeSet</code> a otros componentes."</a></p>
+
+<p class="p">"Hey Mike, I have a question about props that we used to pass the <code class="literal">headings</code> and <code class="literal">changeSet</code> data to other components."</p><p class="it"><a class="indexterm">"Shoot!" exclamó Mike.</a></p>
+
+<p class="p">"Shoot!" Mike exclaimed.</p><p class="it"><a class="indexterm">"Me parece que estamos pasando datos a los componentes que están por debajo del componente actual, pero ¿cómo puede un componente pasar los datos al componente principal?"</a></p>
+
+<p class="p">"It seems to me that we are passing data to the components that are below the current component, but how can a component pass the data to the parent component?"</p><p class="it"><a class="indexterm">"Ah. En React, por defecto, todos los datos fluyen en una sola dirección: de componente padre a componente hijo. Eso es todo.".</a></p>
+
+<p class="p">"Ah. In React, by default, all the data flows only in one direction: from parent component to child component. That's it."</p><p class="it"><a class="indexterm">Esto hace el trabajo del </a><a id="id67" class="indexterm">componente secundario simple y predecible. Toma los Props de los padres y los renderiza." Explica Mike.</a></p>
+
+<p class="p">This makes the job of the <a class="indexterm"></a>child component simple and predictable. Take props from the parent and render." Mike explained.</p><div class="informalexample"><pre class="programlisting">var RecentChangesTables = React.createClass({<br></br>
+  render: function(){<br></br>
+    return(&lt;table className = 'table'&gt;<br></br>
+             &lt;Headings headings = {this.props.headings} /&gt;<br></br>
+             &lt;Rows changeSets = {this.props.changeSets} /&gt;<br></br>
+           &lt;/table&gt;);<br></br>
+    }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Veamos nuestro ejemplo. El componente <code class="literal">RecentChangesTables</code> pasa los props a los componentes <code class="literal">Headings</code> y <code class="literal">Rows</code>. Así que, básicamente, se puede decir que <code class="literal">RecentChangesTables</code> es propietaria de los componentes <code class="literal">Headings</code> y <code class="literal">Rows</code>."</a></p>
+
+<p class="p">"Let's look at our example. The <code class="literal">RecentChangesTables</code> component passes the props to the <code class="literal">Headings</code> and <code class="literal">Rows</code> components. So basically, we can say that <code class="literal">RecentChangesTables</code> owns the <code class="literal">Headings</code> and <code class="literal">Rows</code> components."</p><p class="it"><a class="indexterm">"En React, un componente propietario establece props por otros componentes." Explicó Mike.</a></p>
+
+<p class="p">"In React, an owner component sets props for another components." Mike explained.</p><p class="it"><a class="indexterm">"Lo tengo. Por lo tanto, en el caso anterior, <code class="literal">&lt;table&gt;</code> es también propiedad de <code class="literal">RecentChangesTables</code>?" Preguntó Shawn.</a></p>
+
+<p class="p">"Got it. Therefore, in the preceding case, <code class="literal">&lt;table&gt;</code> is also owned by <code class="literal">RecentChangesTables</code>?" Shawn asked.</p><p class="it"><a class="indexterm">"No, la relación de propietario es específica de los componentes React. En este caso, la tabla es el padre de <code class="literal">Headings</code> y <code class="literal">Rows</code>, de forma similar a la relación padre-hijo en el DOM. Pero no es dueño de ellos." explica Mike.</a></p>
+
+<p class="p">"No. The owner relationship is specific to the React components. In this case, table is the parent of <code class="literal">Headings</code> and <code class="literal">Rows</code>, similar to the parent-child relationship in DOM. But it's not an owner of them." explained Mike.</p><p class="it"><a class="indexterm">"Un componente es el propietario de un componente secundario si ese child se crea en el método de procesamiento de los padres. Creo que esto va a resolver la confusión". Mike añadió.</a></p>
+
+<p class="p">"A component is the owner of a child component if that child gets created in the render method of the parent. I guess this will solve the confusion." Mike added.</p><p class="it"><a class="indexterm">"Sí. Tenes la diferencia entre el propietario y la relación padre-hijo." dijo Shawn.</a></p>
+
+<p class="p">"Yes. Got the difference between owner and parent-child relationship." said Shawn.</p><p class="it"><a class="indexterm">"Por otra parte, un componente no debe mutar sus Props. Siempre deben estar en consonancia con lo que el padre se ha puesto. Es un punto muy importante que hace que React tenga un comportamiento coherente, y también rápido, como veremos pronto." Mike añadió.</a></p>
+
+<p class="p">"Furthermore, a component should not mutate its props. They should always be consistent with what the parent has set. It's a very important point that makes React's behavior consistent as well as fast, as we'll see soon." Mike further added.</p><p class="it"><a class="indexterm">"Podes acceder a los props por <code class="literal">this.props</code>, como ya hemos visto. Si hay algun cambio de los props de los padres, React se asegurará de que los cambios se realicen aguas abajo y se volverá a renderizar el árbol de componentes." Mike.</a></p>
+
+<p class="p">"Props can be accessed by <code class="literal">this.props</code>, as we have already seen. If anything in the parent's props changes, React will make sure that the changes are flown downstream and will re-render the component tree." Mike.</p><p class="it"><a class="indexterm">"Excelente. Ayer, estaba leyendo algo acerca de la validación de los props." Shawn recordó.</a></p>
+
+<p class="p">"Excellent. Yesterday, I was reading something about validating the props." remembered Shawn.</p><p class="it"><a class="indexterm">"Sí. React permite la validación de los props utilizando <code class="literal">PropTypes</code>. Vamos a echar un vistazo a ellos." Mike dijo, tomando un sorbo </a><a id="id68" class="indexterm">de su café recién molido.</a></p>
+
+<p class="p">"Yes. React allows validating the props using <code class="literal">PropTypes</code>. Let's take a look at them." said Mike, taking a sip <a class="indexterm"></a>from his freshly ground coffee.</p></div></div></body></html>

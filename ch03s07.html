@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Setting state</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Setting state"><div class="titlepage"><div><div><h1 class="title"><a id="ch03lvl1sec34"/>Setting state</h1></div></div></div>
+<p class="it">Podríamos necesitar actualizar el estado inicial en base a algunos eventos del usuario. La actualización del estado también es muy fácil usando la función setState()." informó Mike.</p><p class="p">"We might need to update <a id="id81" class="indexterm"/>the initial state based on some user events. Updating state is also easy using the <code class="literal">setState()</code> function." informed Mike.</p><div class="informalexample"><pre class="programlisting">var App = React.createClass({<br></br>
+  getInitialState: function() {<br></br>
+    return {<br></br>
+      changeSets: [],<br></br>
+      headings: ['Updated At', 'Author', 'Change']<br></br>
+    };<br></br>
+  },<br></br>
+  <br></br>
+  handleEvent: function(data) {<br></br>
+    this.setState({ changeSets: data.changeSets });<br></br>
+  },<br></br>
+  <br></br>
+  render: function(){<br></br>
+    &#x2026;   <br></br> 
+});</pre></div></div></body></html>

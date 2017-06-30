@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Displaying static data</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Displaying static data"><div class="titlepage"><div><div><h1 class="title"><a id="ch01lvl1sec12"></a>Displaying static data</h1></div></div></div>
+
+
+<p class="it"><a>"Impresionante! Se ve bien. Ahora, vamos a cambiar nuestra tabla que está mostrando información estática, para empezar a ir a buscar y </a><a id="id16" class="indexterm">mostrar esta información en las filas de los datos JSON que teníamos antes."</a></p>
+
+<p class="p">"Awesome! Looks good. Now, let's change our table that is displaying static information, to start fetching and <a class="indexterm"></a>displaying this information in the rows from the JSON data that we had before."</p>
+
+
+<p class="it">"Vamos a definir estos datos en el método render en sí mismo y ver cómo lo estaríamos usando para crear nuestra tabla. Vamos a hacer básicamente un bucle a través de los datos y la creación de elementos, es decir, las filas de tabla en nuestro caso, para el conjunto individual de datos de eventos Algo como esto:".</p>
+
+<p class="p">"We'll define this data in the render method itself and see how we would be using it to create our table. We'll basically just be looping over the data and creating elements, that is, table rows in our case, for the individual data set of events. Something like this:"</p><div class="informalexample"><pre class="programlisting">…<br></br>
+  var data = [{ "when": "2 minutes ago",<br></br>
+              "who": "Jill Dupre",<br></br>
+              "description": "Created new account"<br></br>
+            },<br></br>
+            {<br></br>
+              "when": "1 hour ago",<br></br>
+              "who": "Lose White",<br></br>
+              "description": "Added fist chapter"<br></br>
+            },<br></br>
+            {<br></br>
+              "when": "2 hours ago",<br></br>
+              "who": "Jordan Whash",<br></br>
+              "description": "Created new account"<br></br>
+            }];<br></br>
+<br></br>
+  var rows = data.map(function(row){<br></br>
+  return  &lt;tr&gt;<br></br>
+     &lt;td&gt;{row.when}&lt;/td&gt;<br></br>
+     &lt;td&gt;{row.who}&lt;/td&gt;<br></br>
+     &lt;td&gt;{row.description}&lt;/td&gt;<br></br>
+   &lt;/tr&gt;<br></br>
+  });<br></br>
+…</pre></div>
+
+
+<p class="it">"Observá cómo estamos utilizando <code class="literal">{}</code> aquí. <code class="literal">{}</code> se utiliza en JSX para incrustar información dinámica en nuestra plantilla de vista. Podemos utilizarlo para incrustar los objetos JavaScript en nuestros puntos de vista, por ejemplo, el nombre de una persona o título de esta tabla. Como podes ver, lo que estamos haciendo aquí es utilizar la función <code class="literal">map</code> de bucle sobre el conjunto de datos que tenemos. Entonces, estamos devolviendo una row (fila) de la tabla, construida a partir de la información disponible en el objeto row (fila) -. Los detalles acerca de cuándo se creó el evento, quien lo creó y la descripción de un evento ".</p>
+
+<p class="p">"Notice how we are using <code class="literal">{}</code> here. <code class="literal">{}</code> is used in JSX to embed dynamic information in our view template. We can use it to embed the JavaScript objects in our views, for example, the name of a person or heading of this table. As you can see, what we are doing here is using the <code class="literal">map</code> function to loop over the dataset that we have. Then, we are returning a table row, constructed from the information available from the row object – the details about when the event was created, who created it and event description."</p>
+
+
+<p class="it">"Estamos utilizando la sintaxis JSX aquí para construir las filas de la tabla. Sin embargo, no se utiliza como valor de retorno final a partir de la función de render."</p>
+
+<p class="p">"We are using JSX syntax here to construct the rows of table. However, it is not used as the final return value from render function."</p>
+
+
+<p class="it">"Eso es correcto, Shawn. React con JSX nos permite crear arbitrariamente elementos para ser utilizados en nuestras vistas, en nuestro caso, la creación de formas dinámicas a partir del conjunto de datos que tenemos. Las filas variables contiene ahora una parte de la vista que habíamos usado en un lugar diferente. también podemos construir otro componente de la vista en la parte superior de la misma ".</p>
+
+<p class="p">"That's correct, Shawn. React with JSX allows us to arbitrarily create elements to be used in our views, in our case, creating it dynamically from the dataset that we have. The rows variable now contains a part of view that we had used at a different place. We can also build another component of the view on top of it."</p>
+
+
+<p class="it"><a class="indexterm">"Esa es la belleza de ello. React nos permite crear de forma dinámica, el uso y la reutilización de las partes de las vistas. Esto es útil para </a><a id="id17" class="indexterm">construir nuestros puntos de vista, parte por parte, de una manera sistemática."</a></p>
+
+<p class="p">"That's the beauty of it. React allows us to dynamically create, use, and reuse the parts of views. This is helpful to <a class="indexterm"></a>build our views, part by part, in a systematic way."</p>
+
+
+<p class="it">"Ahora, después de haber terminado con la construcción de nuestras filas, podemos utilizarlas en nuestro llamado al render final."</p>
+
+<p class="p">"Now, after we are done with building our rows, we can use them in our final render call."</p>
+
+
+<p class="it">"Así que ahora, la instrucción de retorno se verá como algo similar a lo siguiente:"</p>
+
+<p class="p">"So now, the return statement will look something similar to the following:"</p><div class="informalexample"><pre class="programlisting">…<br></br>
+ return &lt;table&gt;<br></br>
+ &lt;thead&gt;<br></br>
+   &lt;th&gt;When&lt;/th&gt;<br></br>
+   &lt;th&gt;Who&lt;/th&gt;<br></br>
+   &lt;th&gt;Description&lt;/th&gt;<br></br>
+ &lt;/thead&gt;  <br></br>
+{rows} <br></br>
+ &lt;/table&gt;<br></br>
+…</pre></div>
+
+
+<p class="it">"He aquí cómo el método render completo ahora se ocupa de la construcción de filas con datos estáticos:"</p>
+
+<p class="p">"Here's how the complete render method now looks after building up rows with static data:"</p><div class="informalexample"><pre class="programlisting">  render: function(){<br></br>
+  var data = [{ "when": "2 minutes ago",<br></br>
+              "who": "Jill Dupre",<br></br>
+              "description": "Created new account"<br></br>
+            },<br></br>
+            {<br></br>
+              "when": "1 hour ago",<br></br>
+              "who": "Lose White",<br></br>
+              "description": "Added fist chapter"<br></br>
+            },<br></br>
+            {<br></br>
+              "when": "2 hours ago",<br></br>
+              "who": "Jordan Whash",<br></br>
+              "description": "Created new account"<br></br>
+            }];<br></br>
+<br></br>
+  var rows = data.map(function(row){<br></br>
+  return  &lt;tr&gt;<br></br>
+     &lt;td&gt;{row.when}&lt;/td&gt;<br></br>
+     &lt;td&gt;{row.who}&lt;/td&gt;<br></br>
+     &lt;td&gt;{row.description}&lt;/td&gt;<br></br>
+   &lt;/tr&gt;<br></br>
+  })<br></br>
+ return &lt;table&gt;<br></br>
+ &lt;thead&gt;<br></br>
+   &lt;th&gt;When&lt;/th&gt;<br></br>
+   &lt;th&gt;Who&lt;/th&gt;<br></br>
+   &lt;th&gt;Description&lt;/th&gt;<br></br>
+ &lt;/thead&gt;<br></br>
+{rows}<br></br>
+&lt;/table&gt;}</pre></div><div class="mediaobject"><img src="graphics/4730_01_05.jpg" alt="Displaying static data"/></div>
+
+
+<p class="it"><a class="indexterm">"Eso está empezando a parecerse a </a><a id="id18" class="indexterm"> dónde queremos llegar."</a></p>
+
+<p class="p">"That's starting to look <a class="indexterm"></a>like where we want to reach."</p></div></body></html>

@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>JSX Gotchas</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="JSX Gotchas"><div class="titlepage"><div><div><h1 class="title"><a id="ch02lvl1sec24"></a>JSX Gotchas</h1></div></div></div><p class="it"><a>El día se dirigía a </a><a id="id61" class="indexterm">su fin. Mike y Shawn todavía estaban discutiendo acerca de esta nueva y brillante cosa que es la JSX. Mike decidió que era el momento de decirle a Shawn acerca de los problemas con el uso de JSX.</a></p>
+
+
+<p class="p">The day was heading to <a class="indexterm"></a>an end. Mike and Shawn were still discussing about this shiny new thing—JSX. Mike decided that it was time to tell Shawn about the issues with using JSX.</p><p class="it"><a class="indexterm">"Shawn, ¿cómo te sentis usando JSX?"</a></p>
+
+
+<p class="p">"Shawn, so how do you feel about using JSX?"</p><p class="it"><a class="indexterm">"Me ha gustado hasta el momento. Es muy similar al markup HTML. Podes pasar atributos, estilos, e incluso clases. También puedo usar todos los elementos DOM", explicó Shawn.</a></p>
+
+
+<p class="p">"I liked it so far. It's very similar to the HTML markup. I can pass attributes, styles, and even classes. I can also use all the DOM elements" explained Shawn.</p><p class="it"><a class="indexterm">"Sí. Pero JSX no es HTML. Tenemos que recordar siempre esto. De lo contrario, vamos a tener problemas."</a></p>
+
+
+<p class="p">"Yes. But JSX is not HTML. We have to always remember this. Otherwise, we will run into trouble."</p><p class="it"><a class="indexterm">"Por ejemplo, si deseas pasar algún atributo personalizado que no existe en la especificación HTML, entonces React simplemente lo ignorará."</a></p>
+
+
+<p class="p">"For example, if you want to pass some custom attribute that does not exist in the HTML specification, then React will simply ignore it."</p><div class="informalexample"><pre class="programlisting">// custom-attribute won't be rendered
+&lt;table custom-attribute = 'super_awesome_table'&gt;
+&lt;/table&gt;</pre></div><p class="it"><a class="indexterm">"Se debe pasar como un atributo de datos de modo que React lo renderice."</a></p>
+
+
+<p class="p">"It must be passed as a data attribute so that React will render it."</p><div class="informalexample"><pre class="programlisting">// data-custom-attribute will be rendered
+&lt;table data-custom-attribute = 'super_awesome_table'&gt;
+&lt;/table&gt;</pre></div><p class="it"><a class="indexterm">"También es posible que encuentres algunos problemas al intentar mostrar el contenido HTML de forma dinámica. En las etiquetas JSX, podemos añadir directamente una entidad HTML válida."</a></p>
+
+
+<p class="p">"We may also run into some issues while rendering the HTML content dynamically. In the JSX tags, we can add a valid HTML entity directly."</p>
+<div class="informalexample"><pre class="programlisting">// Using HTML entity inside JSX tags.<br></br>
+&lt;div&gt; Mike &amp;amp; Shawn &lt;/div&gt;<br></br>
+// will produce<br></br>
+ React.createElement("div", null, " Mike &amp; Shawn ")</pre></div><p class="it"><a class="indexterm">"Pero si lo renderizamos en una expresión dinámica, Entonces escaparán del ampersand."</a></p>
+
+
+ <p class="p">"But if we render it in a dynamic expression, it will then escape the ampersand."</p><div class="informalexample"><pre class="programlisting">// Using HTML entity inside dynamic expression<br></br>
+var first = 'Mike';<br></br>
+var second = 'Shawn';<br></br>
+&lt;div&gt; { first + '&amp;amp;' + second } &lt;/div&gt;<br></br>
+<br></br>
+var first = 'Mike';<br></br>
+var second = 'Shawn';<br></br>
+React.createElement("div", null, " ", first + '&amp;amp;' + second, " ")</pre></div><p class="it"><a class="indexterm">"Sucede cuando React escapa a todas las cadenas para evitar ataques XSS de forma predeterminada. Para superarlo, podemos pasar directamente el carácter Unicode de <code class="literal">&amp;amp;</code> o podemos usar arrays de cadenas y elementos JSX." Mike explicó</a></p>
+
+<p class="p">"It happens as React escapes all the strings in order to prevent XSS attacks by default. To overcome it, we can directly pass the Unicode character of <code class="literal">&amp;amp;</code> or we can use arrays of strings and JSX elements." Mike explained.</p><div class="informalexample"><pre class="programlisting">// Using mixed arrays of JSX elements and normal variables<br></br>
+&lt;div&gt; {[first, &lt;span&gt;&amp;amp;&lt;/span&gt;, second]} &lt;/div&gt;<br></br>
+<br></br>
+React.createElement("div", null, " ", [first,<br></br> 
+                                   React.createElement("span", null, "&amp;"), second], " ")</pre></div><p class="it"><a class="indexterm">"Wow. Puede ser bastante complicado" expresó Shawn.</a></p>
+
+
+                                   <p class="p">"Wow. It can get pretty messed up" expressed Shawn.</p><p class="it"><a class="indexterm">"Bueno, sí, pero si tenemos en cuenta las reglas, entonces es bastante simple. Además, como último recurso, React también permite renderizar HTML puro usando una prop especial <code class="literal">dangerouslySetInnerHTML</code>".</a></p>
+
+
+                                   <p class="p">"Well, yes, but if we remember the rules, then it's pretty simple. Also, as a last resort, React also allows to render raw HTML using a special <code class="literal">dangerouslySetInnerHTML</code> prop."</p><div class="informalexample"><pre class="programlisting">// Rendering raw HTML directly<br></br>
+&lt;div dangerouslySetInnerHTML={{__html: 'Mike &amp;amp; Shawn'}} /&gt;</pre></div><p class="it"><a class="indexterm">"A pesar de que esta opción </a><a id="id62" class="indexterm">se debe utilizar después de la consideración de lo que está siendo renderizado para prevenir ataques XSS" explica Mike.</a></p>
+
+
+<p class="p">"Although this option <a class="indexterm"></a>should be used after consideration about what is getting rendered to prevent XSS attacks" Mike explained.</p></div></body></html>

@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Creating Backbone models</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Creating Backbone models"><div class="titlepage"><div><div><h1 class="title"><a id="ch09lvl1sec71"></a>Creating Backbone models</h1></div></div></div><p class="it"><a>"Por lo tanto, Shawn, vamos a ir </a><a id="id253" class="indexterm">adelante y construir cabo la recopilación de nuestros gatos que queremos visualizar. Para los fines del desarrollo, vamos a utilizar imágenes de gatos de </a><a id="id254" class="indexterm">servicio lorempixel, por ejemplo, </a><a class="ulink" href="http://lorempixel.com/600/600/cats/">http://lorempixel.com/600 / 600 / gatos /</a> . Esto nos dará una imagen gato aleatoria de 600 x 600 píxeles ".</p>
+
+<p class="p">"So, Shawn, let's go <a class="indexterm"></a>ahead and build out our cats' collection that we want to display. For the purpose of development, we are going to use cat images from <a class="indexterm"></a>lorempixel service, for example, <a class="ulink" href="http://lorempixel.com/600/600/cats/">http://lorempixel.com/600/600/cats/</a>. This will give us a random cat image of 600 x 600 pixels."</p><p class="it">"A continuación, vamos a crear un almacén de datos utilizando objetos diferentes a los normales. Queremos explorar cómo integrar diferentes modelos fluye con nuestra aplicación React aquí. En nuestro caso, vamos a hacer uso de los modelos de red troncal, en lugar de la FOTOS constante. sé que ya ha utilizado columna vertebral ".</p>
+
+<p class="p">"Next, we are going to create a store of data using different-than-normal objects. We want to explore how to embed different model flows with our React app here. In our case, let's make use of Backbone models, instead of the PICTURES constant. I know that you have already used Backbone."</p><p class="it">"Sí, lo he utilizado en mis proyectos anteriores."</p>
+
+<p class="p">"Yup, I have used it in my previous projects."</p><p class="it">"Bien entonces, vamos a definir nuestro <code class="literal">Cat</code> modelo".</p>
+
+<p class="p">"Alright then, let's define our <code class="literal">Cat</code> model."</p><div class="informalexample"><pre class="programlisting">const PictureModel = Backbone.Model.extend({
+  defaults: {
+    src: 'http://lorempixel.com/601/600/cats/',
+    name: 'Pusheen',
+    details: 'Pusheen is a Cat'
+  }
+});</pre></div><p class="it">"Aquí almacenamos la <code class="literal">src</code> de la imagen de un gato, su nombre y algunos detalles sobre ella. Como se podes ver, hemos proporcionado algunos valores por defecto para estos atributos."</p>
+
+<p class="p">"Here we store the <code class="literal">src</code> for the image of a cat, its name, and some details about it. As you can see, we have provided some default values for these attributes."</p><p class="it">"A continuación, vamos a definir nuestra <code class="literal">Cats</code> colección de todos los <code class="literal">Cat</code> registros."</p>
+
+<p class="p">"Next, let's define our <code class="literal">Cats</code> collection to all the <code class="literal">Cat</code> records."</p><div class="informalexample"><pre class="programlisting">const Cats = new Backbone.Collection;
+Cats.add(new PictureModel({src: "http://lorempixel.com/601/600/cats/", 
+                                              name: Faker.Name.findName(), 
+                                              details: Faker.Lorem.paragraph()}));
+
+Cats.add(new PictureModel({src: "http://lorempixel.com/602/600/cats/", 
+                                              name: Faker.Name.findName(), 
+                                              details: Faker.Lorem.paragraph()}));
+…</pre></div><p class="it">"En este sentido, haciendo uso del <code class="literal">Faker</code> módulo para crear nombres al azar para los gatos utilizando <code class="literal">Faker.Name.findName()</code>, añadiendo Descripción aleatoria usando <code class="literal">Faker.Lorem.paragraph()</code> y pasando la fuente según sea necesario."</p>
+
+<p class="p">"Here, we making use of the <code class="literal">Faker</code> module to create random names for the cats using <code class="literal">Faker.Name.findName()</code>, adding random description using <code class="literal">Faker.Lorem.paragraph()</code> and passing the source as needed."</p><p class="it">"Cool", dijo Shawn. "Vamos <a id="id255" class="indexterm">a ver cómo se ve ahora".</a></p>
+
+<p class="p">"Cool," said Shawn. "Let <a class="indexterm"></a>me see how this looks now."</p><div class="informalexample"><pre class="programlisting">//models.js
+import Backbone from 'backbone';
+import Faker from 'faker';
+
+const PictureModel = Backbone.Model.extend({
+  defaults: {
+    src: 'http://lorempixel.com/601/600/cats/',
+    name: 'Pusheen',
+    details: 'Pusheen is a Cat'
+  }
+});
+
+const Cats = new Backbone.Collection;
+Cats.add(new PictureModel({src: "http://lorempixel.com/601/600/cats/", name: Faker.Name.findName(), details: Faker.Lorem.paragraph()}));
+…
+Cats.add(new PictureModel({src: "http://lorempixel.com/606/600/cats/", name: Faker.Name.findName(), details: Faker.Lorem.paragraph()}));
+
+module.exports = {Cats, PictureModel};</pre></div></div></body></html>

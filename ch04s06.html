@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Uncontrolled components</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Uncontrolled components"><div class="titlepage"><div><div><h1 class="title"><a id="ch04lvl1sec45"></a>Uncontrolled components</h1></div></div></div>
+<p class="it"><a>"React también tiene </a><a id="id104" class="indexterm">componentes no controlados donde el <code class="literal">value</code> prop no se pasa a la entrada".</a></p>
+
+<p class="p">"React also has <a class="indexterm"></a>uncontrolled components where the <code class="literal">value</code> prop is not passed to the input".</p><div class="informalexample"><pre class="programlisting">render() {
+    return (
+      &lt;input type="text" /&gt;
+    );
+  }</pre></div><p class="it"><a class="indexterm">"En este caso, el valor introducido por el usuario se refleja inmediatamente en la entrada. Para el ajuste de un valor inicial predeterminado, podemos pasar el valor predeterminado <code class="literal">value</code> prop, que actuará como el valor inicial para un componente no controlada."</a></p>
+
+  <p class="p">"In this case, the value entered by the user will be immediately reflected in the input. For setting some default initial value, we can pass the default <code class="literal">value</code> prop, which will act as the initial value for an uncontrolled component."</p><div class="informalexample"><pre class="programlisting">render() {
+    return (
+      &lt;input type="text" defaultValue="Shawn"/&gt;
+    );
+  }</pre></div>
+  <p class="it"><a class="indexterm">"Impresionante. Esto lo hace".</a></p>
+
+  <p class="p">"Awesome. This does it."</p></div></body></html>

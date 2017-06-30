@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?> <html xmlns="http://www.w3.org/1999/xhtml"><head><title>HTML tags vs React components</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="HTML tags vs React components"><div class="titlepage"><div><div><h1 class="title"><a id="ch02lvl1sec17"></a>HTML tags vs React components</h1></div></div></div> <p class="it"><a>"Mike, estoy </a><a id="id38" class="indexterm">intrigado por una cosa más. En JSX, estamos </a><a id="id39" class="indexterm">mezclando los componentes React como si fueran simples etiquetas HTML. Esto lo hicimos en nuestro primer componente."</a></p> <p class="p">"Mike, I am <a class="indexterm"></a>intrigued by one more thing. In JSX, we are <a class="indexterm"></a>mixing the React components as if they are simple HTML tags. We did this in our first component."</p>
+<div class="informalexample"><pre class="programlisting">ReactDOM.render(&lt;App headings =<br></br> {['When', 'Who', 'Description']}<br></br> 
+                     data = {data} /&gt;,<br></br> 
+             document.getElementById('container'));</pre></div>
+
+<p class="it"><a class="indexterm">"La etiqueta <code class="literal">App</code> no es una etiqueta HTML válido aquí. Pero esto todavía funciona."</a></p> <p class="p">"The <code class="literal">App</code> tag is not a valid HTML tag here. But this still works."</p><p class="it"><a class="indexterm">"Sí. Eso es porque podemos especificar ambas etiquetas HTML y componentes React en JSX. Hay una diferencia sutil, sin embargo. Las etiquetas HTML comienzan con una letra minúscula y los componentes React comienzan con una letra mayúscula." Mike explicó.</a></p> <p class="p">"Yes. That's because we can specify both HTML tags and React components in JSX. There is a subtle difference though. HTML tags start with a lowercase letter and React components start with an uppercase letter." Mike explained.</p>
+<div class="informalexample"><pre class="programlisting">// Specifying HTML tags<br></br>
+render: function(){<br></br>
+    return(&lt;table className = 'table'&gt;<br></br>
+           .....<br></br>
+           &lt;/table&gt;);<br></br>
+}<br></br>
+<br></br>
+// Specifying React components<br></br>
+var App = React.createClass({..});<br></br>
+ReactDOM.render(&lt;App headings = {['When', 'Who', 'Description']}<br></br>  
+                     data = {data} /&gt;, <br></br>
+                document.getElementById('container'));</pre></div>
+<p class="it"><a class="indexterm">"Esa es la </a><a id="id40" class="indexterm">principal diferencia. JSX utiliza esta convención </a><a id="id41" class="indexterm">para diferenciar entre las clases de componentes locales y las etiquetas HTML."</a></p>
+
+<p class="p">"That's the <a class="indexterm"></a>primary difference. JSX uses this convention <a class="indexterm"></a>to differentiate between the local component classes and HTML tags."</p></div></body></html>

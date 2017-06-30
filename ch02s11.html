@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Conditionals in JSX</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Conditionals in JSX"><div class="titlepage"><div><div><h1 class="title"><a id="ch02lvl1sec25"></a>Conditionals in JSX</h1></div></div></div><p class="it"><a>"React abraza la idea de atar el markup y la lógica que genera el markup juntos. Esto significa que </a><a id="id63" class="indexterm">podemos usar el poder de JavaScript para bucles y condicionales."</a></p>
+
+<p class="p">"React embraces the idea of tying markup and logic that generates the markup together. This means that we <a class="indexterm"></a>can use the power of JavaScript for loops and conditionals."</p><p class="it"><a class="indexterm">"Pero la lógica if/else es un poco difícil de expresar en el markup. Por lo tanto, en JSX, no podes utilizar las sentencias condicionales como if/else."</a></p>
+
+<p class="p">"But if/else logic is a bit hard to express in markup. Therefore, in JSX, we can't use conditional statements such as if/else."</p><div class="informalexample"><pre class="programlisting">// Using if/else directly doesn't work<br></br>
+&lt;div className={if(success) { 'green' } else { 'red' }}/&gt;<br></br>
+Error: Parse Error: Line 1: Unexpected token if</pre></div><p class="it"><a class="indexterm">"En lugar de ello, podemos utilizar un operador ternario para especificar la lógica if/else."</a></p>
+
+<p class="p">"Instead, we can use a ternary operator for specifying the if/else logic."</p><div class="informalexample"><pre class="programlisting">// Using ternary operator<br></br>
+&lt;div className={ success ? 'green' : 'red' }/&gt;<br></br>
+React.createElement("div", {className:  success ? 'green' : 'red'})</pre></div><p class="it"><a class="indexterm">"Pero el operador ternario se pone complicado con grandes expresiones cuando queremos utilizar el componente React como un child. En este caso, es mejor descargar la lógica a un bloque o tal vez una función" añadió Mike.</a></p>
+
+<p class="p">"But ternary operator gets cumbersome with large expressions when we want to use the React component as a child. In this case, it's better to offload the logic to a block or maybe a function" Mike added.</p><div class="informalexample"><pre class="programlisting">// Moving if/else logic to a function<br></br>
+var showResult = function() {<br></br>
+  if(this.props.success === true)<br></br>
+    return &lt;SuccessComponent /&gt;<br></br>
+  else<br></br>
+    return &lt;ErrorComponent /&gt;<br></br>
+};</pre></div></div></body></html>

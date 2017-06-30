@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 10. Animation</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="chapter" title="Chapter 10. Animation"><div class="titlepage"><div><div><h1 class="title"><a id="ch10"></a>Chapter 10. Animation</h1></div></div></div><p class="it"><a>En el capítulo anterior, tomamos un vistazo a React-router y realizó enrutamiento a diferentes niveles. También nos fijamos en el enrutamiento anidada, que pasa alrededor de los parámetros, y cómo Reactá-router mantiene la historia al realizar las tareas de enrutamiento. Hemos aprendido acerca de pasar alrededor de contexto y usando el contexto para hacer React los componentes. Exploramos los modelos de datos y mezclado y les emparejaron con otros marcos de usar como modelos de datos en la red troncal React similar, y se introdujeron a Flux.</a></p>
+
+<p class="p">In the previous chapter, we took a look at react-router and performed routing at different levels. We also looked at nested routing, passing around parameters, and how react-router maintains history when performing the routing tasks. We learned about passing around context and using context to render React components. We explored data models and mixed and matched them with other frameworks to use as data models in React-like Backbone, and were introduced to Flux.</p><p class="it"><a>En este capítulo, vamos a explorar una diversión React complemento, Animación. Vamos a empezar por continuar con nuestra aplicación Pinterest Gato y mejorarlo para apoyar protagonizada y compartir los datos para actualizar los puntos de vista. a continuación, vamos a explorar la adición de controladores para la animación. Veremos cómo los componentes de envolverse para la animación y cómo React añade los manejadores para diferentes eventos. También exploraremos diferentes eventos y cómo podemos mejorar fácilmente nuestra aplicación con el fin de crear efectos impresionantes.</a></p>
+
+<p class="p">In this chapter, we are going to explore a fun React add-on, Animation. We will start off by continuing with our Cat Pinterest application and enhancing it to support starring and sharing the data to update the views. We will then explore adding handlers for animation. We will see how components get wrapped for animation and how React adds the handlers for different events. We will also explore different events and how we can easily enhance our application in order to create stunning effects.</p><p class="it"><a>En este capítulo, vamos a cubrir los siguientes temas:</a></p>
+
+<p class="p">In this chapter, we will cover the following topics:</p><div class="itemizedlist"><ul class="itemizedlist">
+
+<li class="it"><a>Hacer cambios en el flujo de datos y pasar datos de React-Router enlaces</a></li>
+
+<li class="listitem" style="list-style-type: disc">Making changes to the data flow and passing data from react-router links</li>
+
+<li class="it"><a>Animación en React</a></li>
+
+<li class="listitem" style="list-style-type: disc">Animation in React</li><li class="it"><a>transiciones CSS</a></li>
+
+<li class="listitem" style="list-style-type: disc">CSS transitions</li><li class="it"><a>grupos de transición</a></li>
+
+<li class="listitem" style="list-style-type: disc">Transition groups</li><li class="it"><a>manipuladores de transición</a></li>
+
+<li class="listitem" style="list-style-type: disc">Transition handlers</li><li class="it"><a>La animación de nuestro componente dinámico</a></li>
+
+<li class="listitem" style="list-style-type: disc">Animating our dynamic component</li></ul></div><p class="it"><a>Al final del capítulo, podremos empezar a animar a nuestros componentes React para diferentes acciones tales como la adición de nuevos contenidos, el cambio de los datos y la posición, y así sucesivamente. También vamos a ser capaces de agregar controladores para diferentes tipos de eventos y explorar diferentes opciones de animación por ahí, aparte de la animación núcleo complemento.</a></p>
+
+<p class="p">At the end of chapter, we will be able to start animating our React components for different actions such as adding new content, changing data and position, and so on. We will also be able to add handlers for different types of events and explore different animation options out there, other than core animation add-on.</p><div class="section" title="Fun stuff at Adequate LLC!"><div class="titlepage"><div><div><h1 class="title"><a id="ch10lvl1sec75"></a>Fun stuff at Adequate LLC!</h1></div></div></div><p class="it"><a>"Hola Shawn </a><a id="id261" class="indexterm">y Mike!" Carla se unió a Mike y Shawn en su conversación.</a></p>
+
+<p class="p">"Hi Shawn <a class="indexterm"></a>and Mike!" Carla joined Mike and Shawn in their conversation.</p><p class="it"><a class="indexterm">El día antes, Carla les había pedido para construir una aplicación de estilo Pinterest para los gatos para uno de sus clientes.</a></p>
+
+<p class="p">The day before, Carla had asked them to build a Pinterest-style application for cats for one of their clients.</p><p class="it"><a class="indexterm">"¿Cómo van las cosas hoy en día?" preguntó ella.</a></p>
+
+<p class="p">"How are things going today?" she enquired.</p><p class="it"><a class="indexterm">"Todo bien, Carla. Shawn, ¿quiere mostrar Carla lo que construimos ayer?"</a></p>
+
+<p class="p">"All good, Carla. Shawn, do you want to show Carla what we built yesterday?"</p><p class="it"><a class="indexterm">"Por supuesto."</a></p>
+
+<p class="p">"Sure."</p><div class="mediaobject"><img src="graphics/4730_10_01.jpg" alt="Fun stuff at Adequate LLC!"/></div><p class="it"><a class="indexterm">"Parece interesante! ¿Estamos añadiendo botón para faving / protagonizada de los gatos después?"</a></p>
+
+<p class="p">"That looks nice! Are we adding button for faving/starring of cats next?"</p><p class="it"><a class="indexterm">"Sí, sólo estábamos preparando para eso."</a></p>
+
+<p class="p">"Yes, we were just getting ready for that."</p><p class="it"><a class="indexterm">"Cool. El cliente llamado ayer. Lo que quieren, junto con la visualización de los gatos es mostrar una corriente de gatos que se actualiza en la pantalla. Esto va a suceder cuando alguien faves un gato para que lo mostramos a otros usuarios."</a></p>
+
+<p class="p">"Cool. The client called yesterday. What they want along with displaying the cats is to show a stream of cats being updated on the screen. This is going to happen when someone faves a cat so that we show it to other users."</p><p class="it"><a class="indexterm">"Lo tengo. Vamos a empezar a trabajar en ella y simular adición de gatos para que aparezca en la pantalla para empezar."</a></p>
+
+<p class="p">"Got it. We will start working on it and simulate addition of cats to appear on the screen to start with."</p><p class="it"><a class="indexterm">"Impresionante, yo </a><a id="id262" class="indexterm">os tanto dejar a ella."</a></p>
+
+<p class="p">"Awesome, I <a class="indexterm"></a>will leave you both to it."</p></div></div></body></html>

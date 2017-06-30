@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Shipping details step</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Shipping details step"><div class="titlepage"><div><div><h1 class="title"><a id="ch04lvl1sec50"></a>Shipping details step</h1></div></div></div><p class="it"><a>"Shawn, en este paso, queremos obtener las preferencias de envío del usuario. Contendrá la dirección de envío y el </a><a id="id122" class="indexterm">nombre del cliente." explica Mike.</a></p>
+
+<p class="p">"Shawn, in this step, we want to get the user's shipping preferences. It will contain the shipping address and <a class="indexterm"></a>name of the customer." explained Mike.</p><p class="it"><a class="indexterm">"También debemos añadir un número de teléfono." Shawn añadió.</a></p>
+
+<p class="p">"We should also add a phone number." Shawn added.</p>
+<p class="it"><a class="indexterm">"Claro que sí. Aquí es cómo nuestros detalles de envío forman parezca". informó Mike.</a></p>
+
+<p class="p">"Sure thing. Here is how our shipping details form look like." informed Mike.</p><div class="informalexample"><pre class="programlisting">// src/BookStore.js
+// Adding ShippingDetails component
+
+var ShippingDetails = React.createClass({
+  getInitialState() {
+    return (
+      { fullName: '', contactNumber: '', shippingAddress: '', error: false }
+    );
+  },
+
+  _renderError() {
+    if (this.state.error) {
+      return (
+        &lt;div className="alert alert-danger"&gt;
+          {this.state.error}
+        &lt;/div&gt;
+      );
+    }
+  },
+
+  _validateInput() {
+    if (this.state.fullName === '') {
+      this.setState({error: "Please enter full name"});
+    } else if (this.state.contactNumber === '') {
+      this.setState({error: "Please enter contact number"});
+    } else if (this.state.shippingAddress === '') {
+      this.setState({error: "Please enter shipping address"});
+    } else {
+      this.setState({error: false});
+      return true;
+    }
+
+  },
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    var formData = { fullName: this.state.fullName,
+                     contactNumber: this.state.contactNumber,
+                     shippingAddress: this.state.shippingAddress };
+
+    if (this._validateInput()) {
+      this.props.updateFormData(formData);
+    }
+  },
+
+  handleChange(event, attribute) {
+    var newState = this.state;
+    newState[attribute] = event.target.value;
+    this.setState(newState);
+    console.log(this.state);
+  },
+
+  render() {
+    var errorMessage = this._renderError();
+
+    return (
+      &lt;div&gt;
+        &lt;h1&gt;Enter your shipping information.&lt;/h1&gt;
+        {errorMessage}
+        &lt;div style={{width: 200}}&gt;
+          &lt;form onSubmit={this.handleSubmit}&gt;
+            &lt;div className="form-group"&gt;
+              &lt;input className="form-control"
+                     type="text"
+                     placeholder="Full Name"
+                     value={this.state.fullName}
+                     onChange={(event) =&gt; this.handleChange(event, 'fullName')} /&gt;
+            &lt;/div&gt;
+
+            &lt;div className="form-group"&gt;
+              &lt;input className="form-control"
+                     type="text"
+                     placeholder="Contact number"
+                     value={this.state.contactNumber}
+                     onChange={(event) =&gt; this.handleChange(event, 'contactNumber')}/&gt;
+            &lt;/div&gt;
+
+            &lt;div className="form-group"&gt;
+              &lt;input className="form-control"
+                     type="text"
+                     placeholder="Shipping Address"
+                     value={this.state.shippingAddress}
+                     onChange={(event) =&gt; this.handleChange(event, 'shippingAddress')} /&gt;
+            &lt;/div&gt;
+
+            &lt;div className="form-group"&gt;
+              &lt;button type="submit"
+                      ref="submit"
+                      className="btn btn-success"&gt;
+                Submit
+              &lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/form&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+});</pre></div><p class="it"><a class="indexterm">"Este componente está usando casi mismo código que nuestra primera forma. Estamos mostrando cuadros de texto para los detalles de envío para el usuario. Hay validación y todos los campos son campos obligatorios. Estamos sincronización de los datos introducidos por el usuario mediante un <code class="literal">onChange</code> manejador en el estado del componente y que pasa a este estado a la <code class="literal">updateFormData</code> función del componente principal en el final ". Mike explicó.</a></p>
+
+<p class="p">"This component is using almost same code as our first form. We are showing textboxes for the shipping details to the user. There is validation and all the fields are required fields. We are syncing the data entered by the user using a <code class="literal">onChange</code> handler in the state of the component and passing this state to the <code class="literal">updateFormData</code> function of the parent component in the end." Mike explained.</p><p class="it"><a class="indexterm">"Ahora, al final del </a><a id="id123" class="indexterm">segundo paso, hemos reunido una lista de libros seleccionados por el usuario y la información de envío." dijo Mike.</a></p>
+
+<p class="p">"Now, at the end of <a class="indexterm"></a>second step, we have gathered a list of books chosen by the user and the shipping information." said Mike.</p><div class="informalexample"><pre class="programlisting">{ selectedBooks: ["Zero to One", "Wings of Fire"],
+  fullName: "John Smith",
+  contactNumber: "1234567890",
+  shippingAddress: "10th Cross, NY" }</pre></div><p class="it"><a class="indexterm">"Puedo ver cómo estamos asignando el <code class="literal">value</code> prop de los campos de entrada a su estado correspondiente." Shawn.</a></p>
+
+  <p class="p">"I can see how we are assigning the <code class="literal">value</code> prop of the input fields to it's corresponding state." Shawn.</p><div class="informalexample"><pre class="programlisting">  value={this.state.shippingAddress}</pre></div><p class="it"><a class="indexterm">"Sí. Como hemos comentado anteriormente acerca de los componentes controlados y no controlados, nos estamos asegurando de que la </a><a id="id124" class="indexterm">interfaz de usuario refleja el último estado, basado en la interacción con el usuario." dijo Mike.</a></p>
+
+  <p class="p">"Yes. As we discussed earlier about the controlled and uncontrolled components, we are making sure that the <a class="indexterm"></a>UI reflects the latest state, based on the user interaction." said Mike.</p></div></body></html>

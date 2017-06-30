@@ -1,0 +1,342 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Incorporating defined Backbone models</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Incorporating defined Backbone models"><div class="titlepage"><div><div><h1 class="title"><a id="ch09lvl1sec72">Incorporating defined Backbone models</a></h1></div></div></div><p class="it"><a>"A continuación, vamos a </a><a id="id256" class="indexterm">definir nuestro índice con la forma en que necesitamos la ruta a ser y qué caminos debe responder el enrutamiento a. A partir de ahí, vamos a seguí adelante con la construcción de nuestros componentes."</a></p>
+
+<p class="p">"Next, let's <a class="indexterm">define our index with how we need the routing to be and what paths should the routing respond to. From there, we will go ahead with building our components."</a></p><p class="it"><a class="indexterm">"Lo tengo."</a></p>
+
+<p class="p">"Got it."</p><div class="informalexample"><pre class="programlisting">import React from 'react'
+import { render } from 'react-dom'
+import { createHistory, useBasename } from 'history'
+import { Router, Route, IndexRoute, Link } from 'react-router'
+import Backbone from 'backbone';
+import Modal from './Modal'
+import App from './App'
+import { Cats, PictureModel } from './models';
+import Picture from './Picture'
+import Sample from './Sample'
+import Home from './Home'
+
+const history = useBasename(createHistory)({
+  basename: '/pinterest'
+});
+
+
+render((
+  &lt;Router history={history}&gt;
+    &lt;Route path="/" component={App}&gt;
+      &lt;IndexRoute component={Home}/&gt;
+      &lt;Route path="/pictures/:id" component={Picture}/&gt;
+      &lt;Route path="/this/:cid/is/:randomId/sampleroute" component={Sample}/&gt;
+    &lt;/Route&gt;
+  &lt;/Router&gt;
+), document.getElementById('rootElement'));</pre></div><p class="it"><a class="indexterm">"Por lo tanto, lo primero que veo es que estamos creando un historial de la sesión?"</a></p>
+
+<p class="p">"So, the first thing I see is that we are creating a session history?"</p><p class="it"><a class="indexterm">"Así es, estamos creando un historial de la sesión aquí. Vamos a usarlo para nuestro router."</a></p>
+
+<p class="p">"Correct, we are creating a session history over here. We will use it for our router."</p><p class="it"><a class="indexterm">"En este caso, estamos utilizando el módulo de la historia <code class="literal">useBasename</code> método, que ofrece soporte para ejecutar una aplicación bajo una <code class="literal">base</code> uRL, que en nuestro caso es <code class="literal">/pinterest</code>."</a></p>
+
+<p class="p">"Here, we are using the history module's <code class="literal">useBasename</code> method, which provides support for running an app under a <code class="literal">base</code> URL, which in our case is <code class="literal">/pinterest</code>."</p><p class="it"><a class="indexterm">"Lo tengo."</a></p>
+
+<p class="p">"Got it."</p><p class="it"><a class="indexterm">"A continuación, se están poniendo a cabo forma en que realmente queremos que el enrutamiento sea. Nos envolvemos nuestro router en el <code class="literal">&lt;Router/&gt;</code> componente y especificar diferentes <code class="literal">&lt;Route/&gt;</code> como rutas."</a></p>
+
+<p class="p">"Next, we are laying out how we actually want the routing to be. We wrap our router into the <code class="literal">&lt;Router/&gt;</code> component and specify different <code class="literal">&lt;Route/&gt;</code> as paths."</p><p class="it"><a class="indexterm">"Esto se llama la <span class="strong"><strong>configuración de ruta</strong></span> , que es básicamente un conjunto de reglas o instrucciones sobre cómo hacer coincidir las direcciones URL a algunos Reactn de componentes con el fin de visualizar."</a></p>
+
+<p class="p">"This is called the <span class="strong"><strong>Route Configuration</strong></span>, which is basically a set of rules or instructions on how to match the URLs to some React Component in order to be displayed."</p><p class="it"><a class="indexterm">"Oh, ¿podemos hablar más sobre esta configuración, se ve interesante."</a></p>
+
+<p class="p">"Oh, can we discuss more about this configuration, it looks intriguing."</p><p class="it"><a class="indexterm">"Seguro que es. En primer lugar, vamos a ver lo que <code class="literal">&lt;IndexRoute component={Home}/&gt;</code> hace. Cuando aterricemos en la <code class="literal">/</code> página de la aplicación, que en nuestro caso sería <code class="literal">/pinterest</code>, el componente definida por <code class="literal">IndexRoute</code> se rindió. Como es de suponer, el componente que se exportará será aprobada en el argumento de los componentes de la ruta. Tené en cuenta que esto se muestra en el <code class="literal">App</code> componente que es el componente básico para todos ".</a></p>
+
+<p class="p">"It sure is. First, let's see what <code class="literal">&lt;IndexRoute component={Home}/&gt;</code> does. When we land on the <code class="literal">/</code> page for the application, which in our case would be <code class="literal">/pinterest</code>, the component defined by <code class="literal">IndexRoute</code> gets rendered. As you might have guessed, the component to be rendered is passed in the component argument of the route. Note that this is displayed in the <code class="literal">App</code> component that is the base component for all."</p><p class="it"><a class="indexterm">Al igual que el <code class="literal">IndexRoute</code>, tenemos diferentes <code class="literal">&lt;Route/&gt;</code> definiciones. En nuestro ejemplo, si ves <code class="literal">&lt;Route path="/pictures/:id" component={Picture}/&gt;</code>, se muestra cómo se está acostumbrando ruta, y cómo estamos pasando atributos para el mismo. "Aquí, el atributo de ruta es una expresión matcher y atributo componente especifica el componente que se va a mostrar después de la ruta se corresponde".</a></p>
+
+<p class="p">Similar to the <code class="literal">IndexRoute</code>, we have different <code class="literal">&lt;Route/&gt;</code> definitions. In our example, if you see <code class="literal">&lt;Route path="/pictures/:id" component={Picture}/&gt;</code>, it shows how route is getting used, and how we are passing attributes for the same. "Here, the path attribute is a matcher expression and component attribute specifies the component that is to be displayed after the route is matched."</p><p class="it"><a class="indexterm">"Observá cómo el trayecto se define aquí, se especifica como una expresión."</a></p>
+
+<p class="p">"Notice how the path is defined over here, it is specified as an expression."</p><p class="it"><a class="indexterm">El juego para una ruta en función de una dirección URL se realiza sobre la base de tres componentes:</a></p>
+
+<p class="p">The matching for a route based on a URL is done on the basis of three components:</p><div class="itemizedlist"><ul class="itemizedlist">
+
+<li class="listitem" style="list-style-type: disc">Nesting of route</li>
+
+<li class="listitem" style="list-style-type: disc">Path attribute</li>
+
+<li class="listitem" style="list-style-type: disc">Precedence of the route</li>
+
+</ul></div>
+
+<p class="it"><a class="indexterm">Shawn comenzó, "me dieron el papel de anidación. Veo que hemos organizado nuestras rutas en una forma anidada, como un árbol. La coincidencia de ruta y la construcción se está haciendo sobre la base de esta estructura coincidente en forma de árbol."</a></p>
+
+<p class="p">Shawn began, "I got the nesting part. I see that we have arranged our routes in a nested fashion, like a tree. The route matching and building is being done on the basis of this tree-like matching structure."</p><p class="it"><a class="indexterm">"En este segundo lugar, tenemos el atributo de ruta Podemos ver ejemplos de éstos:".</a></p>
+
+<p class="p">"Right. Secondly, we have the path attribute. We can see examples for these:"</p><div class="informalexample"><pre class="programlisting">      &lt;Route path="/pictures/:id" component={Picture}/&gt;
+      &lt;Route path="/this/:cid/is/:randomId/sampleroute" component={Sample}/&gt;</pre></div><p class="it"><a class="indexterm">"El valor de ruta es una cadena que actúa como una expresión regular, que podes constar de las siguientes partes:"</a></p>
+
+      <p class="p">"The path value is a string that acts as a regex, which can consist of the following parts:"</p><div class="itemizedlist"><ul class="itemizedlist">
+
+      <li class="it"><a class="indexterm"><code class="literal">:paramName</code>: Por ejemplo, ID, que es el parámetro pasado en el URL, tal como <code class="literal">/pictures/12</code>. <code class="literal">12</code> obtiene analiza como <code class="literal">param id</code>.</a></li>
+
+      <li class="listitem" style="list-style-type: disc"><code class="literal">:paramName</code>: For example, ID, which is the param passed in the URL such as <code class="literal">/pictures/12</code>. <code class="literal">12</code> gets parsed as <code class="literal">param id</code>.</li>
+
+      <li class="it"><a class="indexterm"><code class="literal">()</code>: Esto podes ser usado para especificar una ruta opcional, como por ejemplo <code class="literal">/pictures(/:id)</code>, esto va a coincidir <code class="literal">/pictures</code>, así como <code class="literal">/pictures/12</code>.</a></li>
+
+      <li class="listitem" style="list-style-type: disc"><code class="literal">()</code>: This can be used to specify an optional path, such as <code class="literal">/pictures(/:id)</code>, this will match <code class="literal">/pictures</code> as well as <code class="literal">/pictures/12</code>.</li>
+
+      <li class="it"><a class="indexterm"><code class="literal">*</code>: Como en el caso de las expresiones regulares, <code class="literal">*</code> podes ser utilizado para combinar con cualquier parte de la expresión, hasta la siguiente <code class="literal">/</code>, <code class="literal">?</code> o <code class="literal">#</code> se produce. Por ejemplo, para que coincida con todas las imágenes JPEG, podemos utilizar <code class="literal">/pictures/*.jpg</code>.</a></li>
+
+      <li class="listitem" style="list-style-type: disc"><code class="literal">*</code>: As in case of regular expressions, <code class="literal">*</code> can be used to match any part of the expression, until the next <code class="literal">/</code>, <code class="literal">?</code>, or <code class="literal">#</code> occurs. For example, to match all the JPEG images, we can use <code class="literal">/pictures/*.jpg</code>.</li>
+
+      <li class="it"><a class="indexterm"><code class="literal">**</code>: Greedy juego, similar a *, pero coincide con avidez. Por ejemplo, <code class="literal">/**/*.jpg</code> coincidirá <code class="literal">/pictures/8.jpg</code> así como <code class="literal">/photos/10.jpg</code>.</a></li>
+
+      <li class="listitem" style="list-style-type: disc"><code class="literal">**</code>: Greedy matching, similar to *, but it matches greedily. For example, <code class="literal">/**/*.jpg</code> will match <code class="literal">/pictures/8.jpg</code> as well as <code class="literal">/photos/10.jpg</code>.</li></ul></div><p class="it"><a class="indexterm">"Lo tengo. Por último, lo que queda es la prioridad? Lo más probable, se debe utilizar la primera ruta que se define en el archivo y satisfacer la condición utilizada para coincidir con la ruta?"</a></p>
+
+      <p class="p">"Got it. Finally, what remains is the precedence? Most probably, it should use the first route that is defined in the file and satisfy the condition used to match the path?"</p><p class="it"><a class="indexterm">"Exactamente", exclamó Mike.</a></p>
+
+      <p class="p">"Exactly," Mike exclaimed.</p><p class="it"><a class="indexterm">"Ah, se me olvidaba, también tenemos una <code class="literal">&lt;Redirect&gt;</code> ruta. Esto se podes utilizar para que coincida con algunas rutas a otras acciones de ruta. Por ejemplo, queremos <code class="literal">/photos/12</code> hacer coincidir <code class="literal">/pictures/12</code> su lugar, podemos definirlo como código."</a></p>
+
+      <p class="p">"Oh, before I forget, we also have a <code class="literal">&lt;Redirect&gt;</code> route. This can be used to match some routes to other route actions. For example, we want <code class="literal">/photos/12</code> to match <code class="literal">/pictures/12</code> instead, we can define it as code."</p><div class="informalexample"><pre class="programlisting">&lt;Redirect from="/photos/:id" to="/pictures/:id" /&gt;</pre></div><p class="it"><a class="indexterm">"Increíble."</a></p>
+
+      <p class="p">"Awesome."</p><p class="it"><a class="indexterm">"A continuación, vamos a echar un vistazo a todas las cosas que estamos importando y utilizando, que definiremos como componentes".</a></p>
+
+      <p class="p">"Next, let's take a look at all the things that we are importing and using, which we will define as components."</p><div class="informalexample"><pre class="programlisting">import React from 'react'
+…
+import Modal from './Modal'
+import App from './App'
+import { Cats, PictureModel } from './models';
+import Picture from './Picture'
+import Sample from './Sample'
+import Home from './Home'</pre></div><p class="it"><a class="indexterm">"Vamos a definir nuestro <code class="literal">App</code> primer componente, que se va a actuar como contenedor:"</a></p>
+
+<p class="p">"Let's define our <code class="literal">App</code> component first, which is going to act as the container:"</p><div class="informalexample"><pre class="programlisting">..
+import { Router, Route, IndexRoute, Link } from 'react-router'
+import Modal from './Modal'
+
+const App = React.createClass({
+  componentWillReceiveProps(nextProps) {
+    if ((
+            nextProps.location.key !== this.props.location.key &amp;&amp;
+            nextProps.location.state &amp;&amp;
+            nextProps.location.state.modal
+        )) {
+      this.previousChildren = this.props.children
+    }
+  },
+
+  render() {
+    let { location } = this.props;
+    let isModal = ( location.state &amp;&amp; location.state.modal &amp;&amp; this.previousChildren );
+    return (
+        &lt;div&gt;
+          &lt;h1&gt;Cats Pinterest&lt;/h1&gt;
+          &lt;div&gt;
+            {isModal ?
+                this.previousChildren :
+                this.props.children
+            }
+            {isModal &amp;&amp; (
+                &lt;Modal isOpen={true} returnTo={location.state.returnTo}&gt;
+                  {this.props.children}
+                &lt;/Modal&gt;
+            )}
+          &lt;/div&gt;
+        &lt;/div&gt;
+    )
+  }
+});
+
+export {App as default}</pre></div><p class="it"><a class="indexterm">"No vamos a cambiar mucho aquí, este es el ejemplo que ya hemos visto."</a></p>
+
+<p class="p">"We aren't going to change much here, this is from the example that we have already seen."</p><p class="it"><a class="indexterm">"Veo el uso de la ubicación aquí. ¿Es esto desde React-router?"</a></p>
+
+<p class="p">"I see the use of location here. Is this from react-router?"</p><p class="it"><a class="indexterm">"Como hemos visto, nuestra <code class="literal">App</code> está envuelto en el router. El router pasa en el objeto de la ubicación de los apoyos. El objeto ubicación es en realidad similar a <code class="literal">window.location</code>, y es algo que el módulo de historia que usamos define. El <code class="literal">Location</code> objeto tiene varios atributos especiales definidas en superior de la misma, lo que vamos a hacer uso de la forma siguiente:"</a></p>
+
+<p class="p">"As we saw, our <code class="literal">App</code> is wrapped into the router. The router passes in the location object from the props. The location object is actually similar to <code class="literal">window.location</code> and it is something the history module that we use defines. The <code class="literal">Location</code> object has various special attributes defined on top of it, which we are going to make use of, as follows:"</p><div class="itemizedlist"><ul class="itemizedlist">
+
+<li class="it"><a class="indexterm"><code class="literal">pathname</code>: La ruta de acceso real de la URL</a></li>
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">pathname</code>: The actual pathname of the URL</li>
+
+<li class="indexterm"><code class="literal">search</code>: La cadena de consulta</li>
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">search</code>: The query string</li>
+
+<li class="it"><a class="indexterm"><code class="literal">state</code>: Un estado pasa de la React-router y atado como un objeto a la ubicación</a></li>
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">state</code>: A state passed on from the react-router and tied as an object to the location</li>
+
+<li class="it"><a class="indexterm"><code class="literal">action</code>: Uno de los <code class="literal">PUSH</code>, <code class="literal">REPLACE</code>, o <code class="literal">POP</code> las operaciones</a></li>
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">action</code>: One of the <code class="literal">PUSH</code>, <code class="literal">REPLACE</code>, or <code class="literal">POP</code> operations</li>
+
+<li class="it"><a class="indexterm"><code class="literal">key</code>: El identificador único para la ubicación</a></li>
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">key</code>: The unique identifier for the location</li></ul></div>
+
+
+<p class="it"><a class="indexterm">"Lo tengo. Puedo ver que estamos haciendo uso de los <code class="literal">props.children</code> que había visto antes."</a></p>
+
+<p class="p">"Got it. I can see that we are making use of <code class="literal">props.children</code> we had seen before."</p><div class="informalexample"><pre class="programlisting">  componentWillReceiveProps(nextProps) {
+    if ((
+            nextProps.location.key !== this.props.location.key &amp;&amp;
+            nextProps.location.state &amp;&amp;
+            nextProps.location.state.modal
+        )) {
+      this.previousChildren = this.props.children
+    }
+  }</pre></div><p class="it"><a class="indexterm">"Nos estamos almacenando los childs y la pantalla anterior en el <code class="literal">App</code> objeto cuando se visualiza el modal, supongo", preguntó Shawn.</a></p>
+
+  <p class="p">"We are storing the children and the previous screen onto the <code class="literal">App</code> object when the Modal is displayed, I guess," queried Shawn.</p><p class="it"><a class="indexterm">"Sí. Estamos comprobando en primer lugar si estamos mostrando un componente diferente, haciendo coincidir el atributo clave de ubicación. A continuación, comprobar si el atributo de estado fue aprobada en la ubicación y si el modal se establece en true en el estado. Vamos a estar haciendo eso . en el caso de pantalla modal Así es como vamos a pasar al estado en un enlace:"</a></p>
+
+  <p class="p">"Yup. We are first checking whether we are displaying a different Component by matching the key attribute of location. We then check whether the state attribute was passed on the location and whether the modal was set to true on state. We will be doing that in case of Modal display. Here's how we will pass the state onto a link:"</p><div class="informalexample"><pre class="programlisting">&lt;Link … state={{ modal: true .. }}.. /&gt;</pre></div><p class="it"><a class="indexterm">"Vamos a echar un vistazo a la <code class="literal">Link</code> de objeto cuando lo usamos para las imágenes."</a></p>
+
+  <p class="p">" We will take a look at the <code class="literal">Link</code> object when we use it for the images."</p><p class="it"><a class="indexterm">"Entendido," dijo Shawn.</a></p>
+
+  <p class="p">"Got it," said Shawn.</p><p class="it"><a class="indexterm">"Entonces veo que estamos pasando alrededor de los props childs o hacer el diseño anterior, y luego, que muestra <code class="literal">Modal</code> en la parte superior del mismo, si se hace clic modal:"</a></p>
+
+  <p class="p">"Then I see that we are passing around the children props or rendering the previous layout, and then, displaying <code class="literal">Modal</code> on top of it if modal is clicked:"</p><div class="informalexample"><pre class="programlisting">           {isModal ?
+                this.previousChildren :
+                this.props.children
+            }
+            {isModal &amp;&amp; (
+                &lt;Modal isOpen={true} returnTo={location.state.returnTo}&gt;
+                  {this.props.children}
+                &lt;/Modal&gt;
+            )}</pre></div><p class="it"><a class="indexterm">"Exactamente! Usted está consiguiendo bastante bueno en esto", exclamó Mike.</a></p>
+
+            <p class="p">"Exactly! You are getting pretty good at this," Mike exclaimed.</p><p class="it"><a class="indexterm">"Ahora, vamos a ver nuestra página principal componente del índice, de acuerdo?"</a></p>
+
+            <p class="p">"Now, let's see our main index page component, shall we?"</p><div class="informalexample"><pre class="programlisting">// home.js
+import React from 'react'
+import { Cats, PictureModel } from './models';
+import { createHistory, useBasename } from 'history'
+import { Router, Route, IndexRoute, Link } from 'react-router'
+
+const Home = React.createClass({
+  render() {
+    let sampleCat = Cats.sample();
+    return (
+        &lt;div&gt;
+          &lt;div&gt;
+            {Cats.map(cat =&gt; (
+                &lt;Link key={cat.cid} to={`/pictures/${cat.cid}`} state={{ modal: true, returnTo: this.props.location.pathname }}&gt;
+                  &lt;img style={{ margin: 10 }} src={cat.get('src')} height="100" /&gt;
+                &lt;/Link&gt;
+            ))}
+          &lt;/div&gt;
+          &lt;p&gt;&lt;Link to={`/this/${sampleCat.cid}/is/456/sampleroute`}&gt;{`Interesting Details about ${sampleCat.get('name')}`}&lt;/Link&gt;&lt;/p&gt;
+        &lt;/div&gt;
+    )
+  }
+});
+
+export {Home as default}</pre></div><p class="it"><a class="indexterm">"Entonces, Shawn, estamos importando primero todos los datos que generamos en el <code class="literal">Cats</code>.. Colección Vamos a un bucle sobre ellas y mostrar las imágenes con enlaces a Modals Se podes ver que esto ocurra de aquí:"</a></p>
+
+<p class="p">"So Shawn, we are first importing all the data that we generate in the <code class="literal">Cats</code> collection. We are going to loop over them and display the images with links to Modals. You can see this happening here:"</p><div class="informalexample"><pre class="programlisting">            {Cats.map(cat =&gt; (
+                &lt;Link key={cat.cid} to={`/pictures/${cat.cid}`} state={{ modal: true, returnTo: this.props.location.pathname }}&gt;
+                  &lt;img style={{ margin: 10 }} src={cat.get('src')} height="100" /&gt;
+                &lt;/Link&gt;
+            ))}</pre></div><p class="it"><a class="indexterm">"Sí, veo que estamos estableciendo la clave utilizando <code class="literal">cat</code> objetos de <code class="literal">cid</code> desde el objeto espina dorsal. Tuvimos que atribuir por el enlace, el cual es el camino a donde debe estar vinculada, supongo?"</a></p>
+
+            <p class="p">"Yup, I see that we are setting the key using <code class="literal">cat</code> object's <code class="literal">cid</code> from the backbone object. We had to attribute for the link, which is path to where it should be linked, I guess?"</p><p class="it"><a class="indexterm">"Eso es correcto. Por cada gato está representada, tenemos una ruta dinámica única genera, como por ejemplo <code class="literal">/pictures/121</code> y así sucesivamente. Ahora, ya que queremos visualizar el gato ampliada cuando se hace clic en él, estamos pasando <code class="literal">modal: true</code> a indicar en <code class="literal">&lt;Link/&gt;</code>".</a></p>
+
+            <p class="p">"That's right. For every cat displayed, we have a unique dynamic route generated, such as <code class="literal">/pictures/121</code> and so on. Now, as we want to display the enlarged cat when we click on it, we are passing <code class="literal">modal: true</code> to state on <code class="literal">&lt;Link/&gt;</code>."</p><p class="it"><a class="indexterm">"También estamos pasando un <code class="literal">returnTo</code> atributo que se relaciona con la trayectoria de la corriente que se obtiene a partir de la corriente <code class="literal">location.pathname</code>. Vamos a utilizar este <code class="literal">returnTo</code> atributo de estado a configurar de nuevo los enlaces en los componentes. Vamos a mostrar una en el modal de manera que podamos volver a la página principal cuando se hace clic en él y el modal estará cerrada ".</a></p>
+
+            <p class="p">"We are also passing a <code class="literal">returnTo</code> attribute that is related to the current path that we obtain from the current <code class="literal">location.pathname</code>. We will be using this <code class="literal">returnTo</code> attribute from state to set up back links on components. We will display one on the Modal so that we can get back to the home page when it's clicked and the Modal will be closed."</p><p class="it"><a class="indexterm">"Lo tengo que veo también estamos definiendo un enlace a la página de visualización gato muestra aquí:"</a></p>
+
+            <p class="p">"Got it. I see we are also defining a link for the sample cat display page here:"</p><div class="informalexample"><pre class="programlisting">    let sampleCat = Cats.sample();
+…
+render(
+…
+          &lt;p&gt;&lt;Link to={`/this/${sampleCat.cid}/is/456/sampleroute`}&gt;{`Interesting Details about ${sampleCat.get('name')}`}&lt;/Link&gt;&lt;/p&gt;
+…
+);</pre></div><p class="it"><a class="indexterm">". Sí, vamos a presentar al azar un gato aquí Vamos a mostrar los detalles sobre el gato en la página de muestra Ahora, quiero que le muestre cómo estamos creando el enlace aquí:"</a></p>
+
+<p class="p">"Yup, we are going to randomly feature a cat here. We will display the details about the cat on the sample page. Now, I want to show you how we are creating the link here:"</p><div class="informalexample"><pre class="programlisting"><span class="strong"><strong>`/this/${sampleCat.cid}/is/456/sampleroute`</strong></span>
+</pre></div><p class="it"><a class="indexterm">"Aquí, estamos creando una ruta al azar anidado, por ejemplo, esto podes coincidir con una dirección URL, de la siguiente manera:"</a></p>
+
+<p class="p">"Here, we are creating a nested random route, for example, this can match a URL, as follows:"</p><div class="informalexample"><pre class="programlisting"><span class="strong"><strong>/this/123/is/456/sampleroute</strong></span>
+</pre></div><p class="it"><a class="indexterm">"El <code class="literal">123</code> y <code class="literal">456</code> actuar como parametros para la ubicación."</a></p>
+
+<p class="p">"The <code class="literal">123</code> and <code class="literal">456</code> act as params for the location."</p><p class="it"><a class="indexterm">"Agradable", seguido Shawn. "Permítanme definir el modal? Déjame volver a utilizar el uno del ejemplo".</a></p>
+
+<p class="p">"Nice," followed Shawn. "Let me define the Modal? Let me reuse the one from the example."</p><div class="informalexample"><pre class="programlisting">import React from 'react'
+import { Router, Route, IndexRoute, Link } from 'react-router'
+
+const Modal = React.createClass({
+  styles: {
+    position: 'fixed',
+    top: '20%',
+    right: '20%',
+    bottom: '20%',
+    left: '20%',
+    padding: 20,
+    boxShadow: '0px 0px 150px 130px rgba(0, 0, 0, 0.5)',
+    overflow: 'auto',
+    background: '#fff'
+  },
+
+  render() {
+    return (
+      &lt;div style={this.styles}&gt;
+        &lt;p&gt;&lt;Link to={this.props.returnTo}&gt;Back&lt;/Link&gt;&lt;/p&gt;
+        {this.props.children}
+      &lt;/div&gt;
+    )
+  }
+})
+
+export {Modal as default}</pre></div><p class="it"><a class="indexterm">"Eso es simple y directo, Shawn. Nos falta definir cómo se muestran las imágenes. Vamos a definir eso."</a></p>
+
+<p class="p">"That's simple and straightforward, Shawn. We also need to define how we display the pictures. Let's define that."</p><div class="informalexample"><pre class="programlisting">import React from 'react'
+import { Cats, PictureModel } from './models';
+
+const Picture = React.createClass({
+  render() {
+    return (
+        &lt;div&gt;
+          &lt;img src={Cats.get(this.props.params.id).get('src')} style={{ height: '80%' }} /&gt;
+        &lt;/div&gt;
+    )
+  }
+});
+
+export {Picture as default}</pre></div><p class="it"><a class="indexterm">"Para mostrar el gato y buscar detalles al respecto, estamos utilizando el ID que recibimos de params. Estos son enviados a nosotros en el prop params. Estamos entonces ir a buscar el ID de la <code class="literal">Cats</code> colección."</a></p>
+
+<p class="p">"To display the cat and fetch details about it, we are using the ID that we receive from params. These are sent to us on the params prop. We are then fetching the ID from the <code class="literal">Cats</code> collection."</p><div class="informalexample"><pre class="programlisting">Cats.get(this.props.params.id)</pre></div><p class="it"><a class="indexterm">"Uso de la <code class="literal">id</code> hélice, recordamos cómo estábamos enviando el ID en el enlace de gato que hemos definido de la siguiente manera"</a></p>
+
+<p class="p">"Using the <code class="literal">id</code> prop, recall how we were sending the ID on the cat link that we defined as follows"</p><div class="informalexample"><pre class="programlisting">&lt;Route path="/pictures/:id" component={Picture}/&gt;</pre></div><p class="it"><a class="indexterm">"Por último, vamos a echar un vistazo a cómo se utiliza el componente de ejemplo para mostrar la información del gato ejemplo:"</a></p>
+
+<p class="p">"Finally, let's take a look at how the sample component is used to display the cat information from the example:"</p><div class="informalexample"><pre class="programlisting">import React from 'react'
+import { Cats, PictureModel } from './models';
+import { createHistory, useBasename } from 'history'
+import { Router, Route, IndexRoute, Link } from 'react-router'
+
+const Sample = React.createClass({
+  render() {
+    let cat = Cats.get(this.props.params.cid);
+    return (
+        &lt;div&gt;
+          &lt;p&gt;CID for the Cat: {this.props.params.cid}, and Random ID: {this.props.params.randomId}&lt;/p&gt;
+          &lt;p&gt;Name of this Cat is: {cat.get('name')}&lt;/p&gt;
+          &lt;p&gt;Some interesting details about this Cat:&lt;/p&gt;
+          &lt;p&gt; {cat.get('details')} &lt;/p&gt;
+          &lt;/p&gt;
+        &lt;/div&gt;
+    )
+  }
+});
+
+
+export {Sample as default};</pre></div><p class="it"><a class="indexterm">"Con esto, parece que hemos terminado! Vamos a ver cómo se ve, ¿de acuerdo?"</a></p>
+
+<p class="p">"With this, it looks like we are done! Let's see how it looks, shall we?"</p><p class="it"><a class="indexterm">"La página de índice se ve bien."</a></p>
+
+<p class="p">"The index page looks neat."</p><div class="mediaobject"><img src="graphics/4730_09_01.jpg" alt="Incorporating defined Backbone models"/></div><p class="it"><a class="indexterm">"A continuación, vamos a ver cómo el modal y los enlaces se ven con la URL."</a></p>
+
+<p class="p">"Next, let's see how the Modal and the links look with the URL."</p><p class="it"><a class="indexterm">"El gato seguro que se ve bien", se rió Shawn.</a></p>
+
+<p class="p">"The cat sure looks nice," chuckled Shawn.</p><div class="mediaobject"><img src="graphics/4730_09_02.jpg" alt="Incorporating defined Backbone models"/></div><p class="it"><a class="indexterm">"Jaja, sí."</a></p>
+
+<p class="p">"Haha, yes."</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note15">Note</a></h3><p class="it"><a>Note la URL. Al hacer clic sobre el enlace modal cambió a la de la etiqueta de anclaje. Estamos en la misma página y se muestra el modal.</a></p>
+
+<p class="p">Notice the URL. On clicking, the modal link changed to the one on the anchor tag. We are on the same page and the modal is displayed.</p></div></div><p class="it"><a>"Finalmente, tenemos la página de muestra, donde presentamos detalles del gato Vamos a ver cómo se ve:".</a></p>
+
+<p class="p">"Finally, we have the sample page, where we display details of the cat. Let's see how it looks:"</p><div class="mediaobject"><img src="graphics/4730_09_03.jpg" alt="Incorporating defined Backbone models"/></div><p class="it"><a>"¡Increíble!"</a></p>
+
+<p class="p">"Awesome!"</p></div>
+</body></html>

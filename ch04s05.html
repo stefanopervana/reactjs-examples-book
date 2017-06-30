@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Controlled components</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Controlled components"><div class="titlepage"><div><div><h1 class="title"><a id="ch04lvl1sec44"></a>Controlled components</h1></div></div></div><p class="it"><a>"¿Qué es un </a><a id="id103" class="indexterm">componente controlado, Mike?" Shawn se le preguntó.</a></p>
+
+<p class="p">"What is a <a class="indexterm"></a>controlled component, Mike?" asked Shawn.</p><p class="it"><a class="indexterm">"Es un componente de entrada cuyo valor es controlado por React. Al proporcionar la prop valor, estamos informando React que el valor de este campo es 'Shawn'. Una vez React ha declarado que es 'Shawn', cualquier entrada del usuario no lo hará tener un efecto como el valor que ya se encuentra en el ". explica Mike.</a></p>
+
+<p class="p">"It's an input component whose value is controlled by React. By providing the value prop, we are informing React that the value of this field is "Shawn". Once React has declared it to be "Shawn", any user input won't have an effect as the value is already set in the ." explained Mike.</p><p class="it"><a class="indexterm">"Creo que tenemos que recurrir a la <code class="literal">state</code> vez de <code class="literal">props</code>?" Pidió a Shawn.</a></p>
+
+<p class="p">"I think that we have to resort to <code class="literal">state</code> instead of <code class="literal">props</code>?" Shawn asked.</p><p class="it"><a class="indexterm">"Exactamente. A medida que un usuario está interactuando con el campo de entrada, tenemos que actualizar el valor de <code class="literal">prop</code> uso <code class="literal">state</code> y el <code class="literal">onChange</code> controlador de eventos. Podes dar una oportunidad?" sugerido Mike.</a></p>
+
+<p class="p">"Exactly. As an user is interacting with the input field, we need to update the value <code class="literal">prop</code> using <code class="literal">state</code> and <code class="literal">onChange</code> event handler. Can you give it a try?" suggested Mike.</p><div class="informalexample"><pre class="programlisting">// src/index.js
+
+var InputExample = React.createClass({
+  getInitialState() {
+    return (
+      { name: '-'}
+    );
+  },
+
+  handleChange(event) {
+    this.setState({ name: event.target.value });
+  },
+
+  render() {
+    return (
+      &lt;input type="text"
+             value={this.state.name}
+             onChange={this.handleChange} /&gt;
+    );
+  }
+});</pre></div>
+
+<p class="it"><a class="indexterm">"Impresionante. Este patrón de hacer que el valor de una entrada basada en el estado y actualizar el estado en base a la interacción del usuario hace que sea muy fácil de responder a las interacciones del usuario. También podemos hacer algunas cosas de mantenimiento, tales como la validación de la entrada." Mike explica con más detalle.</a></p>
+
+<p class="p">"Awesome. This pattern of making the value of an input based on state and updating the state based on the user interaction makes it very easy to respond to user interactions. We can also do some housekeeping things such as validating the input." Mike explained further.</p>
+
+<p class="it"><a class="indexterm">"Por ejemplo, podes cambiar el caso de todo el texto en mayúsculas." Mike añadió.</a></p>
+
+<p class="p">"For example, you can change the case of all the text to uppercase." Mike added.</p><div class="informalexample"><pre class="programlisting">handleChange: function(event) {
+  this.setState({name: event.target.value.toUpperCase()});
+}</pre></div></div></body></html>

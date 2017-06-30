@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Refs</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Refs"><div class="titlepage"><div><div><h1 class="title"><a id="ch05lvl1sec55"></a>Refs</h1></div></div></div><p class="it"><a>"Creo que hemos </a><a id="id144" class="indexterm">utilizado esto antes", preguntó Shawn.</a></p>
+
+<p class="p">"I think we have <a class="indexterm"></a>used this before," asked Shawn.</p><p class="it"><a class="indexterm">"Sí. Lo refs hacen es darnos un handle para referirse a alguna parte del componente. Hemos hecho esto en formas. Aquí, lo estamos usando para obtener un identificador para el modal para que podamos invocar el <code class="literal">modal()</code> método en la parte superior de eso."</a></p>
+
+<p class="p">"Yeah. What refs do is give us a handle to refer to some part of the component. We have done this in forms. Here, we are using it to get a handle to the modal so that we can invoke the <code class="literal">modal()</code> method on top of it."</p><p class="it"><a class="indexterm">"Esto, a su vez, mostrar el modal."</a></p>
+
+<p class="p">"This would, in turn, display the modal."</p><p class="it"><a class="indexterm">"Ahora, observe cómo estamos usando el <code class="literal">getDOMNode()</code> método".</a></p>
+
+<p class="p">"Now, notice how we are using the <code class="literal">getDOMNode()</code> method."</p><p class="it"><a class="indexterm">"Sí. ¿Qué hacer?"</a></p>
+
+<p class="p">"Yup. What does it do?"</p><p class="it"><a class="indexterm">"El <code class="literal">getDOMNode()</code> método nos ayuda a conseguí el nodo DOM subyacente, donde se representa el elemento React. En nuestro caso, queremos invocar un método en el nodo DOM."</a></p>
+
+<p class="p">"The <code class="literal">getDOMNode()</code> method helps us to get the underlying DOM node, where the React element is rendered. In our case, we want to invoke a method on the DOM node."</p><p class="it"><a class="indexterm">"Cuando llamamos <code class="literal">this.refs.timeoutModal</code>, nos devuelve un objeto de referencia del componente."</a></p>
+
+<p class="p">"When we call <code class="literal">this.refs.timeoutModal</code>, it returns us a ref object of the component."</p><p class="it"><a class="indexterm">"Esto es diferente de la actual </a><a id="id145" class="indexterm">componente DOM. En realidad es un objeto envuelto en React. Para agarrar el objeto DOM subyacente, hemos invocado <code class="literal">getDOMNode()</code>."</a></p>
+
+<p class="p">"This is different from the actual <a class="indexterm"></a>DOM component. It's actually a React-wrapped object. To grab the underlying DOM object, we invoked <code class="literal">getDOMNode()</code>."</p><p class="it"><a class="indexterm">"Lo tengo."</a></p>
+
+<p class="p">"Got it."</p><p class="it"><a class="indexterm">"A continuación, hemos envuelto todo ello en una <code class="literal">setTimeout</code> llamada de modo que podemos decir que es después de que el componente se hace React con éxito y existe contenido modal en la página.</a></p>
+
+<p class="p">"Next, we have wrapped all this in a <code class="literal">setTimeout</code> call so that we can call it after the React component is successfully rendered and modal content exists on the page.</p><p class="it"><a class="indexterm">"Finalmente, llamamos <code class="literal">$(timeoutModal).modal('show')</code> a invocar el modal!"</a></p>
+
+<p class="p">"Finally, we called <code class="literal">$(timeoutModal).modal('show')</code> to invoke the modal!"</p><p class="it"><a class="indexterm">"Vamos a ver cómo nuestra </a><a id="id146" class="indexterm">modal ve ahora."</a></p>
+
+<p class="p">"Let's see how our <a class="indexterm"></a>modal looks now."</p><div class="informalexample"><pre class="programlisting">import React from 'react';
+
+var ModalAlertTimeout = React.createClass({
+  componentDidMount(){
+    setTimeout(()=&gt; {
+      let timeoutModal = this.refs.timeoutModal.getDOMNode();
+      $(timeoutModal).modal('show');
+    }, 100);
+  },
+
+  render() {
+    return (
+
+      &lt;div className="modal fade" ref='timeoutModal'&gt;
+        &lt;div className="modal-dialog"&gt;
+          &lt;div className="modal-content"&gt;
+            &lt;div className="modal-header"&gt;
+              &lt;button type="button" className="close" data-dismiss="modal" aria-label="Close"&gt;&lt;span aria-hidden="true"&gt;×&lt;/span&gt;&lt;/button&gt;
+              &lt;h4 className="modal-title"&gt;Timeout&lt;/h4&gt;
+            &lt;/div&gt;
+            &lt;div className="modal-body"&gt;
+              &lt;p&gt;The cart has timed-out. Please try again!&lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+});
+module.exports = ModalAlertTimeout;</pre></div><p class="it"><a class="indexterm">"Vamos a ver cómo se ve ahora".</a></p>
+
+<p class="p">"Let's see how this looks now."</p><div class="mediaobject"><img src="graphics/4730_05_04.jpg" alt="Refs"/></div>
+
+<p class="it"><a class="indexterm">"Una última cosa, ya que estamos hablando de esto, se trata de DOM. Podemos invocar <code class="literal">getDOMNode()</code> a conseguí también el nodo del componente actual. Por lo tanto, podemos simplemente llamar <code class="literal">this.getDOMNode()</code> y que también nos devolverá un elemento!"</a></p>
+
+<p class="p">"One last thing since we are discussing this, is about DOM. We can invoke <code class="literal">getDOMNode()</code> to also get the node for the current component. Therefore, we can simply call <code class="literal">this.getDOMNode()</code> and that will also return us an element!"</p><p class="it"><a class="indexterm">"Muy bien, vamos a hacer esto. Vamos a </a><a id="id147" class="indexterm">desmontar el modal cuando alguien cierra de modo que podemos invocar un modo nuevo en el segundo render."</a></p>
+
+<p class="p">"Alright, let's do this. We will <a class="indexterm"></a>unmount the modal when someone closes it so that we can invoke it afresh on the second render."</p><p class="it"><a class="indexterm">"Vamos a definir una devolución de llamada </a><a id="id148" class="indexterm">método de hacer precisamente eso, de la siguiente manera:"</a></p>
+
+<p class="p">"Let's define a callback <a class="indexterm"></a>method to do just that, as follows:"</p><div class="informalexample"><pre class="programlisting">unMountComponent () {
+    React.unmountComponentAtNode(this.getDOMNode().parentNode);
+  }</pre></div><p class="it"><a class="indexterm">"Por último, vamos a establecer esto como una devolución de llamada en el cierre de nuestra modal, de la siguiente manera:"</a></p>
+
+  <p class="p">"Finally, we will set this as a callback on close of our modal, as follows:"</p><div class="informalexample"><pre class="programlisting">$(timeoutModal).on('hidden.bs.modal', this.unMountComponent);</pre></div><p class="it"><a class="indexterm">"Con esto, hemos terminado! El componente desmontará en ocultar modal."</a></p>
+
+  <p class="p">"With this, we are done! The component will unmount on modal hide."</p><p class="it"><a class="indexterm">"Observá cómo estamos usando el <code class="literal">parentNode</code> atributo en el nodo DOM para ocultar el modal. Esto nos ayuda a sacar el recipiente en el que el elemento es React y que estamos utilizando para eliminar el modal."</a></p>
+
+  <p class="p">"Notice how we are using the <code class="literal">parentNode</code> attribute on the DOM node to hide the modal. This helps us to get the container on which the React element is and that we are using to remove the modal."</p><p class="it"><a class="indexterm">"Niza. Eso ha sido un repaso. Gracias Mike!"</a></p>
+
+  <p class="p">"Nice. That has been a refresher. Thanks Mike!"</p><p class="it"><a class="indexterm">Con eso, el dúo se dirigió de nuevo para comprobar los diversos cambios que acababan de hacer.</a></p>
+
+  <p class="p">With that, the duo headed back to check the various changes they had just done.</p></div></body></html>

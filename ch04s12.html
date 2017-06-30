@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Delivery details step</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Delivery details step"><div class="titlepage"><div><div><h1 class="title"><a id="ch04lvl1sec51"></a>Delivery details step</h1></div></div></div><p class="it"><a>"Shawn, el siguiente </a><a id="id125" class="indexterm">paso consiste en proporcionar diversas opciones de entrega Por el momento, vamos a suponer que el usuario podes elegir entre. <code class="literal">Primary</code> entrega, lo que significa una entrega al día siguiente, y <code class="literal">Normal</code> la entrega, lo que significa 3 -. Entrega de 4 días por defecto, la <code class="literal">Primary</code> opción debe estar seleccionado. Un usuario podes elegir la <code class="literal">Normal</code> opción de entrega también. se podes tratar la construcción de este último paso?" Preguntó Mike.</a></p>
+
+<p class="p">"Shawn, the next <a class="indexterm"></a>step is about providing various delivery options. For now, let's assume that the user can choose between <code class="literal">Primary</code> delivery, meaning a next-day delivery, and <code class="literal">Normal</code> delivery, meaning 3 - 4 days delivery. By default, the <code class="literal">Primary</code> option must be selected. A user can choose the <code class="literal">Normal</code> delivery option too. Can you try building this last step?" Mike asked.</p><div class="informalexample"><pre class="programlisting">// src/BookStore.js
+// Adding DeliveryDetails component
+
+var DeliveryDetails = React.createClass({
+  getInitialState() {
+    return (
+      { deliveryOption: 'Primary' }
+    );
+  },
+
+  handleChange(event) {
+    this.setState({ deliveryOption: event.target.value});
+  },
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.updateFormData(this.state);
+  },
+
+  render() {
+    return (
+      &lt;div&gt;
+        &lt;h1&gt;Choose your delivery options here.&lt;/h1&gt;
+        &lt;div style={{width:200}}&gt;
+          &lt;form onSubmit={this.handleSubmit}&gt;
+            &lt;div className="radio"&gt;
+              &lt;label&gt;
+                &lt;input type="radio"
+                       checked={this.state.deliveryOption === "Primary"}
+                       value="Primary"
+                       onChange={this.handleChange} /&gt;
+                Primary -- Next day delivery
+              &lt;/label&gt;
+            &lt;/div&gt;
+            &lt;div className="radio"&gt;
+              &lt;label&gt;
+                &lt;input type="radio"
+                       checked={this.state.deliveryOption === "Normal"}
+                       value="Normal"
+                       onChange={this.handleChange} /&gt;
+                Normal -- 3-4 days
+              &lt;/label&gt;
+            &lt;/div&gt;
+
+            &lt;button className="btn btn-success"&gt;
+              Submit
+            &lt;/button&gt;
+          &lt;/form&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+});</pre></div><p class="it"><a class="indexterm">"Mike, según sea necesario, he añadido <code class="literal">Primary</code> como opción por defecto a través del estado. Solía botones de radio y su prop comprobado con el fin de asegurarse de que un sólo botón de radio está seleccionado en cualquier punto del tiempo. Además, el estado se actualiza utilizando la <code class="literal">onChange</code> devolución de llamada para reflejar la seleccionada por opción. por último, la <code class="literal">updateFormData</code> función es llamada para actualizar los datos del formulario de los padres ". Shawn explicó.</a></p>
+
+<p class="p">"Mike, as needed, I added <code class="literal">Primary</code> as the default option through state. I used radio buttons and their checked prop in order to make sure that only one radio button is selected at any point of time. Also, the state is updated using the <code class="literal">onChange</code> callback to reflect the selected by option. Finally, the <code class="literal">updateFormData</code> function is called to update the parent's form data." Shawn explained.</p><p class="it"><a class="indexterm">"Grande, Shawn. Esto se ve bien. Creo que también vamos a tener que hacer algunos cambios en nuestro <code class="literal">BookStore</code> componente como </a><a id="id126" class="indexterm">ahora queremos mostrar una página de confirmación después de que el usuario ha completado la elección de opciones de entrega."</a></p>
+
+<p class="p">"Great, Shawn. This looks good. I think we will also have to make some changes to our <code class="literal">BookStore</code> component as <a class="indexterm"></a>now we want to show a confirmation page after the user has completed choosing delivery options."</p><div class="informalexample"><pre class="programlisting">// src/BookStore.js
+// Updating BookStore component
+
+var BookStore = React.createClass({
+ render() {
+    switch (this.state.currentStep) {
+      case 1:
+        return &lt;BookList updateFormData={this.updateFormData} /&gt;;
+      case 2:
+        return &lt;ShippingDetails updateFormData={this.updateFormData} /&gt;;
+      case 3:
+        return &lt;DeliveryDetails updateFormData={this.updateFormData} /&gt;;
+      case 4:
+        return &lt;Confirmation data={this.state.formValues}/&gt;;}/&gt;;}/&gt;;
+      default:
+        return &lt;BookList updateFormData={this.updateFormData} /&gt;;
+    }
+  }
+});
+
+// Adding Conformation step
+
+var Confirmation = React.createClass({
+  render() {
+    return (
+      &lt;div&gt;
+        &lt;h1&gt;Are you sure you want to submit the data?&lt;/h1&gt;
+      &lt;/div&gt;
+    );
+  }
+});</pre></div><p class="it"><a class="indexterm">"Hemos añadido el <code class="literal">Confirmation</code> componente como el último paso y también añadimos el formulario predeterminado para ser la <code class="literal">BookList</code> forma, donde el usuario podes elegir los libros. Ahora, sólo tenemos que mostrar toda la información capturada hasta el último paso en la <span class="strong"><strong>confirmación de</strong></span> la página y, de hecho presentar </a><a id="id127" class="indexterm">todo para el back-end ". dijo Mike.</a></p>
+
+<p class="p">"We added the <code class="literal">Confirmation</code> component as the last step and also added the default form to be the <code class="literal">BookList</code> form, where the user can choose the books. Now, we just need to show all the information captured up to the last step on the <span class="strong"><strong>Confirmation</strong></span> page and actually submit <a class="indexterm"></a>everything to the backend." said Mike.</p><p class="it"><a class="indexterm">"Voy a actualizar la <span class="strong"><strong>confirmación de</strong></span> la página para mostrar los datos introducidos por el usuario." Dijo Shawn.</a></p>
+
+<p class="p">"Let me update the <span class="strong"><strong>Confirmation</strong></span> page to show the data entered by the user." Shawn said.</p><div class="informalexample"><pre class="programlisting">var Confirmation = React.createClass({
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.updateFormData(this.props.data);
+  },
+
+  render() {
+    return (
+      &lt;div&gt;
+        &lt;h1&gt;Are you sure you want to submit the data?&lt;/h1&gt;
+        &lt;form onSubmit={this.handleSubmit}&gt;
+          &lt;div&gt;
+            &lt;strong&gt;Full Name&lt;/strong&gt; : { this.props.data.fullName }
+          &lt;/div&gt;&lt;br/&gt;
+          &lt;div&gt;
+            &lt;strong&gt;Contact Number&lt;/strong&gt; : { this.props.data.contactNumber }
+          &lt;/div&gt;&lt;br/&gt;
+          &lt;div&gt;
+            &lt;strong&gt;Shipping Address&lt;/strong&gt; : { this.props.data.shippingAddress }
+          &lt;/div&gt;&lt;br/&gt;
+          &lt;div&gt;
+            &lt;strong&gt;Selected books&lt;/strong&gt; : { this.props.data.selectedBooks.join(", ") }
+          &lt;/div&gt;&lt;br/&gt;
+          &lt;button className="btn btn-success"&gt;
+            Place order
+          &lt;/button&gt;
+        &lt;/form&gt;
+      &lt;/div&gt;
+    );
+  }
+});</pre></div><p class="it"><a class="indexterm">"Mike, hice una lista de todos los </a><a id="id128" class="indexterm">datos seleccionados por el usuario y proporciona un botón para realizar el pedido. Parece que este". Shawn.</a></p>
+
+<p class="p">"Mike, I listed all the <a class="indexterm"></a>data selected by the user and provided a button to place the order. It looks like this." Shawn.</p><div class="mediaobject"><img src="graphics/4730_04_04.jpg" alt="Delivery details step"/></div><p class="it"><a class="indexterm">"Perfecto. Tengo la página éxito listo. Vamos a intentarlo." Micro.</a></p>
+
+<p class="p">"Perfect. I have the success page ready. Let's try that." Mike.</p><div class="informalexample"><pre class="programlisting">// src/BookStore.js
+// Adding Success step
+
+var Success = React.createClass({
+  render() {
+    var numberOfDays = "1 to 2 ";
+
+    if (this.props.data.deliveryOption === 'Normal') {
+      numberOfDays = "3 to 4 ";
+    }
+    return (
+      &lt;div&gt;
+        &lt;h2&gt;
+          Thank you for shopping with us {this.props.data.fullName}.
+        &lt;/h2&gt;
+        &lt;h4&gt;
+          You will soon get {this.props.data.selectedBooks.join(", ")} at {this.props.data.shippingAddress} in approrximately {numberOfDays} days.
+        &lt;/h4&gt;
+      &lt;/div&gt;
+    );
+  }
+});</pre></div><p class="it"><a class="indexterm">"También vamos a necesitar </a><a id="id129" class="indexterm">actualizar <code class="literal">BookStore</code> para mostrar la página de éxito", añadió Mike.</a></p>
+
+<p class="p">"We will also need to <a class="indexterm"></a>update <code class="literal">BookStore</code> to show the success page," added Mike.</p><div class="informalexample"><pre class="programlisting">// Updating render method of BookStore component
+
+  render() {
+    switch (this.state.currentStep) {
+      case 1:
+        return &lt;BookList updateFormData={this.updateFormData} /&gt;;
+      case 2:
+        return &lt;ShippingDetails updateFormData={this.updateFormData} /&gt;;
+      case 3:
+        return &lt;DeliveryDetails updateFormData={this.updateFormData} /&gt;;
+      case 4:
+        return &lt;Confirmation data={this.state.formValues} updateFormData={this.updateFormData}/&gt;;
+      case 5:
+        return &lt;Success data={this.state.formValues}/&gt;;
+      default:
+        return &lt;BookList updateFormData={this.updateFormData} /&gt;;
+    }
+  }</pre></div><p class="it"><a class="indexterm">"Ahora, la página de éxito se muestra como la última página después de que el usuario ha confirmado y se coloca la orden. Nuestra primera versión del asistente de formulario es completa." Mike </a><a id="id130" class="indexterm">informó.</a></p>
+
+  <p class="p">"Now, the success page will be shown as the last page after the user has confirmed and placed the order. Our first version of the form wizard is complete." Mike <a class="indexterm"></a>informed.</p><div class="mediaobject"><img src="graphics/4730_04_05.jpg" alt="Delivery details step"/></div></div></body></html>

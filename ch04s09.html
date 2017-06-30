@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Parent Child relationship</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Parent Child relationship"><div class="titlepage"><div><div><h1 class="title"><a id="ch04lvl1sec48"></a>Parent Child relationship</h1></div></div></div><p class="it"><a>"Después de esto, el </a><a id="id114" class="indexterm">siguiente paso es la comunicación con el componente de array. En la actualidad, no hay manera de que nuestro componente secundario podes comunicarse con los props. Queremos comunicar con el componente principal que queremos enviar los libros seleccionados por el usuario para el componente principal. la forma más fácil para un child para comunicarse con el padre es a través de los props ". Mike explicó.</a></p>
+
+
+<p class="p">"Now after this, the <a class="indexterm"></a>next step is communicating with the parent component. Currently, there is no way that our child component can communicate with props. We want to communicate with the parent component as we want to send the selected books by the user to the parent component. The easiest way for a child to communicate with the parent is via props." Mike explained.</p><p class="it"><a class="indexterm">"Sin embargo, los props son generalmente los atributos o propiedades que se envían a un child, ¿verdad? ¿Cómo podes un child a comunicarse con el padre usarlos?" pidió a Shawn.</a></p>
+
+
+<p class="p">"But props are generally the attributes or properties that are sent to a child, right? How can a child communicate with the parent using them?" Shawn asked.</p><p class="it"><a class="indexterm">"Recordá que la <code class="literal">{}</code> sintaxis. Podemos pasar cualquier expresión válida como prop. Podemos pasar una devolución de llamada funcionan como prop a un componente secundario. Un child podes llamar para actualizar el estado de los padres. Vamos a </a><a id="id115" class="indexterm">actualizar nuestro <code class="literal">BookStore</code> componente ahora". Mike explicó.</a></p>
+
+
+<p class="p">"Remember the <code class="literal">{}</code> syntax. We can pass any valid expression as prop. We can pass a function callback as prop to a child component. A child can call it to update the state of the parent. Let's <a class="indexterm"></a>update our <code class="literal">BookStore</code> component now." Mike explained.</p><div class="informalexample"><pre class="programlisting">// src/BookStore.js
+
+……
+// Updating BookStore component
+
+  updateFormData(formData) {
+    console.log(formData);
+  },
+  
+  render() {
+    switch (this.state.currentStep) {
+      case 1:
+        return &lt;BookList 
+                 updateFormData={this.updateFormData} /&gt;;
+      case 2:
+        return &lt;ShippingDetails  
+                 updateFormData={this.updateFormData} /&gt;;
+      case 3:
+        return &lt;DeliveryDetails 
+                 updateFormData={this.updateFormData} /&gt;;
+    }
+  }
+……
+
+});</pre></div><p class="it"><a class="indexterm">"Pasamos la <code class="literal">updateFormData</code> función como un prop a todos los componentes childs. Esta función se encargará de la actualización de los datos del formulario. Nosotros también tenga que actualizar <code class="literal">BookList</code> con el fin de usarlo."</a></p>
+
+
+<p class="p">"We pass the <code class="literal">updateFormData</code> function as a prop to all the child components. This function will take care of updating the form data. We will also need to update <code class="literal">BookList</code> in order to use it."</p><div class="informalexample"><pre class="programlisting">// src/BookStore.js
+// Updating BookList component
+
+……
+  handleSubmit(event) {
+    event.preventDefault();
+
+    this.props.updateFormData({ selectedBooks: 
+                                this.state.selectedBooks });
+  }
+  ……
+}); </pre></div><p class="it"><a class="indexterm">"El <code class="literal">BookList</code> componente ahora llama a la <code class="literal">updateFormData</code> función y pasa a los libros seleccionados en ese momento a ella, cada vez que un usuario envía la primera forma," explica Mike.</a></p>
+
+
+<p class="p">"The <code class="literal">BookList</code> component now calls the <code class="literal">updateFormData</code> function and passes the currently selected books to it, whenever a user submits the first form," explained Mike.</p>
+
+<p class="it"><a class="indexterm">"Por lo tanto, todas las formas enviará sus datos al componente de los padres y que utilizará los datos completos para la presentación final, ¿verdad?" pidió a Shawn.</a></p>
+
+
+<p class="p">"Therefore, every form will send its data to the parent component and we will use the complete data for final submission, right?" Shawn asked.</p><p class="it"><a class="indexterm">"Exactamente. Vamos a </a><a id="id116" class="indexterm">necesitar una manera de almacenar los datos entrantes en el componente principal sin embargo."</a></p>
+
+
+<p class="p">"Exactly. We will <a class="indexterm"></a>need a way to store the incoming data in the parent component though."</p><div class="informalexample"><pre class="programlisting">// src/BookStore.js
+// Updating BookStore component
+
+var BookStore = React.createClass({
+  getInitialState() {
+    return ({ currentStep: 1, formValues: {} });
+  },
+
+  updateFormData(formData) {
+    var formValues = Object.assign({}, this.state.formValues, formData);
+    this.setState({formValues: formValues});  
+  },
+
+  render() {
+    switch (this.state.currentStep) {
+      case 1:
+        return &lt;BookList updateFormData={this.updateFormData} /&gt;;
+      case 2:
+        return &lt;ShippingDetails updateFormData={this.updateFormData} /&gt;;
+      case 3:
+        return &lt;DeliveryDetails updateFormData={this.updateFormData} /&gt;;
+    }
+  }
+});</pre></div><p class="it"><a class="indexterm">"Añadimos un estado a almacenar <code class="literal">formValues</code>. Cada vez que el usuario envía el formulario, el formulario secundario llamará de los padres <code class="literal">updateFormData</code> función. Esta función se fusionarán los datos actuales almacenados en la array de <code class="literal">formValues</code> la entrada <code class="literal">formData</code> y restablecer el estado de la nueva <code class="literal">formValues</code>. En este caso, se obtener <code class="literal">selectedBooks</code> en el <code class="literal">formValues</code> objeto, de la siguiente manera:" dijo Mike.</a></p>
+
+
+<p class="p">"We added state to store <code class="literal">formValues</code>. Whenever the user submits the form, the child form will call the parent's <code class="literal">updateFormData</code> function. This function will merge the current data stored in the parent's <code class="literal">formValues</code> with incoming <code class="literal">formData</code> and reset the state to the new <code class="literal">formValues</code>. In this case, we will get <code class="literal">selectedBooks</code> in the <code class="literal">formValues</code> object, as follows:" said Mike.</p><div class="informalexample"><pre class="programlisting"> { selectedBooks: ['Zero to One', 'Monk who sold his Ferrary'] }</pre></div><p class="it"><a class="indexterm">"Tené en cuenta que, estamos haciendo uso de otro método- ES6 <code class="literal">Object.assign</code>. El <code class="literal">Object.assign()</code> método se utiliza para copiar los valores de todas las propiedades enumerables de uno o más objetos de origen a un objeto de destino."</a></p>
+
+
+<p class="p">"Note that, we are making use of another ES6 method—<code class="literal">Object.assign</code>. The <code class="literal">Object.assign()</code> method is used to copy the values of all the enumerable properties from one or more source objects to a target object."</p><p class="it"><a class="indexterm">"En nuestro caso, el uso de <code class="literal">Object.assign</code> fusionará el estado actual de los valores del formulario con los nuevos valores de la forma que se cambian después de alguna interacción del usuario. A continuación, utilizaremos estos datos actualizados para actualizar el estado del componente. Estamos utilizando <code class="literal">Object.assign</code> en lugar de directamente mutar el estado del componente. vamos a cubrir por qué esto es mejor que la mutación directamente el estado del componente en los siguientes capítulos ".</a></p>
+
+
+<p class="p">"In our case, the use of <code class="literal">Object.assign</code> will merge the current state of form values with the new form values that are changed after some user interaction. We will then use this updated data to update the state of the component. We are using <code class="literal">Object.assign</code> instead of directly mutating the state of the component. We will cover why this is better than directly mutating the state of the component in the following chapters."</p><div class="informalexample"><pre class="programlisting">var formValues = Object.assign({}, this.state.formValues, formData);</pre></div><p class="it"><a class="indexterm">"Tiene sentido. Este </a><a id="id117" class="indexterm">se encarga de la actualización de los datos del formulario. Ahora bien, ¿cómo vamos a ir al siguiente paso?" Pidió a Shawn.</a></p>
+
+
+<p class="p">"Makes sense. This <a class="indexterm"></a>takes care of updating the form data. Now, how will we go to the next step?" Shawn asked.</p><p class="it"><a class="indexterm">"Eso es simple. Cada vez que actualizamos los datos del formulario, también tenemos que actualizar el <code class="literal">currentStep</code> método de la <code class="literal">BookStore</code> componente. ¿Podes dar una oportunidad?" Preguntó Mike.</a></p>
+
+
+<p class="p">"That's simple. Whenever we update the form data, we also need to update the <code class="literal">currentStep</code> method of the <code class="literal">BookStore</code> component. Can you give it a try?" Mike asked.</p><div class="informalexample"><pre class="programlisting">// src/BookStore.js
+// Updating BookStore component
+
+var BookStore = React.createClass({
+  updateFormData(formData) {
+    var formValues = Object.assign({}, this.state.formValues, formData);
+    var nextStep = this.state.currentStep + 1;
+    this.setState({currentStep: nextStep, formValues: formValues});
+    console.log(formData);
+  },
+
+  render() {
+    switch (this.state.currentStep) {
+      case 1:
+        return &lt;BookList updateFormData={this.updateFormData} /&gt;;
+      case 2:
+        return &lt;ShippingDetails updateFormData={this.updateFormData} /&gt;;
+      case 3:
+        return &lt;DeliveryDetails updateFormData={this.updateFormData} /&gt;;
+    }
+  }
+});</pre></div><p class="it"><a class="indexterm">"Perfecto. Se han actualizado el paso a <code class="literal">1</code> la <code class="literal">updateFormData</code> devolución de llamada. Esto llevará al usuario a la </a><a id="id118" class="indexterm">siguiente etapa." Micro.</a></p>
+
+
+<p class="p">"Perfect. You have updated the step by <code class="literal">1</code> in the <code class="literal">updateFormData</code> callback. This will take the user to the <a class="indexterm"></a>next step." Mike.</p></div></body></html>

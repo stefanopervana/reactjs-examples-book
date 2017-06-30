@@ -1,0 +1,290 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Animate</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Animate"><div class="titlepage"><div><div><h1 class="title"><a id="ch10lvl1sec77">Animate</a></h1></div></div></div><p class="it"><a>"React nos permite </a><a id="id268" class="indexterm">animar objetos fácilmente con sus React-addons-css-transición del grupo del complemento."</a></p>
+
+
+<p class="p">"React allows us <a class="indexterm">to animate objects easily with its react-addons-css-transition-group add-on."</a></p><p class="it"><a class="indexterm">"Esto nos da un identificador para el <code class="literal">ReactCSSTransitionGroup</code> objeto, que es lo que va a utilizar para animar a los cambios en los datos, tales como la adición de gatos, faving / unfaving, y así sucesivamente."</a></p>
+
+
+<p class="p">"This gives us a handle to the <code class="literal">ReactCSSTransitionGroup</code> object, which is what we will be using to animate changes in data, such as addition of cats, faving/unfaving, and so on."</p><p class="it"><a class="indexterm">"Vamos a empezar por la animación de la adición de nuevos gatos de la corriente, ¿de acuerdo?"</a></p>
+
+
+<p class="p">"Let's start by animating the addition of new cats to the stream, shall we?"</p><div class="informalexample"><pre class="programlisting">render() {
+    let Cats = this.state.catGenerator.Cats;
+
+    return (
+        &lt;div&gt;
+          &lt;div&gt;
+            &lt;ReactCSSTransitionGroup transitionName="cats" 
+                                     transitionEnterTimeout={500} 
+                                     transitionLeaveTimeout={300}
+                                     transitionAppear={true} 
+                                     transitionAppearTimeout={500}&gt;
+              {Cats.map(cat =&gt; (
+                  &lt;div key={cat.cid} style={{float: 'left'}}&gt;
+                    &lt;Link to={`/pictures/${cat.cid}`}
+                          state={{ modal: true, returnTo: this.props.location.pathname, cat: cat }}&gt;
+                      &lt;img style={{ margin: 10 }} src={cat.get('src')} height="100"/&gt;
+                    &lt;/Link&gt;
+                    &lt;span key={`${cat.cid}`} className="fa fa-star"&gt;&lt;/span&gt;
+                  &lt;/div&gt;
+              ))}
+
+&lt;/ReactCSSTransitionGroup&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+    )
+  }</pre></div><p class="it"><a class="indexterm">"Aquí, he cambiado nuestro </a><a id="id269" class="indexterm">método render y simplemente envolvió la exhibición de la colección de los gatos en un <code class="literal">ReactCSSTransitionGroup</code> elemento, como tal."</a></p>
+
+
+  <p class="p">"Here, I changed our <a class="indexterm">render method and simply wrapped the display of the collection of cats in a <code class="literal">ReactCSSTransitionGroup</code> element, like so."</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">            &lt;ReactCSSTransitionGroup transitionName="cats" 
+                                     transitionEnterTimeout={500}
+                                     transitionLeaveTimeout={300}
+                                     transitionAppear={true} 
+                                     transitionAppearTimeout={500}&gt;</a></pre></div><p class="it"><a class="indexterm">"Vamos a ir a través de ellos uno por uno en el siguiente:</a></p>
+
+
+                                     <p class="p">"Let's go through them one by one in the following:</p><div class="itemizedlist"><ul class="itemizedlist">
+                                     <li class="it"><code class="literal">transitionName</code>: Esta propiedad se utiliza para definir el prefijo de nombre de la clase utilizada para las clases CSS aplicados para diferentes eventos, como elemento de entrar, salir, y así sucesivamente.</li>
+
+                                     <li class="listitem" style="list-style-type: disc"><code class="literal">transitionName</code>: This property is used to define the class name prefix used for the CSS classes applied for different events, such as element enter, leave, and so on.</li>
+
+                                     <li class="it"><a class="indexterm"><code class="literal">transitionEnterTimeout</code>: Este es el tiempo de espera para un elemento que se mostrará recién después de la renderización.</a></li>
+
+                                     <li class="listitem" style="list-style-type: disc"><code class="literal">transitionEnterTimeout</code>: This is the timeout for an element to be displayed freshly after rendering.</li>
+
+                                     <li class="it"><a class="indexterm"><code class="literal">transitionLeaveTimeout</code>: Esto es similar a <code class="literal">transitionEnterTimeout</code>, pero se usa cuando el elemento se retira de la página.</a></li>
+
+                                     <li class="listitem" style="list-style-type: disc"><code class="literal">transitionLeaveTimeout</code>: This is similar to <code class="literal">transitionEnterTimeout</code>, but it is used when the element is removed from the page.</li>
+
+                                     <li class="it"><a class="indexterm"><code class="literal">transitionAppear</code> a veces, queremos animar la adición de la colección de elementos, en nuestros gatos de casos, cuando se procesan primero. Podemos hacer esto mediante el establecimiento de esta propiedad en true.</a></li><a class="indexterm">
+
+                                     </a><li class="listitem" style="list-style-type: disc"><a class="indexterm"><code class="literal">transitionAppear</code>: Sometimes, we want to animate the addition of the collection of elements, in our case cats, when they are first rendered. We can do this by setting this property to true.</a><div class="note" title="Note" style=""><a class="indexterm"></a><div class="inner"><a class="indexterm"></a><h3 class="title"><a class="indexterm"></a><a id="note16">Note</a></h3><p class="it"><a>Tené en cuenta que los elementos, que se añaden después de que aparezcan los primeros elementos, se aplican la <code class="literal">transitionEnter</code> propiedad.</a></p>
+
+
+                                     <p class="p">Note that the elements, which are added after the first elements are displayed, are applied the <code class="literal">transitionEnter</code> property.</p></div></div></li>
+
+                                     <li class="it"><a><code class="literal">transitionAppearTimeout</code>: Esto es similar a los otros valores de tiempo de espera, pero para <code class="literal">transitionAppear</code>.</a></li>
+
+                                     <li class="listitem" style="list-style-type: disc"><code class="literal">transitionAppearTimeout</code>: This is similar to the other timeout values, but for <code class="literal">transitionAppear</code>.</li>
+
+                                     <li class="it"><a><code class="literal">transitionEnter</code> este es, por defecto, ajustado a <code class="literal">true</code>. Se podes ajustar a <code class="literal">false</code> si no queremos animar la transición elemento a entrar.</a></li>
+
+                                     <li class="listitem" style="list-style-type: disc"><code class="literal">transitionEnter</code>: This is, by default, set to <code class="literal">true</code>. It can be set to <code class="literal">false</code> if we don't want to animate the element-enter transition.</li>
+
+                                     <li class="it">transitionLeave este es, por defecto, ajustado a <code class="literal">true</code>. Se podes ajustar a <code class="literal">false</code> si no queremos animar la animación de transición elemento licencia.</li>
+
+                                     <li class="listitem" style="list-style-type: disc"><code class="literal">transitionLeave</code>: This is, by default, set to <code class="literal">true</code>. It can be set to <code class="literal">false</code> if we don't want to animate the element-leave transition animation.</li>
+
+                                     </ul></div><p class="it"><a>"Ahora, basado en el nombre de la transición y de transición, las clases se aplican a los elementos dentro del <code class="literal">&lt;ReactCSSTransitionGroup/&gt;</code> componente. Por ejemplo, para entrar en la transición, y nuestro <code class="literal">cats</code> prefijo, <code class="literal">cats-enter</code> se aplicaría a los elementos."</a></p>
+
+
+                                     <p class="p">"Now, based on the transition and transition name, classes are applied to the elements within the <code class="literal">&lt;ReactCSSTransitionGroup/&gt;</code> component. For example, for enter transition, and our <code class="literal">cats</code> prefix, <code class="literal">cats-enter</code> would be applied to the elements."</p><p class="it"><a>"En el siguiente ciclo, <code class="literal">cats-enter-active</code> se aplicará a la última clase que el elemento debe estar en".</a></p>
+
+
+                                     <p class="p">"In the next cycle, <code class="literal">cats-enter-active</code> will be applied to the final class that the element should be in."</p><p class="it"><a>"Lo tengo."</a></p>
+
+
+                                     <p class="p">"Got it."</p><p class="it"><a>"Vamos a ver todas las </a><a id="id270" class="indexterm">diferentes transiciones que podemos definir en base a esto."</a></p>
+
+
+                                     <p class="p">"Let's check all the <a class="indexterm">different transitions that we can define based on this."</a></p><a class="indexterm">
+
+
+
+                                     <div class="informalexample"><pre class="programlisting">.cats-enter {
+    opacity: 0.01;
+}
+
+.cats-enter.cats-enter-active {
+    opacity: 1;
+    transition: opacity 1500ms ease-in;
+}
+.cats-leave {
+    opacity: 1;
+}
+
+.cats-leave.cats-leave-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
+}
+
+.cats-appear {
+    opacity: 0.01;
+}
+
+.cats-appear.cats-appear-active {
+    opacity: 1;
+    transition: opacity 1.5s ease-in;
+}</pre></div>
+
+</a><p class="it"><a class="indexterm"></a><a class="indexterm">"Las transiciones de animación son bastante simple aquí. Cuando se añade un nuevo elemento en el principio, para comenzar con los seis gatos que inicializa con,. En el siguiente pulso, los .cats a aparecer se aplica la clase. <code class="literal">cats-appear-active</code> se añade a la clase el elemento."</a></p>
+
+
+<p class="p">"The animation transitions are pretty simple here. When a new element is added in the beginning, to start with the six cats that we initialized with, the .cats-appear class is applied. In the next tick, the .<code class="literal">cats-appear-active</code> class is added to the element."</p><p class="it"><a class="indexterm">"A continuación, las clases se retiran después de una transición con éxito, como se muestra en la siguiente captura de pantalla:"</a></p>
+
+
+<p class="p">"Next, the classes are removed after a successful transition, as shown in the following screenshot:"</p><div class="mediaobject"><img src="graphics/4730_10_04.jpg" alt="Animate"/></div><p class="it"><a class="indexterm">"Shawn, si se podes ver, se dará cuenta de cómo los gatos desaparecen y luego aparecen en su estado final en la opacidad total."</a></p>
+
+
+<p class="p">"Shawn, if you can see, you will notice how the cats fade in and then show up in their end state in full opacity."</p><p class="it"><a class="indexterm">"Cool. Esto se ve muy </a><a id="id271" class="indexterm">bonito. Un efecto agradable para cuando se añaden los nuevos elementos, también."</a></p>
+
+
+<p class="p">"Cool. That looks <a class="indexterm">nice. A nice effect for when the new elements are added, as well."</a></p><p class="it"><a class="indexterm">"Es cierto. ¿Quieres probar la animación de las estrellas?"</a></p>
+
+
+<p class="p">"True. Do you want to try animating the stars?"</p><p class="it"><a class="indexterm">"¡Por supuesto!"</a></p>
+
+
+<p class="p">"Sure!"</p><p class="it"><a class="indexterm">"Permítanme en primer lugar comprobar las clases que tenemos para las estrellas. Veo que ha hecho uso de la estrella de la fuente-estilo hermoso y añadido a ellos."</a></p>
+
+
+<p class="p">"Let me first check the classes that we have for the stars. I can see that you have made use of the font-beautiful star and added style to them."</p><div class="informalexample"><pre class="programlisting">.fa {
+  transition: all .1s ease-in-out;
+  color: #666;
+}
+.star{
+    display: inline-block;
+    width: 20px;
+    position: relative;
+}
+
+.star span{
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.fa-star{
+  color: #fa0017;
+}
+
+.fa-star-o{
+    color: #fa0017;
+}
+
+.fa-star-o:active:before {
+  content: "\f005"!important;
+}</pre></div><p class="it"><a class="indexterm">"Sí, eso es todo allí mismo."</a></p>
+
+
+<p class="p">"Yup, that's it right there."</p><p class="it"><a class="indexterm">"En primer lugar, permítanme </a><a id="id272" class="indexterm">encargue favorito y unfave en las estrellas."</a></p>
+
+
+<p class="p">"First, let me <a class="indexterm">handle fave and unfave on the stars."</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">faveUnfave(event){
+    let catCid = event.target.dataset;
+    let catGenerator = this.state.catGenerator;
+    let Cats = catGenerator.Cats;
+    let cat = Cats.get(catCid);
+    cat.set('faved', !cat.get('faved'));
+    catGenerator.Cats = Cats;
+    this.setState({catGenerator: catGenerator});
+  }</a></pre></div><p class="it"><a class="indexterm">"Cambiar el elemento para agregar <code class="literal">data-cid</code> y <code class="literal">handler</code>, de la siguiente manera:"</a></p>
+
+
+  <p class="p">"Change the element to add <code class="literal">data-cid</code> and <code class="literal">handler</code>, as follows:"</p><div class="informalexample"><pre class="programlisting">&lt;span key={`${cat.cid}`}  className="fa fa-star" onClick={::this.faveUnfave} data-cid={cat.cid}&gt;&lt;/span&gt;  </pre></div><p class="it"><a class="indexterm">"En primer lugar, estoy pasando <code class="literal">faveUnfave</code> como el <code class="literal">onClick</code> evento, que se une al contexto de clase aquí. A continuación, estoy pasando <code class="literal">cat.cid</code> el valor de <code class="literal">data-cid</code>"</a></p>
+
+
+  <p class="p">"Firstly, I am passing <code class="literal">faveUnfave</code> as the <code class="literal">onClick</code> event, which is bound to the class context here. Next, I am passing <code class="literal">cat.cid</code> value for <code class="literal">data-cid</code>"</p><p class="it"><a class="indexterm">"En el <code class="literal">faveUnfave</code> método, entonces me voy a tirar de la cat ID para el elemento Elegida como favorita. En base a esto, voy a tirar del objeto gato de la colección el gato del catGenerator. Más tarde, voy a cambiar el estado del valor favorito actual y restablecer el estado de la colección."</a></p>
+
+
+  <p class="p">"In the <code class="literal">faveUnfave</code> method, I will then pull the cat ID for the faved element. Based on this, I will pull the cat object from the catGenerator's cat collection. Later, I will toggle the state of the current fave value and reset the state of the collection."</p><p class="it"><a class="indexterm">"Esto luce bien."</a></p>
+
+
+  <p class="p">"This looks good."</p><p class="it"><a class="indexterm">"A continuación, se mostrará ya sea la estrella Elegida como favorita o unfaved, en base al estado actual favorito y envolver esto como una transición CSS para que podamos empezar a mostrar la animación para mostrar y ocultar la estrella, cambiar el color, y así sucesivamente."</a></p>
+
+
+  <p class="p">"Next, I will display either the faved or unfaved star, based on the current fave status and wrap this as a CSS transition so that we can start showing animation to display and hide the star, change the color, and so on."</p><div class="informalexample"><pre class="programlisting">&lt;ReactCSSTransitionGroup transitionName="faved"
+                                             transitionEnterTimeout={500}
+                                             transitionLeaveTimeout={300}
+                                             transitionAppear={true}
+                                             transitionAppearTimeout={500}
+                                             className="star"&gt;
+                    {()=&gt;{
+                      if(cat.get('faved') === true){
+                        return &lt;span key={`${cat.cid}`}  className="fa fa-star" onClick={::this.faveUnfave} data-cid={cat.cid}&gt;&lt;/span&gt;;
+                      } else {
+                        return &lt;span key={`${cat.cid}`}  className="fa fa-star-o" onClick={::this.faveUnfave} data-cid={cat.cid}&gt;&lt;/span&gt;;
+                      }
+                    }()}
+                    &lt;/ReactCSSTransitionGroup&gt;</pre></div><p class="it"><a class="indexterm">"Perfecto", seguido de Mike.</a></p>
+
+
+                    <p class="p">"Perfect," followed Mike.</p><p class="it"><a class="indexterm">"Ahora vamos a añadir </a><a id="id273" class="indexterm">el estilo de este favorito."</a></p>
+
+
+                    <p class="p">"Now let's add <a class="indexterm">the styling for this fave."</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">.faved-enter {
+    transform: scale(1.5);
+}
+
+.faved-enter.faved-enter-active {
+    transform: scale(3);
+    transition: all .5s ease-in-out;
+}
+
+.faved-leave {
+    transform: translateX(-100%);
+    transform: scale(0);
+}
+
+.faved-leave.faved-leave-active {
+    transform: scale(0);
+    transition: all .1s ease-in-out;
+}</a></pre></div><p class="it"><a class="indexterm">"Aquí, he añadido la animación de tal manera que, al hacer clic en la estrella, se ampliará, similar a la funcionalidad de Twitter favorito. Entonces, se escalará hacia atrás y permanecer en estado Elegida como favorita."</a></p>
+
+
+<p class="p">"Here, I added animation such that, on clicking the star, it will scale up, similar to Twitter's fave functionality. Then, it will scale back and remain in faved state."</p><p class="it"><a class="indexterm">"Del mismo modo que en unfave se escala hacia arriba y atrás a su tamaño original."</a></p>
+
+
+<p class="p">"Similarly on unfave it will scale up and back to its original size."</p><p class="it"><a class="indexterm">"Se ve bien, vamos </a><a id="id274" class="indexterm">a echarle un vistazo", seguido de Mike.</a></p>
+
+
+<p class="p">"Looks good, let's <a class="indexterm">check it out," followed Mike.</a></p><p class="it"><a class="indexterm">"Um, creo que todos los elementos están aquí, pero no parece estar funcionando, Mike?"</a></p>
+
+
+<p class="p">"Umm, I think all elements are here, but it doesn't seem to be working, Mike?"</p><p class="it"><a class="indexterm">"Déjame ver Ah, por lo que el culpable es la siguiente:".</a></p>
+
+
+<p class="p">"Let me see. Ah, so the culprit is this:"</p><div class="informalexample"><pre class="programlisting">                       {()=&gt;{
+                      if(cat.get('faved') === true){
+                        return &lt;span key={`${cat.cid}`}  className="fa fa-star" onClick={::this.faveUnfave} data-cid={cat.cid}&gt;&lt;/span&gt;;
+                      } else {
+                        return &lt;span key={`${cat.cid}`}  className="fa fa-star-o" onClick={::this.faveUnfave} data-cid={cat.cid}&gt;&lt;/span&gt;;
+                      }
+                    }()}</pre></div><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note17">Note</a></h3><p class="it"><a>Observá el valor de la clave que hemos usado aquí? Es idéntica. La <code class="literal">TransitionGroup</code> rastrea los cambios en los elementos y realiza tareas de animación basadas en los valores clave. Las <code class="literal">TransitionGroup</code> necesidades para saber qué ha cambiado en el elemento con el fin de realizar tareas de animación y también se necesita la clave para identificar el elemento.</a></p>
+
+
+                    <p class="p">Notice the key value that we have used here? It's identical. The <code class="literal">TransitionGroup</code> keeps track of the changes to the elements and performs animation tasks based on key values. The <code class="literal">TransitionGroup</code> needs to know what has changed in the element in order to perform animation tasks and it also needs the key to identify the element.</p></div></div><p class="it"><a>"En este caso, la clave seguíá siendo <code class="literal">cat.cid</code> en el caso de favorito o unfave, y por lo tanto el elemento sigue siendo el mismo."</a></p>
+
+
+                    <p class="p">"In the case here, the key will remain <code class="literal">cat.cid</code> in case of fave or unfave, and therefore the element stays the same."</p><p class="it"><a>"Vamos a añadir un sufijo o prefijo de la clave, junto con el estado favorito."</a></p>
+
+
+                    <p class="p">"Let's add a suffix or prefix to the key, along with the fave status."</p><div class="informalexample"><pre class="programlisting">{()=&gt;{
+                      if(cat.get('faved') === true){
+                        return &lt;span key={`${cat.cid}_${cat.get('faved')}`} className="fa fa-star" onClick={::this.faveUnfave} data-cid={cat.cid}&gt;&lt;/span&gt;;
+                      } else {
+                        return &lt;span key={`${cat.cid}_${cat.get('faved')}`} className="fa fa-star-o" onClick={::this.faveUnfave} data-cid={cat.cid}&gt;&lt;/span&gt;;
+                      }
+}()}</pre></div><p class="it"><a>"Perfecto. Funciona ahora, Mike."</a></p>
+
+
+<p class="p">"Perfect. It works now, Mike."</p><p class="it"><a>"Sí. Buen trabajo en la animación CSS, Shawn. La estrella se ve bien. Vamos a ver cómo se ve ahora".</a></p>
+
+
+<p class="p">"Yup. Nice work on the CSS animation, Shawn. The star looks good. Let's see how it looks now."</p><p class="it"><a>"Así es como se ve cuando </a><a id="id275" class="indexterm">nos FAVE un gato:"</a></p>
+
+
+<p class="p">"Here's how it looks when <a class="indexterm">we fave a cat:"</a></p><div class="mediaobject"><a class="indexterm"><img src="graphics/4730_10_05.jpg" alt="Animate"/></a></div><p class="it"><a class="indexterm">"Éste es después de la transición favorito es completa."</a></p>
+
+
+<p class="p">"This one is after the fave transition is complete."</p><div class="mediaobject"><img src="graphics/4730_10_06.jpg" alt="Animate"/></div><p class="it"><a class="indexterm">"Por último, la misma </a><a id="id276" class="indexterm">animación tiene lugar cuando tratamos de unfave el gato."</a></p>
+
+
+<p class="p">"Finally, the same <a class="indexterm">animation takes place when we try to unfave the cat."</a></p><div class="mediaobject"><a class="indexterm"><img src="graphics/4730_10_07.jpg" alt="Animate"/></a></div><p class="it"><a class="indexterm">"Perfecto, Carla amará esto!"</a></p>
+
+
+<p class="p">"Perfect, Carla will love this!"</p><p class="it"><a class="indexterm">Había sido un día de diversión en Adequate LLC. Shawn y Mike trabajaron en la refactorización su aplicación con el fin de permitir que los datos cambian para reflejar los cambios de la vista y la animación que se agregan a los gatos y se retiran. Ellos </a><a id="id277" class="indexterm">también trabajaron sobre cómo se faved estrellas / unfaved.</a></p>
+
+
+<p class="p">It had been a fun day at Adequate LLC. Shawn and Mike worked on refactoring their app in order to allow data changes to reflect the view changes and animating the cats being added and removed. They <a class="indexterm">also worked on how stars were faved/unfaved.</a></p></div><a class="indexterm">
+</a></body></html>

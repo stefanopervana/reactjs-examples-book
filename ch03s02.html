@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Props validation</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Props validation"><div class="titlepage"><div><div><h1 class="title"><a id="ch03lvl1sec29"></a>Props validation</h1></div></div></div><p class="it"><a>"React proporciona una </a><a id="id69" class="indexterm">manera de validar el uso de los props PropTypes. Esto es extremadamente útil para asegurar que los componentes se utilizan correctamente. Aquí está un ejemplo del uso de <code class="literal">propTypes</code> de nuestra aplicación." Explica Mike.</a></p>
+
+<p class="p">"React provides a <a class="indexterm"></a>way to validate the props using PropTypes. This is extremely useful to ensure that the components are used correctly. Here is an example of using <code class="literal">propTypes</code> for our app." explained Mike.</p><div class="informalexample"><pre class="programlisting">var App = React.createClass({<br></br>
+  propTypes: {<br></br>
+   headings: React.PropTypes.array,<br></br>
+   changeSets: React.PropTypes.array,<br></br>
+   author: React.PropTypes.string.isRequired<br></br>
+   },<br></br>
+  <br></br>
+  render: function(){<br></br>
+    return(&lt;table className = 'table'&gt;<br></br>
+             &lt;Headings headings = {this.props.headings} /&gt;<br></br>
+             &lt;Rows changeSets = {this.props.changeSets} /&gt;<br></br>
+           &lt;/table&gt;);<br></br>
+    }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Oh! ¿Va a mostrar un error ya que no estamos pasando el autor, que se requiere, supongo? Veo que <code class="literal">propTypes</code> ha establecido el valor del autor como <code class="literal">isRequired</code>." Pidió a Shawn.</a></p>
+
+
+<p class="p">"Oh! Will it show an error as we are not passing the author, which is required, I assume? I see that <code class="literal">propTypes</code> has set the author value to be <code class="literal">isRequired</code>." Shawn asked.</p><div class="mediaobject"><img src="graphics/4730_03_01.jpg" alt="Props validation"/></div><p class="it"><a class="indexterm">"No, no generará un error, pero mostrará una buena advertencia para nosotros para echar un vistazo." dijo Mike.</a></p>
+
+<p class="p">"No. It will not throw an error, but it will show a nice warning for us to take a look at." said Mike.</p><p class="it"><a class="indexterm">"Además, <code class="literal">propTypes</code> sólo se verifica en el desarrollo. Su trabajo es simplemente comprobar que se cumplen todas las hipótesis que estamos haciendo acerca de nuestros componentes." Añadió Mike.</a></p>
+
+<p class="p">"Also, <code class="literal">propTypes</code> are only checked in development. Their job is to just check that all the assumptions that we are making about our components are being met." Mike added.</p><p class="it"><a class="indexterm">"Lo tengo. Estoy de acuerdo en que es mejor tenerlo en lugar de quedarse sorprendido por el hipo al azar durante la producción," Shawn.</a></p>
+
+<p class="p">"Got it. I agree that it's better to have it rather than getting surprised by random hiccups during production," Shawn.</p><p class="it"><a class="indexterm">"Sí. Es especialmente útil, ya que, junto con los tipos estándar, también podemos validar los tipos personalizados." Mike informó.</a></p>
+
+<p class="p">"Yes. It's especially useful as, along with standard types, we can also validate the custom types." Mike informed.</p><div class="informalexample"><pre class="programlisting">var App = React.createClass({<br></br>
+  propTypes: {<br></br>
+   headings: function(props, propName, componentName) {<br></br>
+   if(propName === 'headings')<br></br>
+     return Error('Failed Validation');<br></br>
+   }<br></br>
+  },<br></br>
+  <br></br>
+  render: function(){<br></br>
+    return(&lt;table className = 'table'&gt;<br></br>
+             &lt;Headings headings = {this.props.headings} /&gt;<br></br>
+             &lt;Rows changeSets = {this.props.changeSets} /&gt;<br></br>
+           &lt;/table&gt;);<br></br>
+    }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Por lo tanto, si la </a><a id="id70" class="indexterm">estructura de los props no sucede según tu hipótesis, podes elevar una advertencia mediante la definición de un validador personalizado como se muestra en el caso anterior", explica Mike.</a></p>
+
+<p class="p">"Therefore, if the <a class="indexterm"></a>structure of the props is not as per your assumption, you can raise a warning by defining a custom validator as shown in the previous case", Mike explained.</p></div></body></html>

@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Getting started with forms</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Getting started with forms"><div class="titlepage"><div><div><h1 class="title"><a id="ch04lvl1sec42"></a>Getting started with forms</h1></div></div></div><p class="it"><a>"Formas comportan ligeramente </a><a id="id97" class="indexterm">diferente en el mundo React que en el mundo HTML normal. Son un poco más especial que los otros componentes del DOM en el mundo React. El <code class="literal">&lt;input&gt;</code>, <code class="literal">&lt;textarea&gt;</code> y <code class="literal">&lt;option&gt;</code> las etiquetas son algunos de los componentes de entrada comunes proporcionados por React." explica Mike.</a></p>
+
+<p class="p">"Forms behave slightly <a class="indexterm"></a>differently in the React world than in the normal HTML world. They are a bit special than the other DOM components in the React world. The <code class="literal">&lt;input&gt;</code>, <code class="literal">&lt;textarea&gt;</code>, and <code class="literal">&lt;option&gt;</code> tags are some of the common input components provided by React." explained Mike.</p>
+
+<p class="it"><a class="indexterm">"Estos componentes forman están mutados cuando el usuario interactúa con ellos, añade un poco de texto en la entrada, o selecciona una opción. Por lo tanto, tenemos que tener cuidado de que estamos manejando esas interacciones del usuario correctamente." Mike explica con más detalle.</a></p>
+
+<p class="p">"These form components are mutated when the user interacts with them, adds some text in the input, or selects an option. Therefore, we need to take care that we are managing those user interactions properly." Mike explained further.</p><p class="it"><a class="indexterm">"Vamos a empezar con una simple </a><a id="id98" class="indexterm">etiqueta de entrada para comprender la interacción del usuario." informó Mike.</a></p>
+
+<p class="p">"Let's start with a simple <a class="indexterm"></a>input tag to understand the user interaction." informed Mike.</p><div class="informalexample"><pre class="programlisting">// src/index.js
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+var InputExample = React.createClass({
+  render() {
+    return (
+      &lt;input type="text" value="Shawn" /&gt;
+    );
+  }
+});
+ReactDOM.render(&lt;InputExample /&gt;,  
+                 document.getElementById('root'));</pre></div>
+
+<p class="it"><a class="indexterm">"Mike, ¿cuál es el significado de importación aquí?" Shawn se le preguntó.</a></p>
+
+                 <p class="p">"Mike, what is the meaning of import here?" asked Shawn.</p><p class="it"><a class="indexterm">"Buena captura. Esta es una de las características ES6 que vamos a utilizar en este proyecto. Se utiliza para importar las funciones definidas en otros módulos o secuencias de comandos externos."</a></p>
+
+                 <p class="p">"Good catch. This is one of the ES6 features that we are going to use in this project. It is used to import functions defined in other modules or external scripts."</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note07"></a>Note</h3><p class="it"><a>Más información </a><a id="id99" class="indexterm">sobre la importación se podes encontrar en </a><a class="ulink" href="https://developer.mozilla.org/en/docs/web/javascript/reference/statements/import">https://developer.mozilla.org/en/docs/web/javascript/reference/statements/import</a> .</p>
+
+                 <p class="p">More information <a class="indexterm"></a>on import can be found at <a class="ulink" href="https://developer.mozilla.org/en/docs/web/javascript/reference/statements/import">https://developer.mozilla.org/en/docs/web/javascript/reference/statements/import</a>.</p></div></div><p class="it">"También estamos utilizando una nueva manera de definir funciones en ES6."</p>
+
+                 <p class="p">"We are also using a new way of defining functions in ES6."</p><div class="informalexample"><pre class="programlisting">// Old way of defining function
+render: function() {
+  return (
+    &lt;input type="text" value="Shwn" /&gt;
+  );
+}
+
+// New way of defining function
+render() {
+    return (
+      &lt;input type="text" value="Shawn" /&gt;
+    );
+  }</pre></div><p class="it">"El uso de esta nueva sintaxis, que no tenemos que escribir la palabra <code class="literal">function</code> cada vez que se define la función."</p>
+
+  <p class="p">"Using this new syntax, we don't have to write word <code class="literal">function</code> every time we define the function."</p><p class="it">"Shawn, nuestra aplicación se inicia mediante la ejecución <code class="literal">npm start</code>."</p>
+
+  <p class="p">"Shawn, start our app by running <code class="literal">npm start</code>."</p><div class="informalexample"><pre class="programlisting">
+<span class="strong"><strong>$ npm start</strong></span>
+
+<span class="strong"><strong>&gt; reactjs-by-example-react-forms@0.0.1 start /Users/prathamesh/Projects/sources/reactjs-by-example/chapter4</strong></span>
+<span class="strong"><strong>&gt; node server.js</strong></span>
+
+<span class="strong"><strong>Listening at localhost:9000</strong></span>
+<span class="strong"><strong>Hash: 8ec0d12965567260413b</strong></span>
+<span class="strong"><strong>Version: webpack 1.9.11</strong></span>
+<span class="strong"><strong>Time: 1639ms</strong></span>
+</pre></div><p class="it">"Impresionante, que funciona porque <a id="id100" class="indexterm">hemos configurado la <code class="literal">package.json</code> sección de secuencias de comandos para iniciar la aplicación."</a></p>
+
+<p class="p">"Awesome, it works because <a class="indexterm"></a>we have configured the <code class="literal">package.json</code> scripts section for starting the app."</p><div class="informalexample"><pre class="programlisting">  // package.json
+  ……
+  "scripts": {
+    "start": "node server.js",
+    "lint": "eslint src"
+  },
+……</pre></div><p class="it"><a class="indexterm">"Volvamos a nuestra caja de entrada. Vemos una entrada de texto HTML normal con un valor predefinido, <code class="literal">Shawn</code>. Todo bien." dijo Mike.</a></p>
+
+<p class="p">"Let's get back to our input box. We see a normal HTML text input with a predefined value, <code class="literal">Shawn</code>. All good." said Mike.</p><div class="mediaobject"><img src="graphics/4730_04_01.jpg" alt="Getting started with forms"/></div><p class="it"><a class="indexterm">"Mike, no se podes editar. Parece </a><a id="id101" class="indexterm">como el campo está. Además, estoy viendo una advertencia en la consola de sólo lectura." Shawn informado.</a></p>
+
+<p class="p">"Mike, I can't edit it. Seems <a class="indexterm"></a>like the field is read-only. Also, I am seeing a warning in the console." informed Shawn.</p><div class="mediaobject"><img src="graphics/4730_04_02.jpg" alt="Getting started with forms"/></div></div></body></html>

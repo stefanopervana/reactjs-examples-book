@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Setting up the application</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Setting up the application"><div class="titlepage"><div><div><h1 class="title"><a id="ch04lvl1sec41">Setting up the application</a></h1></div></div></div><p class="it"><a>". Shawn, que estaban usando JSBin hasta este punto, pero ahora vamos a crear la aplicación localmente Utilizaremos la siguiente estructura de directorios para nuestro código:"</a></p>
+
+<p class="p">"Shawn, we were using JSBin up to this point. But now we will create the app locally. We will use the following directory structure for our code:"</p><div class="informalexample"><pre class="programlisting"><span class="strong"><strong>$ tree -L 1</strong></span>
+<span class="strong"><strong>.</strong></span>
+<span class="strong"><strong>├── LICENSE</strong></span>
+<span class="strong"><strong>├── README.md</strong></span>
+<span class="strong"><strong>├── index.html</strong></span>
+<span class="strong"><strong>├── node_modules</strong></span>
+<span class="strong"><strong>├── package.json</strong></span>
+<span class="strong"><strong>├── server.js</strong></span>
+<span class="strong"><strong>├── src</strong></span>
+<span class="strong"><strong>└── webpack.config.js</strong></span>
+
+<span class="strong"><strong>2 directories, 6 files</strong></span>
+</pre></div><div class="itemizedlist"><ul class="itemizedlist">
+
+<li class="it"><a>El <code class="literal">src</code> directorio contendrá todos los componentes React</a></li>
+
+<li class="listitem" style="list-style-type: disc">The <code class="literal">src</code> directory will contain all of the React components</li>
+
+<li class="it">El <code class="literal">webpack.config.js</code> y el <code class="literal">server.js</code> archivo se usa para configurar el servidor de desarrollo local mediante webpack.</li>
+
+<li class="listitem" style="list-style-type: disc">The <code class="literal">webpack.config.js</code> and <code class="literal">server.js</code> file will be used for setting up local development server using webpack.</li>
+
+<li class="it"><a>El <code class="literal">package.json</code> archivo se utiliza para contener información acerca de todos los paquetes de la npm utilizados por nosotros</a></li>
+
+<li class="listitem" style="list-style-type: disc">The <code class="literal">package.json</code> file will be used to contain information about all of the npm packages used by us</li><li class="listitem" style="list-style-type: disc"><a>El <code class="literal">index.html</code> archivo será el punto de partida de la aplicación</a></li>
+
+<li class="listitem" style="list-style-type: disc">The <code class="literal">index.html</code> file will be the starting point of the app</li></ul></div><p class="it"><a>"Vamos a ver nuestro <code class="literal">index.html</code> archivo."</a></p>
+
+<p class="p">"Let's see our <code class="literal">index.html</code> file."</p><div class="informalexample"><pre class="programlisting">// index.html
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Forms in React&lt;/title&gt;
+    &lt;link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id='root' class="container"&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+  &lt;script src="/static/bundle.js"&gt;&lt;/script&gt;
+&lt;/html&gt;</pre></div><p class="it"><a>"Estamos utilizando CSS de arranque para embellecer nuestra aplicación. Aparte de esto, estamos incluyendo el código JavaScript integrado como <code class="literal">static/bundle.js</code>. Webpack a empaquetar el código JavaScript de nuestra aplicación y colocarlo en <code class="literal">static/bundle.js</code>".</a></p>
+
+<p class="p">"We are using bootstrap CSS to beautify our app. Other than this, we are including the bundled JavaScript as <code class="literal">static/bundle.js</code>. Webpack will bundle the JavaScript code from our app and place it in <code class="literal">static/bundle.js</code>."</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note05">Note</a></h3><p class="it"><a>Webpack es un bundler módulo que lleva nuestro código JavaScript y genera activos estáticos correspondientes a estos módulos. También tiene otras características tales como el reemplazo del módulo caliente, lo que vamos a utilizar en este libro. Estaremos cubriendo webpack y es de configuración con más profundidad en </a><a class="link" href="ch11.html" title="Capítulo 11. Herramientas React">el capítulo 11</a> , <span class="emphasis"><em>React Herramientas</em></span> .</p>
+
+<p class="p">Webpack is a module bundler that takes our JavaScript code and generates static assets representing these modules. It also has other features such as hot module replacement, which we will be using in this book. We will be covering webpack and it's configuration in more depth in <a class="link" href="ch11.html" title="Chapter 11. React Tools">Chapter 11</a>, <span class="emphasis"><em>React Tools</em></span>.</p></div></div><p class="it">"Vamos a ver nuestro <code class="literal">index.js</code> <a id="id96" class="indexterm">archivo, que será el punto de entrada del código JavaScript."</a></p>
+
+<p class="p">"Let's see our <code class="literal">index.js</code> <a class="indexterm">file, which will be the entry point of the JavaScript code."</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">// src/index.js
+
+import ReactDOM from 'react-dom';
+import BookStore from './BookStore';
+
+ReactDOM.render(&lt;BookStore /&gt;, document.getElementById('root'));</a></pre></div><p class="it"><a class="indexterm">"Va a hacer que nuestro <code class="literal">BookStore</code> componente en el contenedor raíz presente en <code class="literal">index.html</code>. Ahora, lo único que queda por hacer es en realidad escribir el código para nuestro <code class="literal">BookStore</code> componente. Vamos a empezar."</a></p>
+
+<p class="p">"It will render our <code class="literal">BookStore</code> component in the root container present in <code class="literal">index.html</code>. Now, the only thing left to do is actually writing the code for our <code class="literal">BookStore</code> component. Let's get started."</p><p class="it"><a class="indexterm">"Mike, en JSBin, nuestro código ES6 se iba a convertir en JavaScript normal automáticamente. ¿Cómo va a ser convertido ahora?" Shawn se le preguntó.</a></p>
+
+<p class="p">"Mike, in JSBin, our ES6 code was getting converted to normal JavaScript automatically. How will it be converted now?" asked Shawn.</p><p class="it"><a class="indexterm">"Excelente pregunta. Me olvidé de mencionar sobre el uso de Babel. Babel es un transpiler JavaScript que convertirá nuestro código ES6 y JSX tener JavaScript normal. Ya he configurado esta aplicación para usar Babel. Podes comprobar <code class="literal">package.json</code> y <code class="literal">webpack.config.js</code> ver cómo hemos configurado Babel convertir el código ES6 al código ES5. Pero no hay que preocuparse demasiado acerca de él por ahora. vamos a volver a ella y ver cómo toda la configuración funciona después ".</a></p>
+
+<p class="p">"Excellent question. I forgot to mention about using Babel. Babel is a JavaScript transpiler that will convert our ES6 and JSX code to normal JavaScript. I have already configured this app to use Babel. You can check <code class="literal">package.json</code> and <code class="literal">webpack.config.js</code> to see how we configured Babel to convert the ES6 code to ES5 code. But let's not worry too much about it for now. We will come back to it and see how the whole setup works later."</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note06">Note</a></h3><p class="it"><a>Estaremos cubriendo cómo hemos utilizado Babel y webpack en </a><a class="link" href="ch11.html" title="Capítulo 11. Herramientas React">el capítulo 11</a> , <span class="emphasis"><em>React Herramientas</em></span> . En este momento, se espera que el lector no se preocupe y directamente configurar la aplicación siguiendo las instrucciones dadas en el código fuente de este capítulo. También se podes consultar <a class="link" href="ch11.html" title="Capítulo 11. Herramientas React">el capítulo 11</a> , <span class="emphasis"><em>React Herramientas</em></span> para más detalles antes de completar este capítulo.</p>
+
+<p class="p">We will be covering how we have used Babel and Webpack in <a class="link" href="ch11.html" title="Chapter 11. React Tools">Chapter 11</a>, <span class="emphasis"><em>React Tools</em></span>. Right now, the reader is expected to not worry about it and directly set up the application using the instructions given in source code of this chapter. You can also check <a class="link" href="ch11.html" title="Chapter 11. React Tools">Chapter 11</a>, <span class="emphasis"><em>React Tools</em></span> for more details before completing this chapter.</p></div></div></div>
+</body></html>

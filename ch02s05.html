@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='utf-8'?> <html xmlns="http://www.w3.org/1999/xhtml"><head><title>Multiple components</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Multiple components"><div class="titlepage"><div><div><h1 class="title"><a id="ch02lvl1sec19"></a>Multiple components</h1></div></div></div><p class="it"><a>"Shawn, vamos a </a><a id="id43" class="indexterm">volver a nuestra aplicación. Estamos utilizando casi el mismo código de la última vez, pero podes configurar una nueva JSBin. Hemos incluido la última biblioteca React y bootstrap en la ficha HTML. También hemos añadido un elemento contenedor, vamos a renderizar nuestra aplicación React".</a></p> <p class="p">"Shawn, let's get <a class="indexterm"></a>back to our application. We are using almost the same code from last time but you can set up a new JSBin. We have included the latest React library and bootstrap library in the HTML tab. We have also added a container element, which we will render our React app."</p><div class="informalexample"><pre class="programlisting">&lt;!DOCTYPE html&gt;<br></br> &lt;html&gt;<br></br>
+  &lt;head&gt;<br></br>
+    &lt;script src="https://code.jquery.com/jquery.min.js"&gt;&lt;/script&gt;<br></br>
+    &lt;link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/<br></br>bootstrap-combined.min.css" rel="stylesheet" type="text/css" /&gt;<br></br>
+    &lt;script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"&gt;&lt;/script&gt;<br></br>
+    &lt;script src="//fb.me/react-with-addons-0.14.3.js"&gt;&lt;/script&gt;<br></br>
+    &lt;script src="//fb.me/react-dom-0.14.3.js"&gt;&lt;/script&gt;<br></br>
+    &lt;meta charset="utf-8"&gt;<br></br>
+    &lt;meta name="viewport" content="width=device-width"&gt;<br></br>
+    &lt;title&gt;JSX in Detail&lt;/title&gt;<br></br>
+  &lt;/head&gt;<br></br>
+  &lt;body&gt;<br></br>
+    &lt;div id="container"&gt;<br></br>
+    &lt;/div&gt;<br></br>
+  &lt;/body&gt;<br></br>
+&lt;/html&gt;</pre></div><p class="it"><a class="indexterm">"En este momento, estamos utilizando únicamente un solo componente para mostrar los datos de la API de cambios recientes."</a></p>
+
+
+
+<p class="p">"Right now, we are only using a single component to display the data from the recent changes API."</p><div class="informalexample"><pre class="programlisting">var App = React.createClass({<br></br>
+  render: function(){<br></br>
+    var headings = this.props.headings.map(function(heading) {<br></br>
+      return(&lt;th&gt;<br></br>
+        {heading}<br></br>
+      &lt;/th&gt;);<br></br>
+    });<br></br>
+<br></br>
+    var rows = this.props.data.map(function(row){<br></br>
+      return  &lt;tr&gt;<br></br>
+        &lt;td&gt;{row.when}&lt;/td&gt;<br></br>
+        &lt;td&gt;{row.who}&lt;/td&gt;<br></br>
+        &lt;td&gt;{row.description}&lt;/td&gt;<br></br>
+      &lt;/tr&gt;<br></br>
+<br></br>
+    })<br></br>
+      return &lt;div&gt;&lt;h1&gt;{this.props.title}&lt;/h1&gt;&lt;table&gt;<br></br>
+        &lt;thead&gt;<br></br>
+          {headings}<br></br>
+        &lt;/thead&gt;<br></br>
+        {rows}<br></br>
+      &lt;/table&gt;&lt;/div&gt;<br></br>
+  }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Vamos a dividir este único </a><a id="id44" class="indexterm">componente en pequeños componentes componibles. Estos componentes modulares simples utilizarán otros componentes modulares con interfaces independientes bien definidas."</a></p> <p class="p">"Let's split this single <a class="indexterm"></a>component into small composable components. These simple modular components will use other modular components with well-defined self-contained interfaces."</p><p class="it"><a class="indexterm">"Lo tengo", dijo Shawn.</a></p> <p class="p">"Got it" said Shawn.</p><p class="it"><a class="indexterm">"Ok. El primer paso es tratar de identificar los diferentes componentes que están presentes en nuestro único componente."</a></p> <p class="p">"Ok. The first step is trying to identify the different components that are present in our single component."</p><p class="it"><a class="indexterm">"En la actualidad, nuestra renderizado listas de métodos <code class="literal">tableHeadings</code> y <code class="literal">tableRows</code> como childs de elemento de la tabla."</a></p> <p class="p">"Currently, our render method lists <code class="literal">tableHeadings</code> and <code class="literal">tableRows</code> as the children of table element."</p><div class="informalexample"><pre class="programlisting">return(&lt;table&gt;<br></br> {tableHeadings}<br></br>
+             {tableRows}<br></br>
+       &lt;/table&gt;);</pre></div>
+<p class="it"><a class="indexterm">"Creo que vamos a hacer los componentes de los headings y rows?" pidió a Shawn.</a></p> <p class="p">"I guess we will make the components for the headings and rows?" Shawn asked.</p><p class="it"><a class="indexterm">"Sí. Pero podemos ir un paso más allá las partidas y las filas son las listas de unidades aún más pequeñas. <code class="literal">Heading</code> y una etiqueta <code class="literal">Row</code>, respectivamente, lo podes visualizar de la siguiente manera:".</a></p> <p class="p">"Yes. But we can go one step further. Both headings and rows are lists of still smaller units, a <code class="literal">Heading</code> and a <code class="literal">Row</code> tag, respectively. It can be visualized as follows:"</p><div class="informalexample"><pre class="programlisting">&lt;table&gt;<br></br>
+ &lt;Headings&gt;<br></br>
+  &lt;Heading/&gt;<br></br>
+    &lt;Heading/&gt;<br></br>
+  &lt;/Headings&gt;<br></br>
+  &lt;Rows &gt;<br></br>
+    &lt;Row/&gt;<br></br>
+    &lt;Row/&gt;<br></br>
+  &lt;/Rows&gt;<br></br>
+&lt;/table&gt;</pre></div><p class="it"><a class="indexterm">"Tiene sentido, Mike. Voy a tratar de crear <code class="literal">Heading</code> ahora."</a></p>
+
+
+
+<p class="p">"Makes sense, Mike. Let me try to create <code class="literal">Heading</code> now."</p><p class="it"><a class="indexterm">"Claro, adelante."</a></p>
+
+
+
+<p class="p">"Sure, go ahead."</p><div class="informalexample"><pre class="programlisting">var Heading = React.createClass({<br></br>
+  render: function() {<br></br>
+    return(&lt;th&gt;{heading}&lt;/th&gt;);<br></br>
+  }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Mike, creo que esto </a><a id="id45" class="indexterm">va a funcionar, con excepción del heading. No estoy seguro de cómo representar el rumbo real de la etiqueta <code class="literal">&lt;th&gt;</code>."</a></p> <p class="p">"Mike, I think this <a class="indexterm"></a>will work, except the heading. I am not sure how to render the actual heading in the <code class="literal">&lt;th&gt;</code> tag."</p><p class="it"><a class="indexterm">"No se preocupe por ello. Vamos a suponer que va a pasar como Props al componente <code class="literal">Heading</code>."</a></p> <p class="p">"Don't worry about it. Let's just assume that it will be passed as props to the <code class="literal">Heading</code> component."</p><p class="it"><a class="indexterm">"Claro Aquí está el <code class="literal">Heading</code> componente a continuación:"</a></p> <p class="p">"Sure. Here is the <code class="literal">Heading</code> component then:"</p><div class="informalexample"><pre class="programlisting">var Heading = React.createClass({<br></br> render: function() {<br></br>
+    return(&lt;th&gt;{this.props.heading}&lt;/th&gt;);<br></br>
+  }<br></br>
+}); </pre></div><p class="it"><a class="indexterm">"Perfecto! El componente <code class="literal">Row</code> también será similar a <code class="literal">Heading</code>. Se obtendrá el objeto <code class="literal">changeSet</code> en sus Props"</a></p>
+
+<p class="p">"Perfect! The <code class="literal">Row</code> component will also be similar to <code class="literal">Heading</code>. It will get the <code class="literal">changeSet</code> object in its props"</p><div class="informalexample"><pre class="programlisting">var Row = React.createClass({<br></br>
+  render: function() {<br></br>
+    return(&lt;tr&gt;<br></br>
+             &lt;td&gt;{this.props.changeSet.when}&lt;/td&gt;<br></br>
+             &lt;td&gt;{this.props.changeSet.who}&lt;/td&gt;<br></br>
+             &lt;td&gt;{this.props.changeSet.description}&lt;/td&gt;<br></br>
+          &lt;/tr&gt;);<br></br>
+  }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Shawn, hicistes componentes de más bajo nivel. Ahora, es el momento de subir un nivel. En primer lugar vamos a construir <code class="literal">Headings</code>."</a></p> <p class="p">"Shawn, we are done with lowest-level components. Now, it's time to move up a level. Let's build <code class="literal">Headings</code> first."</p><p class="it"><a class="indexterm">"De manera similar a cómo un componente <code class="literal">Heading</code> obtendrás tu título en los Props, <code class="literal">Headings</code> obtendrá una lista de los títulos que se le pasan."</a></p> <p class="p">"Similar to how a <code class="literal">Heading</code> component will get its title in props, <code class="literal">Headings</code> will get a list of titles passed to it."</p><div class="informalexample"><pre class="programlisting">var Headings = React.createClass({render: function() {<br></br>
+    var headings = this.props.headings.map(function(heading) {<br></br>
+      return(&lt;Heading heading = {heading}/&gt;);<br></br>
+    });<br></br>
+<br></br>
+   return (&lt;thead&gt;&lt;tr&gt;{headings}&lt;/tr&gt;&lt;thead&gt;);<br></br>
+  }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Estamos interactuando sobre la lista de títulos y convertirlos en una lista de los componentes <code class="literal">Heading</code>. El componente <code class="literal">Headings</code> es el control de cómo se transmiten los Props a los componentes <code class="literal">Heading</code> </a><a id="id46" class="indexterm">individuales. En cierto sentido, los componentes <code class="literal">Heading</code> individuales son propiedad de <code class="literal">Headings</code>." explica Mike.</a></p> <p class="p">"We are iterating over the list of titles and converting them into a list of the <code class="literal">Heading</code> components. The <code class="literal">Headings</code> component is controlling how the props are passed to the individual <code class="literal">Heading</code> <a class="indexterm"></a>components. In a sense, individual <code class="literal">Heading</code> components are owned by <code class="literal">Headings</code>." explained Mike.</p><p class="it"><a class="indexterm">"En React, un propietario es el componente que establece Props de otros componentes. También podemos decir que si el componente X está presente en el método <code class="literal">render()</code> del componente Y, entonces Y es propietario de X." Mike añadió.</a></p> <p class="p">"In React, an owner is the component that sets props of other components. We can also say that if the X component is present in the <code class="literal">render()</code> method of the Y component, then Y owns X." Mike further added.</p><p class="it"><a class="indexterm">"Shawn, seguí adelante y construí las filas de componentes similares a <code class="literal">Headings</code>".</a></p> <p class="p">"Shawn, go ahead and build the Rows component similar to <code class="literal">Headings</code>."</p><p class="it"><a class="indexterm">"Aqui tienes:"</a></p> <p class="p">"Here you go:"</p><div class="informalexample"><pre class="programlisting">var Rows = React.createClass({<br></br> render: function() {<br></br>
+    var rows = this.props.changeSets.map(function(changeSet) {<br></br>
+      return(&lt;Row changeSet = {changeSet}/&gt;);<br></br>
+    });<br></br>
+    return ({rows});<br></br>
+  }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Sólo hay un problema. No podes renderizar las filas, ya que es una colección de componentes. Recordá que la función <code class="literal">render()</code> sólo podes renderizar una etiqueta" dijo Mike.</a></p> <p class="p">"There is just one issue. You can't render the rows as it's a collection of components. Remember that the <code class="literal">render()</code> function can only render one tag" Mike said.</p><p class="it"><a class="indexterm">"Creo que debería envolver las filas de una etiqueta <code class="literal">&lt;tbody&gt;</code>.", Shawn."</a></p> <p class="p">"I guess I should wrap the rows in a <code class="literal">&lt;tbody&gt;</code> tag.", Shawn."</p><div class="informalexample"><pre class="programlisting">var Rows = React.createClass({<br></br> render: function() {<br></br>
+    var rows = this.props.changeSets.map(function(changeSet) {<br></br>
+      return(&lt;Row changeSet = {changeSet}/&gt;);<br></br>
+    });<br></br>
+<br></br>
+    return (&lt;tobdy&gt;{rows}&lt;/tbody&gt;);<br></br>
+  }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Perfecto. Tenemos casi todo ahora. Vamos a terminar añadiendo el alto nivel <code class="literal">App</code> de los componentes."</a></p> <p class="p">"Perfect. We have almost everything now. Let's finish it by adding the top-level <code class="literal">App</code> component."</p><div class="informalexample"><pre class="programlisting">var App = React.createClass({<br></br> render: function(){<br></br>
+    return &lt;table className = 'table'&gt;<br></br>
+             &lt;Headings headings = {this.props.headings} /&gt;<br></br>
+             &lt;Rows changeSets = {this.props.changeSets} /&gt;<br></br>
+           &lt;/table&gt;;<br></br>
+    }<br></br>
+});</pre></div><p class="it"><a class="indexterm">"Así es como </a><a id="id47" class="indexterm">nuestro código completo se ve ahora:"</a></p>
+
+
+
+<p class="p">"Here's how <a class="indexterm"></a>our complete code looks now:"</p><div class="informalexample"><pre class="programlisting">var Heading = React.createClass({<br></br>
+  render: function() {<br></br>
+    return &lt;th&gt;{this.props.heading}&lt;/th&gt;;<br></br>
+  }<br></br>
+});<br></br>
+<br></br>
+var Headings = React.createClass({<br></br>
+  render: function() {<br></br>
+    var headings = this.props.headings.map(function(name) {<br></br>
+      return &lt;Heading heading = {name}/&gt;;<br></br>
+    });<br></br>
+   return &lt;thead&gt;&lt;tr&gt;{headings}&lt;/tr&gt;&lt;/thead&gt;;<br></br>
+  }<br></br>
+});<br></br>
+<br></br>
+var Row = React.createClass({<br></br>
+  render: function() {<br></br>
+    return &lt;tr&gt;<br></br>
+             &lt;td&gt;{this.props.changeSet.when}&lt;/td&gt;<br></br>
+             &lt;td&gt;{this.props.changeSet.who}&lt;/td&gt;<br></br>
+             &lt;td&gt;{this.props.changeSet.description}&lt;/td&gt;<br></br>
+           &lt;/tr&gt;;<br></br>
+  }<br></br>
+});<br></br>
+<br></br>
+var Rows = React.createClass({<br></br>
+  render: function() {<br></br>
+    var rows = this.props.changeSets.map(function(changeSet) {<br></br>
+      return(&lt;Row changeSet = {changeSet}/&gt;);<br></br>
+    });<br></br>
+    return &lt;tbody&gt;{rows}&lt;/tbody&gt;;<br></br>
+  }<br></br>
+});<br></br>
+<br></br>
+<br></br>
+var App = React.createClass({<br></br>
+  render: function() {<br></br>
+    return &lt;table className = 'table'&gt;<br></br>
+             &lt;Headings headings = {this.props.headings} /&gt;<br></br>
+             &lt;Rows changeSets = {this.props.changeSets} /&gt;<br></br>
+           &lt;/table&gt;;<br></br>
+    }<br></br>
+});<br></br>
+<br></br>
+var data = [{ "when": "2 minutes ago",<br></br>
+              "who": "Jill Dupre",<br></br>
+              "description": "Created new account"<br></br>
+            },<br></br>
+            { <br></br>     
+              "when": "1 hour ago",<br></br>
+              "who": "Lose White",<br></br>
+              "description": "Added fist chapter"<br></br>
+           }];<br></br>
+var headings = ['When', 'Who', 'Description'];<br></br>
+<br></br>
+ReactDOM.render(&lt;App headings = {headings} <br></br>
+                     changeSets = {data} /&gt;,<br></br> 
+                                      document.getElementById('container')); </pre></div>
+<p class="it"><a class="indexterm">"Shawn, creo que has entendido el poder de los componentes del composability ahora. Esto hace a nuestra interfaz de usuario fácil </a><a id="id48" class="indexterm">de razonar y fácil de reutilizar y componer. Vamos a utilizar esta filosofía en todas partes con React."</a></p> <p class="p">"Shawn, I think you have understood the power of composability of components now. It makes our UI easy <a class="indexterm"></a>to reason with and easy to reuse and compose. We will be using this philosophy throughout with React."</p><p class="it"><a class="indexterm">"Estoy de acuerdo. Cada componente hace una cosa bien y al final, todos ellos consiguen componer juntos toda la construcción de la aplicación. Las diferentes partes del código se separan de tal manera que no interfieran entre sí."</a></p> <p class="p">"I agree. Every component does one thing right and in the end, all of them get composed together so that the whole application is built. Different parts of the code get separated in such a way that they don't interfere with each other."</p></div></body></html>

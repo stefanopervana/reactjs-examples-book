@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Modifying this.props.children</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Modifying this.props.children"><div class="titlepage"><div><div><h1 class="title"><a id="ch03lvl1sec31"></a>Modifying this.props.children</h1></div></div></div><p class="it"><a>"Shawn. No </a><a id="id73" class="indexterm">es un prop especial que debemos conocer </a><a id="id74" class="indexterm">. Es <code class="literal">this.props.children</code>," continuó Mike.</a></p>
+
+<p class="p">"Shawn. There <a class="indexterm"></a>is one special prop that we should know <a class="indexterm"></a>about. It's <code class="literal">this.props.children</code>," continued Mike.</p><p class="it"><a class="indexterm">"React captura todos los childs que están presentes entre la etiqueta de apertura y la etiqueta de cierre en los props a los que podes acceder a través de <code class="literal">this.props.children</code>". dijo Mike.</a></p>
+
+<p class="p">"React captures all the children that are present in the opening and closing tag into props that can be accessed through <code class="literal">this.props.children</code>." said Mike.</p><p class="it"><a class="indexterm">"Vamos a tratar de modificar nuestro código usando <code class="literal">this.props.children</code>. Esto también es necesario ya que queremos mostrar un encabezado para nuestra table de salida." Mike añadió.</a></p>
+
+<p class="p">"Let's try to modify our code to use <code class="literal">this.props.children</code>. This is also required as we want to display a header for our output table." Mike added.</p><div class="informalexample"><pre class="programlisting">var RecentChangesTable = React.createClass({
+  render: function(){<br></br>
+          return(<br></br>
+          &lt;div&gt;<br></br>
+            &lt;h1&gt; Recent Changes &lt;/h1&gt;<br></br>
+            &lt;table className='table'&gt;<br></br>
+               {this.props.children}<br></br>
+            &lt;/table&gt;<br></br>
+          &lt;/div&gt;<br></br>
+          );<br></br>
+  }<br></br>
+});<br></br>
+<br></br>
+var App = React.createClass({<br></br>
+  render: function(){<br></br>
+    return(&lt;RecentChangesTable&gt;<br></br>
+             &lt;Headings headings = {this.props.headings} /&gt;<br></br>
+             &lt;Rows changeSets = {this.props.changeSets} /&gt;<br></br>
+           &lt;/RecentChangesTable&gt;);<br></br>
+    }<br></br>
+});</pre></div><div class="mediaobject"><img src="graphics/4730_03_03.jpg" alt="Modifying this.props.children"/></div><p class="it"><a class="indexterm">"Cool. Así que hemos extraído de la tabla en su propio componente y también añadimos una cabecera". Shawn confirmó.</a></p>
+
+<p class="p">"Cool. So we extracted the table in its own component and also added a header." Shawn confirmed.</p><p class="it"><a class="indexterm">"Sí, nosotros </a><a id="id75" class="indexterm">renderizamos <code class="literal">Headings</code> y <code class="literal">Rows</code> usando <code class="literal">this.props.children</code>." Mike explicó.</a></p>
+
+<p class="p">"Yes and we <a class="indexterm"></a>rendered <code class="literal">Headings</code> and <code class="literal">Rows</code> using <code class="literal">this.props.children</code>." Mike explained.</p><p class="it"><a class="indexterm">"Impresionante. Voy </a><a id="id76" class="indexterm">a cambiar nuestro código basado en nuestra discusión sobre los Props." Shawn dijo con entusiasmo.</a></p>
+
+<p class="p">"Awesome. Let <a class="indexterm"></a>me change our code based on our discussion about props." Shawn said excitedly.</p></div></body></html>

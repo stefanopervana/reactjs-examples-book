@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>PureRenderMixin</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="PureRenderMixin"><div class="titlepage"><div><div><h1 class="title"><a id="ch08lvl1sec67"></a>PureRenderMixin</h1></div></div></div><p class="it"><a>"Shawn, <code class="literal">PureRenderMixin</code> es un complemento que se podes utilizar en lugar de <code class="literal">shouldComponentUpdate</code>. Bajo el capó, utiliza <code class="literal">shouldComponentUpdate</code> y compara los </a><a id="id241" class="indexterm">apoyos actuales y el estado con los siguientes accesorios y estados. Vamos a intentarlo en </a><a id="id242" class="indexterm">nuestro código. En primer lugar, tenemos que instalar el complemento, por supuesto ". dijo Mike.</a></p>
+
+<p class="p">"Shawn, <code class="literal">PureRenderMixin</code> is an add-on that can be used in place of <code class="literal">shouldComponentUpdate</code>. Under the hood, it uses <code class="literal">shouldComponentUpdate</code> and compares the <a class="indexterm"></a>current props and state with the next props and states. Let's try it in <a class="indexterm"></a>our code. First, we need to install the add-on, of course." said Mike.</p><div class="informalexample"><pre class="programlisting">
+<span class="strong"><strong>$ npm install react-addons-pure-render-mixin</strong></span>
+
+<span class="strong"><strong>// src/Header.js</strong></span>
+
+<span class="strong"><strong>import React from 'react';</strong></span>
+<span class="strong"><strong>import PureRenderMixin from 'react-addons-pure-render-mixin';</strong></span>
+
+<span class="strong"><strong>export default React.createClass({</strong></span>
+<span class="strong"><strong>  mixins: [PureRenderMixin],</strong></span>
+<span class="strong"><strong>     ..</strong></span>
+<span class="strong"><strong>     ..</strong></span>
+<span class="strong"><strong>})</strong></span>
+
+<span class="strong"><strong>// src/Form.js</strong></span>
+
+<span class="strong"><strong>import React from 'react';</strong></span>
+<span class="strong"><strong>import PureRenderMixin from 'react-addons-pure-render-mixin';</strong></span>
+
+<span class="strong"><strong>export default React.createClass({</strong></span>
+<span class="strong"><strong>  mixins: [PureRenderMixin],</strong></span>
+<span class="strong"><strong>  ..</strong></span>
+<span class="strong"><strong>  ..</strong></span>
+<span class="strong"><strong>     }</strong></span>
+<span class="strong"><strong>})</strong></span>
+</pre></div><p class="it"><a class="indexterm">"Shawn, vamos a ver el tiempo perdido ahora que hemos utilizado <code class="literal">PureRenderMixin</code>." dijo Mike.</a></p>
+
+<p class="p">"Shawn, let's see the wasted time now that we have used <code class="literal">PureRenderMixin</code>." said Mike.</p><div class="mediaobject"><img src="graphics/4730_08_12.jpg" alt="PureRenderMixin"/></div><p class="it"><a class="indexterm">"Oh, se puso peor. La <code class="literal">PureRenderMixin</code> función agregó el tiempo perdido en la re-renderización <code class="literal">Form</code> y <code class="literal">Header</code> componentes de la espalda. ¿Qué está pasando, Mike?" Pidió a Shawn.</a></p>
+
+<p class="p">"Oh, it got worse. The <code class="literal">PureRenderMixin</code> function added the time wasted in re-rendering <code class="literal">Form</code> and <code class="literal">Header</code> components back. What is going on, Mike?" Shawn asked.</p><p class="it"><a class="indexterm">"Cálmate! Me </a><a id="id243" class="indexterm">voy a explicar por qué sucedió esto. El <code class="literal">PureRenderMixin</code> compara los apoyos actuales y el estado con los siguientes accesorios y estado, pero lo hace la comparación superficial. Por lo tanto, si estamos pasando el estado o apoyos que contienen objetos y matrices, a continuación, la comparación superficial no devolverá cierto incluso si ambos tienen el mismo contenido ". Mike explicó.</a></p>
+
+<p class="p">"Calm down! I <a class="indexterm"></a>am going to explain why this happened. The <code class="literal">PureRenderMixin</code> compares the current props and state with the next props and state, but it does shallow comparison. Therefore, if we are passing the state or props that contain objects and arrays, then the shallow comparison will not return true even if they both have the same content." Mike explained.</p><p class="it"><a class="indexterm">"Sin embargo, cuando estamos pasando objetos complejos o matrices a las <code class="literal">Header</code> y <code class="literal">Form</code> los componentes? Estamos justo pasando los datos de la libreta como el nombre del autor, número de edición, y así sucesivamente. No estamos pasando algo que <code class="literal">Header</code>, ¿cómo <code class="literal">PureRenderMixin</code> fallan?" Pidió a Shawn.</a></p>
+
+<p class="p">"However, where are we passing any complex objects or arrays to the <code class="literal">Header</code> and <code class="literal">Form</code> components? We are just passing the book data such as the name of author, edition count, and so on. We are not passing anything to <code class="literal">Header</code>, how does <code class="literal">PureRenderMixin</code> fail?" Shawn asked.</p><p class="it"><a class="indexterm">"Están olvidando prop estilo pasa al <code class="literal">Header</code> y <code class="literal">Form</code> desde el <code class="literal">App</code> componente." informó Mike.</a></p>
+
+<p class="p">"You are forgetting style prop passed to <code class="literal">Header</code> and <code class="literal">Form</code> from the <code class="literal">App</code> component." informed Mike.</p><div class="informalexample"><pre class="programlisting">// src/App.js
+
+render() {
+    let style = {paddingTop: '5%'};
+    return (
+      &lt;div className='container'&gt;
+        &lt;Header style={style}&gt;&lt;/Header&gt;
+        &lt;Form style={style}
+              performSearch={this._performSearch}&gt;
+        &lt;/Form&gt;
+         ..
+         ..
+      &lt;/div&gt;
+)}</pre></div><p class="it"><a class="indexterm">"Cada vez que <code class="literal">App</code> se re-renderizado, se crea un nuevo objeto de estilo y enviado a <code class="literal">Header</code> y <code class="literal">Form</code> en los apoyos."</a></p>
+
+<p class="p">"Each time <code class="literal">App</code> gets re-rendered, a new object for style is created and sent to <code class="literal">Header</code> and <code class="literal">Form</code> in props."</p><div class="mediaobject"><img src="graphics/4730_08_13.jpg" alt="PureRenderMixin"/></div><div class="section" title="The PureRenderMixin anti pattern"><div class="titlepage"><div><div><h2 class="title"><a id="ch08lvl2sec17"></a>The PureRenderMixin anti pattern</h2></div></div></div><p class="it"><a>Las <code class="literal">PureRenderMixin</code> internamente </a><a id="id244" class="indexterm">implementos <code class="literal">shouldComponentUpdate</code>, como sigue:</a></p>
+
+<p class="p">The <code class="literal">PureRenderMixin</code> internally <a class="indexterm"></a>implements <code class="literal">shouldComponentUpdate</code>, as follows: </p><div class="informalexample"><pre class="programlisting">var ReactComponentWithPureRenderMixin = {
+  shouldComponentUpdate: function(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  },
+};</pre></div><p class="it"><a class="indexterm">La <code class="literal">shallowCompare</code> función es también un complemento proporcionado por React que es una función de ayuda para comparar el </a><a id="id245" class="indexterm">estado actual y los accesorios con el siguiente estado y los accesorios. Básicamente se logra el mismo que <code class="literal">PureRenderMixin</code>, pero como es una función, se podes utilizar directamente en lugar de utilizar <code class="literal">PureRenderMixin</code>. Se necesita especialmente cuando estamos usando clases ES6 con React." Explica Mike.</a></p>
+
+<p class="p">The <code class="literal">shallowCompare</code> function is also an add-on provided by React that is a helper function to compare the <a class="indexterm"></a>current state and props with the next state and props. It basically achieves the same thing as <code class="literal">PureRenderMixin</code>, but as it is a function, it can be used directly instead of using <code class="literal">PureRenderMixin</code>. It is especially needed when we are using ES6 classes with React." Mike explained.</p><p class="it"><a class="indexterm">"Mike, por lo que la comparación poco profunda es la razón por la que <code class="literal">PureRenderMixin</code> está fallando para detectar que no hay ningún cambio en los próximos apoyos?" Pidió a Shawn.</a></p>
+
+<p class="p">"Mike, so the shallow comparison is the reason why <code class="literal">PureRenderMixin</code> is failing to detect that there is no change in the next props?" Shawn asked.</p><p class="it"><a class="indexterm">"Sí. Los <code class="literal">shallowCompare</code> sólo itera sobre las claves de los objetos que se están comparando y devuelve falso cuando el valor de la clave en cada objeto no es estrictamente igual. Por lo tanto, si pasamos accesorios sencillos, según se indica, a continuación, <code class="literal">shallowCompare</code> determinarán correctamente que re- no se requiere la representación:"</a></p>
+
+<p class="p">"Yes. The <code class="literal">shallowCompare</code> just iterates over the keys of objects that are being compared and returns false when the value of the key in each object is not strictly equal. Therefore, if we pass simple props, as follows, then <code class="literal">shallowCompare</code> will correctly determine that re-rendering is not required:"</p><div class="informalexample"><pre class="programlisting">// shallowCompare will detect correctly that props are not changed.
+{ author_name: "Dan Brown", 
+  edition_count: "20", 
+  title: "Angels and Demons" }</pre></div><p class="it"><a class="indexterm">"Sin embargo, fallará inmediatamente con un prop que es un objeto o matriz."</a></p>
+
+  <p class="p">"However, it will fail immediately with a prop that is an object or array."</p><div class="informalexample"><pre class="programlisting">{ author_name: "Dan Brown", 
+  edition_count: "20", 
+  title: "Angels and Demons", 
+  style: { paddingTop: '%5' } }</pre></div><p class="it"><a class="indexterm">"Aunque <code class="literal">PureRenderMixin</code> nos salva unas pocas líneas de código, podes que no funcione todo el tiempo a medida que esperar que funcione. Especialmente cuando tenemos estatales mutables, objetos o matrices en los apoyos." dijo Mike.</a></p>
+
+  <p class="p">"Though <code class="literal">PureRenderMixin</code> saves us a few lines of code, it may not work all the time as we expect it to work. Especially when we have mutable state, objects, or arrays in props." said Mike.</p><p class="it"><a class="indexterm">"Lo tengo. Así que podemos escribir nuestra propia <code class="literal">shouldComponentUpdate</code> función cuando hemos anidado estado o props ¿verdad?", Preguntó Shawn.</a></p>
+
+  <p class="p">"Got it. So we can write our own <code class="literal">shouldComponentUpdate</code> function when we have nested state or props right?", Shawn asked.</p><p class="it"><a class="indexterm">"Sí. <code class="literal">PureRenderMixin</code> y <code class="literal">shallowCompare</code> es bueno para los componentes simples con accesorios sencillos </a><a id="id246" class="indexterm">y estados, pero hay que tener </a><a id="id247" class="indexterm">cuidado cuando lo estamos usando." Micro.</a></p>
+
+  <p class="p">"Yes. <code class="literal">PureRenderMixin</code> and <code class="literal">shallowCompare</code> is good for simple components with simple props <a class="indexterm"></a>and states but we should take <a class="indexterm"></a>care when we are using it." Mike.</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note13"></a>Note</h3><p class="it"><a>Usando mixins se desaconseja en React mundo por varias razones. Pago alternativo que </a><a id="id248" class="indexterm">se acerca a <code class="literal">PureRenderMixin</code> patrón aquí - </a><a class="ulink" href="https://github.com/gaearon/react-pure-render">https://github.com/gaearon/react-pure-render</a> .</p>
+
+  <p class="p">Using mixins is discouraged in React world for various reasons. Checkout alternative <a class="indexterm"></a>approaches for <code class="literal">PureRenderMixin</code> pattern here - <a class="ulink" href="https://github.com/gaearon/react-pure-render">https://github.com/gaearon/react-pure-render</a>.</p></div></div></div></div></body></html>

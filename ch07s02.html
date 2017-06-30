@@ -1,0 +1,363 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Cloning components</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Cloning components"><div class="titlepage"><div><div><h1 class="title"><a id="ch07lvl1sec61">Cloning components</a></h1></div></div></div><p class="it"><a>"Shawn, los apoyos también son inmutables en React. En la mayoría de los casos, el componente secundario sólo utiliza props aprobadas por el componente principal. Sin embargo, a veces queremos extender los apoyos entrantes con algunos datos nuevos antes de emitir el componente secundario. Es una caso de uso típico para actualizar estilos y clases CSS. React proporciona un complemento para clonar un componente y </a><a id="id189" class="indexterm">la ampliación de sus props. Se llama el <span class="strong"><strong>cloneWithProps</strong></span> </a><a id="id190" class="indexterm"> complemento." dijo Mike.</a></p>
+
+<p class="p">"Shawn, props are also immutable in React. In most of the cases, the child component just uses props passed by the parent component. However, sometimes we want to extend the incoming props with some new data before rendering the child component. It's a typical use case to update styles and CSS classes. React provides an addon to clone a component and <a class="indexterm">extending its props. It's called the <span class="strong"><strong>cloneWithProps</strong></span> </a><a class="indexterm">addon." said Mike.</a></p><p class="it"><a class="indexterm">"Mike, que complemento está </a><a id="id191" class="indexterm">obsoleto. Yo había mirado en el pasado y React ha desaprobado él. También tiene gran cantidad de cuestiones relacionadas con los árbitros del componente hijo no conseguí pasar a los componentes child clonado recientemente," informó a Shawn.</a></p>
+
+<p class="p">"Mike, that addon is <a class="indexterm">deprecated. I had looked at it in the past and React has deprecated it. It also has lot of issues related to refs of the child component not getting passed to the newly-cloned child components," Shawn informed.</a></p><p class="it"><a class="indexterm">"Es cierto. Sin embargo, React también tiene un alto nivel de <code class="literal">React.cloneElement</code> método API, lo que nos permite clonar y ampliar un componente. Tiene una API muy sencilla y se podes utilizar en lugar del complemento cloneWithProps." Mike explicó.</a></p>
+
+<p class="p">"True. However, React also has a top-level <code class="literal">React.cloneElement</code> API method, which allows us to clone and extend a component. It has a very simple API and it can be used instead of the cloneWithProps addon." Mike explained.</p><div class="informalexample"><pre class="programlisting">React.cloneElement(element, props, …children);</pre></div><p class="it"><a class="indexterm">"Este método podes ser utilizado para clonar el elemento dado y combinar los nuevos apoyos con los apoyos existentes. Se sustituye a los childs ya existentes con nuevos childs. Por lo tanto, tenemos que tener esto en cuenta al tratar con los componentes childs."</a></p>
+
+<p class="p">"This method can be used to clone the given element and merge the new props with existing props. It replaces existing children with new children. Therefore, we have to keep this in mind while dealing with the child components."</p><p class="it"><a class="indexterm">"La <code class="literal">cloneElement</code> función también pasa ref del antiguo componente secundario al componente clonado recientemente. Por lo tanto, si tenemos cualquier devoluciones de llamada en base a los árbitros, que seguíán funcionando incluso después de la clonación."</a></p>
+
+<p class="p">"The <code class="literal">cloneElement</code> function also passes ref of the old child component to the newly-cloned component. Therefore, if we have any callbacks based on refs, they will continue to work even after cloning."</p><p class="it"><a class="indexterm">"Shawn, aquí es su próximo reto. Mostramos la lista de libros en nuestra aplicación. De hecho, en todas nuestras aplicaciones, se muestra la lista de otras cosas, como los productos, artículos y así sucesivamente. Queremos mostrar las filas con colores alternativos en todos estos anuncios en lugar de fondo sólo blanco. como el código para esta función será el mismo en todas las aplicaciones, estoy pensando en crear un componente separado que aceptará filas como entrada y hacerlas con colores alternos. tales componentes podes ser utilizados en todas nuestras aplicaciones. creo que se podes hacer uso de <code class="literal">React.cloneElement</code> esta ". Mike explicó la siguiente tarea.</a></p>
+
+<p class="p">"Shawn, here is your next challenge. We show listing of books in our app. In fact, in all of our apps, we show the listing of other things such as products, items, and so on. We want to show the rows with alternate colors in all of these listings instead of just white background. As the code for this feature will be the same across all the apps, I am thinking about creating a separate component that will accept rows as input and render them with alternate colors. Such components can be used in all of our apps. I think that you can make use of <code class="literal">React.cloneElement</code> for this." Mike explained the next task.</p><p class="it"><a class="indexterm">"Suena como una buena idea para </a><a id="id192" class="indexterm">extraer esto como un componente separado. Lo necesitamos en casi todas las aplicaciones. Nuestro control de calidad se quejaba de la falta de colores en nuestra aplicación de búsqueda de ayer." Shawn recordaba.</a></p>
+
+<p class="p">"Sounds like a good idea to <a class="indexterm">extract this as a separate component. We need it in almost all the apps. Our QA was complaining about the lack of colors in our search app yesterday." Shawn remembered.</a></p><p class="it"><a class="indexterm">"Vamos a añadir algunos colores alternos a continuación." Mike se rió entre dientes.</a></p>
+
+<p class="p">"Let's add some alternate colors then." Mike chuckled.</p><p class="it"><a class="indexterm">"En primer lugar, vamos a ver cómo estamos mostrando los libros actualmente."</a></p>
+
+<p class="p">"First, let's see how we are displaying books currently."</p><div class="informalexample"><pre class="programlisting">// src/App.js
+
+render() {
+    let tabStyles = {paddingTop: '5%'};
+    return (
+      &lt;div className='container'&gt;
+        &lt;div className="row" style={tabStyles}&gt;
+          &lt;div className="col-lg-8 col-lg-offset-2"&gt;
+            &lt;h4&gt;Open Library | Search any book you want!&lt;/h4&gt;
+            &lt;div className="input-group"&gt;
+              &lt;input type="text" className="form-control" placeholder="Search books..." ref='searchInput'/&gt;
+              &lt;span className="input-group-btn"&gt;
+                &lt;button className="btn btn-default" type="button" onClick={this._performSearch}&gt;Go!&lt;/button&gt;
+              &lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        {this._displaySearchResults()}
+      &lt;/div&gt;
+    );
+  },
+
+_displaySearchResults() {
+    if(this.state.searching) {
+      return &lt;Spinner /&gt;;
+    } else if(this.state.searchCompleted) {
+      return (
+        &lt;BookList
+            searchCount={this.state.totalBooks}
+            _sortByTitle={this._sortByTitle}&gt;
+          {this._renderBooks()}
+        &lt;/BookList&gt;
+      );
+    }
+  } 
+
+_renderBooks() {
+    return this.state.books.map((book, idx) =&gt; {
+      return (
+        &lt;BookRow key={idx}
+                 title={book.title}
+                 author_name={book.author_name}
+                 edition_count={book.edition_count} /&gt;
+      );
+    })
+  },
+
+})
+  }</pre></div><p class="it"><a class="indexterm">"El <code class="literal">BookList</code> </a><a id="id193" class="indexterm">componente simplemente hace que las filas que se le pasan como lo está usando <code class="literal">this.props.children</code>."</a></p>
+
+  <p class="p">"The <code class="literal">BookList</code> <a class="indexterm">component just renders the rows passed to it as it is using <code class="literal">this.props.children</code>."</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">// BookList component
+
+var BookList = React.createClass({
+  render() {
+    return (
+      &lt;div className="row"&gt;
+        &lt;div className="col-lg-8 col-lg-offset-2"&gt;
+          &lt;span className='text-center'&gt;
+            Total Results: {this.props.searchCount}
+          &lt;/span&gt;
+          &lt;table className="table table-stripped"&gt;
+            &lt;thead&gt;
+              &lt;tr&gt;
+                &lt;th&gt;&lt;a href="#" onClick={this.props._sortByTitle}&gt;Title&lt;/a&gt;&lt;/th&gt;
+                &lt;th&gt;Author&lt;/th&gt;
+                &lt;th&gt;No. of Editions&lt;/th&gt;
+              &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+              <span class="strong"><strong>{this.props.children}</strong></span>
+            &lt;/tbody&gt;
+          &lt;/table&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+});</a></pre></div><p class="it"><a class="indexterm">"Mike, yo estoy nombrando el componente <code class="literal">RowAlternator</code>. El <code class="literal">RowAlternator</code> componente obtendrá la matriz dinámica de childs filas y va a proporcionar con colores alternos. Podemos pasar múltiples </a><a id="id194" class="indexterm">colores para <code class="literal">RowAlternator</code> también. De esta manera, el código de cliente que utiliza este componente podes controlar los colores que quieren utilizar como colores alternos ".</a></p>
+
+<p class="p">"Mike, I am naming the component <code class="literal">RowAlternator</code>. The <code class="literal">RowAlternator</code> component will get the dynamic array of children rows and it will render them with alternate colors. We can pass multiple <a class="indexterm">colors to <code class="literal">RowAlternator</code> too. In this way, the client code using this component can control the colors that they want to use as alternate colors."</a></p><p class="it"><a class="indexterm">"Suena bien, Shawn. Creo que esta cantidad de API es suficiente por ahora."</a></p>
+
+<p class="p">"Sounds good, Shawn. I think this much API is enough for now."</p><div class="informalexample"><pre class="programlisting">// RowAlternator component
+
+import React from 'react';
+
+var RowAlternator = React.createClass({
+  propTypes: {
+    firstColor: React.PropTypes.string,
+    secondColor: React.PropTypes.string
+  },
+
+  render() {
+    return (
+      &lt;tbody&gt;
+        { this.props.children.map((row, idx) =&gt; {
+            if (idx %2 == 0) {
+              return React.cloneElement(row, { style: { background: this.props.firstColor }});
+            } else {
+              return React.cloneElement(row, { style: { background: this.props.secondColor }});
+            }
+          })
+        }
+      &lt;/tbody&gt;
+    )
+  }
+});
+
+module.exports = RowAlternator;</pre></div><p class="it"><a class="indexterm">"Como no sabemos cuántos childs elementos nos pondremos en <code class="literal">RowAlternator</code>, nos limitaremos a iterar sobre todos ellos y el estilo de conjunto con colores alternos. También estamos utilizando <code class="literal">React.cloneElement</code> </a><a id="id195" class="indexterm">aquí para clonar el child pasado y extender su prop estilo con color de fondo apropiada ".</a></p>
+
+<p class="p">"As we don't know how many children elements we will get in <code class="literal">RowAlternator</code>, we will just iterate over all of them and set style with alternate colors. We are also using <code class="literal">React.cloneElement</code> <a class="indexterm">here to clone the passed child and extend its style prop with appropriate background color."</a></p><p class="it"><a class="indexterm">"Vamos a cambiar nuestro <code class="literal">BookList</code> componente ahora con el fin de utilizar <code class="literal">RowAlternator</code>."</a></p>
+
+<p class="p">"Let's change our <code class="literal">BookList</code> component now in order to use <code class="literal">RowAlternator</code>."</p><div class="informalexample"><pre class="programlisting">// BookList component
+
+import RowAlternator from '../src/RowAlternator';
+
+var BookList = React.createClass({
+  render() {
+    return (
+      &lt;div className="row"&gt;
+        &lt;div className="col-lg-8 col-lg-offset-2"&gt;
+          &lt;span className='text-center'&gt;
+            Total Results: {this.props.searchCount}
+          &lt;/span&gt;
+          &lt;table className="table table-stripped"&gt;
+            &lt;thead&gt;
+              &lt;tr&gt;
+                &lt;th&gt;&lt;a href="#" onClick={this.props._sortByTitle}&gt;Title&lt;/a&gt;&lt;/th&gt;
+                &lt;th&gt;Author&lt;/th&gt;
+                &lt;th&gt;No. of Editions&lt;/th&gt;
+              &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;RowAlternator firstColor="white" secondColor="lightgrey"&gt;
+              {this.props.children}
+            &lt;/RowAlternator&gt;
+          &lt;/table&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+});</pre></div><p class="it"><a class="indexterm">"Estamos todo listo La lista muestra ahora colores alternos como queríamos, como se muestra en la imagen siguiente:".</a></p>
+
+<p class="p">"We are all set. The listing now shows alternate colors as we wanted, as shown in the following image:"</p><div class="mediaobject"><img src="graphics/4730_07_06.jpg" alt="Cloning components"/></div><p class="it"><a class="indexterm">"Perfecto, Shawn. Como ya habrá notado, usando <code class="literal">React.cloneElement</code> tiene sentido cuando estamos construyendo un </a><a id="id196" class="indexterm">componente con childs dinámicas, en las que no tenemos control sobre el método render de estos childs, pero desea extender sus apoyos en base a unos criterios." Mike era feliz.</a></p>
+
+<p class="p">"Perfect, Shawn. As you already noticed, using <code class="literal">React.cloneElement</code> makes sense when we are building a <a class="indexterm">component with dynamic children, where we don't have control on the render method of these children, but want to extend their props based on some criteria." Mike was happy.</a></p><div class="section" title="Helpers for testing React apps"><div class="titlepage"><div><div><h2 class="title"><a id="ch07lvl2sec10">Helpers for testing React apps</a></h2></div></div></div><p class="it"><a>"Shawn, hemos </a><a id="id197" class="indexterm">no se añade ninguna prueba para nuestra aplicación, sin embargo, sin embargo, ha llegado el momento de empezar poco a poco añadiendo cobertura de la prueba. Con la biblioteca broma y utilidades de prueba complemento, se hace muy fácil de configurar y empezar a probar las aplicaciones React. " Marcos explicó la siguiente tarea.</a></p>
+
+<p class="p">"Shawn, we have <a class="indexterm">not added any tests for our app yet, however, the time has come to start slowly adding test coverage. With the Jest library and Test Utilities addon, it becomes very easy to set up and start testing the React apps." Mark explained the next task.</a></p><p class="it"><a class="indexterm">"He oído hablar de broma. ¿No es una biblioteca de pruebas por parte de Facebook?" pidió a Shawn.</a></p>
+
+<p class="p">"I have heard about Jest. Isn't it a testing library by Facebook?" Shawn asked.</p><div class="section" title="Setting up Jest"><div class="titlepage"><div><div><h3 class="title"><a id="ch07lvl3sec01">Setting up Jest</a></h3></div></div></div><p class="it"><a>"Sí. Está construido sobre </a><a id="id198" class="indexterm">la parte superior de jazmín. Es muy fácil de configurar. En primer lugar, </a><a id="id199" class="indexterm">tenemos que instalar los <code class="literal">jest-cli</code> y <code class="literal">babel-jest</code> paquetes."</a></p>
+
+<p class="p">"Yes. It's built on <a class="indexterm">top of Jasmine. It's very easy to set up. First, we </a><a class="indexterm">have to install the <code class="literal">jest-cli</code> and <code class="literal">babel-jest</code> packages."</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm"><span class="strong"><strong>npm install jest-cli --save-dev</strong></span>
+<span class="strong"><strong>npm install babel-jest –-save-dev</strong></span>
+</a></pre></div><p class="it"><a class="indexterm">"Después de eso, tenemos que configurar <code class="literal">package.json</code>, de la siguiente manera:"</a></p>
+
+<p class="p">"After that, we need to configure <code class="literal">package.json</code>, as follows:"</p><div class="informalexample"><pre class="programlisting">{
+ ...
+ "scripts": {
+   "test": "jest"
+ },
+
+ "jest": {
+   "scriptPreprocessor": "&lt;rootDir&gt;/node_modules/babel-jest",
+    "unmockedModulePathPatterns": [
+         "&lt;rootDir&gt;/node_modules/react",
+         "&lt;rootDir&gt;/node_modules/react-dom",
+         "&lt;rootDir&gt;/node_modules/react-addons-test-utils",
+         "&lt;rootDir&gt;/node_modules/fbjs"
+     ],
+   "testFileExtensions": ["es6", "js", "jsx"],
+   "moduleFileExtensions": ["js", "json", "es6"]
+ }
+ ...
+}</pre></div><p class="it"><a class="indexterm">"De manera predeterminada, la broma se burla de todos los módulos, sin embargo, aquí estamos diciendo broma no burlarse de React y los relacionados con </a><a id="id200" class="indexterm">las bibliotecas. También estamos especificando las extensiones para nuestro archivo de prueba que se identifica por la broma como archivos de prueba."</a></p>
+
+<p class="p">"By default, Jest mocks all modules, however, here we are telling Jest not to mock React and the related <a class="indexterm">libraries. We are also specifying the extensions for our test file that will be identified by Jest as test files."</a></p><p class="it"><a class="indexterm">"Crear una <code class="literal">__test__</code> carpeta, donde vamos a añadir nuestras pruebas. La broma va a ejecutar las pruebas de archivos en esta carpeta. Vamos a </a><a id="id201" class="indexterm">añadir un archivo vacío también. Tenemos que asegurarnos de que el archivo debe terminar con <code class="literal">-test.js</code> fin de que la broma va a recoger a ejecutar las pruebas ". Mike explicó.</a></p>
+
+<p class="p">"Create a <code class="literal">__test__</code> folder, where we will be adding our tests. Jest will run the tests from files in this folder. Let's <a class="indexterm">add an empty file too. We have to make sure that the file should end with <code class="literal">-test.js</code> so that Jest will pick up it to run the tests." Mike explained.</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm"><span class="strong"><strong>mkdir __test__</strong></span>
+<span class="strong"><strong>touch __test__/app-test.js</strong></span>
+</a></pre></div><p class="it"><a class="indexterm">"Ahora vamos a verificar que podemos ejecutar las pruebas desde la línea de comandos."</a></p>
+
+<p class="p">"Now let's verify that we can run the tests from the command line."</p><div class="informalexample"><pre class="programlisting"><span class="strong"><strong>$ npm test</strong></span>
+
+<span class="strong"><strong>&gt; react-addons-examples@0.0.1 test /Users/prathamesh/Projects/sources/reactjs-by-example/chapter7</strong></span>
+<span class="strong"><strong>&gt; jest</strong></span>
+
+<span class="strong"><strong>Using Jest CLI v0.7.1</strong></span>
+<span class="strong"><strong>PASS __tests__/app-test.js (0.007s)</strong></span>
+</pre></div><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note10">Note</a></h3><p class="it"><a>Debería ver una salida que es similar a la salida anterior. Se podes cambiar en función de la broma </a><a id="id202" class="indexterm">versión. Consulte </a><a class="ulink" href="https://facebook.github.io/jest/docs/getting-started.html">https://facebook.github.io/jest/docs/getting-started.html</a> para establecer broma, en caso de cualquier problema.</p>
+
+<p class="p">You should see an output that is similar to the preceding output. It may change based on the Jest <a class="indexterm">version. Consult </a><a class="ulink" href="https://facebook.github.io/jest/docs/getting-started.html">https://facebook.github.io/jest/docs/getting-started.html</a> to set up Jest, in case of any issues.</p></div></div><p class="it">"Shawn, estamos todo listo con la broma. Es hora de empezar a escribir las pruebas ahora. Vamos a probar si el alto nivel <code class="literal">App</code> de componentes se monta correctamente. Sin embargo, en primer lugar, tenemos que entender un poco más acerca del uso de broma," dijo Mike .</p>
+
+<p class="p">"Shawn, we are all set with Jest. It's time to start writing the tests now. We will test whether the top-level <code class="literal">App</code> component gets mounted correctly. However, first, we need to understand a bit more about using Jest," said Mike.</p><p class="it">"De manera predeterminada, la broma <a id="id203" class="indexterm">se burla de todos los módulos que se requieren en un archivo de prueba. La broma hace esto para aislar el módulo que está en pruebas de todos los otros módulos. En este </a><a id="id204" class="indexterm">caso, queremos poner a prueba el <code class="literal">App</code> componente. Si sólo requerimos , entonces la broma proporcionará una versión burlado de <code class="literal">App</code>".</a></p>
+
+<p class="p">"By default, Jest <a class="indexterm">mocks all the modules that are required in a test file. Jest does this to isolate the module that is under test from all the other modules. In this </a><a class="indexterm">case, we want to test the <code class="literal">App</code> component. If we just require it, then Jest will provide a mocked version of <code class="literal">App</code>."</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">// app-test.js
+   
+   const App = require('App'); // Mocked by Jest</a></pre></div><p class="it"><a class="indexterm">"A medida que queremos probar el <code class="literal">App</code> componente en sí mismo, tenemos que especificar la broma no para burlarse de él. La broma proporciona la <code class="literal">jest.dontmock()</code> función para este propósito."</a></p>
+
+   <p class="p">"As we we want to test the <code class="literal">App</code> component itself, we need to specify Jest not to mock it. Jest provides the <code class="literal">jest.dontmock()</code> function for this purpose."</p><div class="informalexample"><pre class="programlisting">// app-test.js
+
+jest.dontmock('./../src/App'); // Tells Jest not to mock App.
+const App = require('App');</pre></div><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note11">Note</a></h3><p class="it"><a>Compruebe </a><a class="ulink" href="https://facebook.github.io/jest/docs/automatic-mocking.html">https://facebook.github.io/jest/docs/automatic-mocking.html</a> para <a id="id205" class="indexterm">más detalles acerca de burla función automática de broma.</a></p>
+
+<p class="p">Check <a class="ulink" href="https://facebook.github.io/jest/docs/automatic-mocking.html">https://facebook.github.io/jest/docs/automatic-mocking.html</a> for <a class="indexterm">more details about automatic mocking feature of Jest.</a></p></div></div><p class="it"><a class="indexterm">"El siguiente, que se sumará la importación para el complemento React y TestUtils."</a></p>
+
+<p class="p">"Next up, we will add imports for the React and TestUtils addon."</p><div class="informalexample"><pre class="programlisting">// app-test.js
+
+jest.dontMock('../src/App');
+const App = require('../src/App');
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import TestUtils from 'react-addons-test-utils';</pre></div><p class="it"><a class="indexterm">"El complemento TestUtils ofrece funciones de utilidad para hacer que los componentes, la búsqueda de sub-componentes en componentes renderizados e imitando eventos en el componente renderizado. Esto ayuda en las pruebas tanto de la estructura y el comportamiento de los componentes React." Mike añadió.</a></p>
+
+<p class="p">"The TestUtils addon provides utility functions to render the components, finding sub-components in rendered components and mimicking events on the rendered component. It helps in testing both the structure and behavior of the React components." Mike added.</p></div></div><div class="section" title="Testing structure of React components"><div class="titlepage"><div><div><h2 class="title"><a id="ch07lvl2sec11">Testing structure of React components</a></h2></div></div></div><p class="it"><a>"Vamos a </a><a id="id206" class="indexterm">empezar con la <code class="literal">renderIntoDocument</code> función. Esta función hace que el componente dado en un nodo DOM independiente en el documento. Retorna <code class="literal">ReactComponent</code>, que podes ser utilizado para realizar más pruebas."</a></p>
+
+<p class="p">"We will <a class="indexterm">start with the <code class="literal">renderIntoDocument</code> function. This function renders the given component into a detached DOM node in the document. It returns <code class="literal">ReactComponent</code>, which can be used for further testing."</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">// app-test.js
+
+describe('App', () =&gt; {
+  it('mounts successfully', () =&gt; {
+    let app = TestUtils.renderIntoDocument(&lt;App /&gt;);
+    expect(app.state.books).toEqual([]);
+    expect(app.state.searching).toEqual(false);
+  })
+});</a></pre></div><p class="it"><a class="indexterm">"Hemos hecho que el <code class="literal">App</code> componente de DOM y afirmó que inicialmente libros y buscar el estado se están ajustadas correctamente." Mike explicó.</a></p>
+
+<p class="p">"We rendered the <code class="literal">App</code> component in DOM and asserted that initially books and searching state are being set correctly." Mike explained.</p><p class="it"><a class="indexterm">"Mike, esto es impresionante. No estamos probando DOM real, pero probar los componentes React en su lugar."</a></p>
+
+<p class="p">"Mike, this is awesome. We are not testing real DOM, but testing the React components instead."</p><p class="it"><a class="indexterm">"Sí. El complemento TestUtils viene con métodos de búsqueda que se podes utilizar para encontrar los componentes childs en un árbol determinado componente. Son útiles para encontrar los componentes secundarios tales como cuadro de entrada y botón de enviar y simular eventos de clic o cambiar los acontecimientos."</a></p>
+
+<p class="p">"Yes. The TestUtils addon comes with finder methods that can be used to find the child components in a given component tree. They are useful to find the child components such as input box and submit button and simulate click events or change events."</p>
+
+<div class="itemizedlist"><ul class="itemizedlist">
+
+<li class="it"><code class="literal">findAllInRenderedTree(tree, predicate function)</code>: Esto es útil para encontrar todos los componentes de un árbol dado que devuelve el valor de verdad de la función de predicado.</li>
+
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">findAllInRenderedTree(tree, predicate function)</code>: This is useful for finding all the components in a given tree that returns the truth value for the predicate function.</li>
+
+<li class="it"><a class="indexterm"><code class="literal">scryRenderedDOMComponentsWithClass(tree, className)</code>: Esto es útil para encontrar todos los componentes del DOM con un nombre de clase dado.</a></li>
+
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">scryRenderedDOMComponentsWithClass(tree, className)</code>: This is useful for finding all the DOM components with a given class name.</li>
+
+
+<li class="indexterm"><code class="literal">findRenderedDOMComponentWithClass(tree, className)</code>: En lugar de encontrar todos los componentes del DOM con una clase dada, este método espera que sólo uno de tales componentes está presente. Se produce una excepción si hay múltiples componentes con un nombre de clase dado.</li>
+
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">findRenderedDOMComponentWithClass(tree, className)</code>: Instead of finding all the DOM components with a given class, this method expects that only one such component is present. It throws an exception if there are multiple components with a given class name.</li>
+
+<li class="it"><a class="indexterm"><code class="literal">scryRenderedDOMComponentsWithTag(tree, tagName)</code>: Es similar a la búsqueda de los componentes del DOM con el nombre de la clase, sin embargo, en lugar de nombre de la clase, que encuentra los componentes basados ​​en un nombre de etiqueta dado.</a></li>
+
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">scryRenderedDOMComponentsWithTag(tree, tagName)</code>: It's similar to finding the DOM components with the class name, however, instead of class name, it finds the components based on a given tag name.</li>
+
+<li class="it"><a class="indexterm"><code class="literal">findRenderedDOMComponentWithTag(tree, tagName)</code>: En lugar de encontrar todos los componentes con una etiqueta determinada, se espera que sólo uno de tales componentes está presente. También lanza una excepción cuando existe más de un tipo de componentes.</a></li>
+
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">findRenderedDOMComponentWithTag(tree, tagName)</code>: Instead of finding all the components with a given tag, it expects that only one such component is present. It also throws exception when more than one such components exists.</li>
+
+<li class="it"><a class="indexterm"><code class="literal">scryRenderedComponentsWithType(tree, componentType)</code>: Este método busca todos los componentes con un tipo dado. Es útil para encontrar todos los componentes compuestos creados por el usuario.</a></li>
+
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">scryRenderedComponentsWithType(tree, componentType)</code>: This method finds all the components with a given type. It's useful to find all the composite components created by the user.</li>
+
+<li class="it"><a class="indexterm"><code class="literal">findRenderedComponentWithType (tree, componentType)</code>: Esto es similar </a><a id="id207" class="indexterm">a todos los </a><a id="id208" class="indexterm">métodos de búsqueda anteriores. Plantea una excepción si hay más de un componente con un tipo dado está presente.</a></li>
+
+
+<li class="listitem" style="list-style-type: disc"><code class="literal">findRenderedComponentWithType (tree, componentType)</code>: This is similar <a class="indexterm">to all the </a><a class="indexterm">previous finder methods. It raises exception if more than one component with a given type is present.</a></li><a class="indexterm">
+
+</a></ul></div></div><div class="section" title="Testing behavior of React components"><div class="titlepage"><div><div><h2 class="title"><a id="ch07lvl2sec12">Testing behavior of React components</a></h2></div></div></div><p class="it"><a>"Vamos a </a><a id="id209" class="indexterm">utilizar estas funciones para </a><a id="id210" class="indexterm">afirmar que la búsqueda de libros comienza cuando un usuario introduce un término de búsqueda y hace clic en el <span class="strong"><strong>Enviar</strong></span> botón. Vamos a simular el caso de haber entrado término de búsqueda por parte del usuario." dijo Mike.</a></p>
+
+<p class="p">"Let's <a class="indexterm">use these functions to </a><a class="indexterm">assert that the search for books starts when a user enters a search term and clicks the <span class="strong"><strong>Submit</strong></span> button. We will simulate the event of entering search term by the user." said Mike.</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">// app-test.js
+
+it('starts searching when user enters search term and clicks submit', () =&gt; {
+    let app = TestUtils.renderIntoDocument(&lt;App /&gt;);
+
+    let inputNode = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
+    inputNode.value = "Dan Brown";
+    TestUtils.Simulate.change(inputNode);
+    let submitButton = TestUtils.findRenderedDOMComponentWithTag(app, 'button');
+    TestUtils.Simulate.click(submitButton);
+    expect(app.state.searching).toEqual(true);
+    expect(app.state.searchCompleted).toEqual(false);
+  })</a></pre></div><p class="it"><a class="indexterm">"Rendimos del <code class="literal">App</code> componente, encontrar el nodo de entrada, ajustar el valor del nodo de entrada al término de búsqueda, y simular el evento de cambio de uso <code class="literal">TestUtils.Simulate()</code>. Esta función simula el envío evento determinado en un nodo DOM. La <code class="literal">Simulate</code> función tiene un método para cada evento que React entiende. por lo tanto, podemos simular todos los eventos como el cambio, haga clic, y así sucesivamente. podemos probar el comportamiento de los usuarios utilizando este método ", explica Mike.</a></p>
+
+  <p class="p">"We render the <code class="literal">App</code> component, find the input node, set the value of the input node to the search term, and simulate the change event using <code class="literal">TestUtils.Simulate()</code>. This function simulates the given event dispatch on a DOM node. The <code class="literal">Simulate</code> function has a method for every event that React understands. Therefore, we can simulate all events such as change, click, and so on. We can test the user behavior using this method," Mike explained.</p><p class="it"><a class="indexterm">"Lo tengo. Por lo tanto, después de cambiar el término de búsqueda, hacemos clic en el botón de enviar y verifique que el estado se actualiza de acuerdo con nuestras expectativas", informó Shawn.</a></p>
+
+  <p class="p">"Got it. Therefore, after changing the search term, we click the submit button and verify that the state gets updated as per our expectations," informed Shawn.</p><p class="it"><a class="indexterm">"Sí, Shawn. Ahora, se podes comprobar si el Spinner se muestra una vez que el usuario hace clic en el <span class="strong"><strong>Enviar</strong></span> botón? Podes utilizar uno de los métodos de búsqueda que hemos comentado anteriormente." Mike explicó la siguiente tarea.</a></p>
+
+  <p class="p">"Yes, Shawn. Now, can you check whether the Spinner is shown once the user clicks the <span class="strong"><strong>Submit</strong></span> button? You can use one of the finder method that we discussed earlier." Mike explained the next task.</p><p class="it"><a class="indexterm">"Sí. Una vez que los cambios de estado de los componentes después de hacer clic en el <span class="strong"><strong>Enviar</strong></span> botón, podemos buscar el árbol de componentes renderizados para ver si el componente Spinner está presente o no."</a></p>
+
+  <p class="p">"Yes. Once the component state changes after clicking the <span class="strong"><strong>Submit</strong></span> button, we can search the rendered component tree to see whether the Spinner component is present or not."</p><div class="informalexample"><pre class="programlisting">// app-test.js
+
+// __tests__/app-test.js
+
+import Spinner from './../src/Spinner';
+
+it('starts searching when user enters search term and clicks submit', () =&gt; {
+    let app = TestUtils.renderIntoDocument(&lt;App /&gt;);
+    let inputNode = TestUtils.findRenderedDOMComponentWithTag(app, 'input');
+    inputNode.value = "Dan Brown";
+    TestUtils.Simulate.change(inputNode);
+    let submitButton = TestUtils.findRenderedDOMComponentWithTag(app, 'button');
+    TestUtils.Simulate.click(submitButton);
+    expect(app.state.searching).toEqual(true);
+    expect(app.state.searchCompleted).toEqual(false);
+<span class="strong"><strong>    let spinner = TestUtils.findRenderedComponentWithType(app, Spinner);</strong></span>
+<span class="strong"><strong>    expect(spinner).toBeTruthy();</strong></span>
+  }),</pre></div><p class="it"><a class="indexterm">"Estamos utilizando <code class="literal">TestUtils.findRenderedComponentWithType</code> aquí para comprobar si Spinner está presente en el árbol dictada por el <code class="literal">App</code> componente o no. Sin embargo, antes de añadir esta afirmación, hay que importar el componente giratorio en la parte superior del archivo de prueba como se <code class="literal">findRenderedComponentWithType</code> espera un segundo argumento sea una React componente ".</a></p>
+
+  <p class="p">"We are using <code class="literal">TestUtils.findRenderedComponentWithType</code> here to check whether Spinner is present in the tree rendered by the <code class="literal">App</code> component or not. However, before adding this assertion, we need to import the Spinner component at the top of the test file as <code class="literal">findRenderedComponentWithType</code> expects a second argument to be a React component."</p><p class="it"><a class="indexterm">"Excelente, Shawn. Como </a><a id="id211" class="indexterm">se podes ver, el comportamiento de la prueba del componente React se hace muy fácil con el <code class="literal">TestUtils.Simulate</code> y <code class="literal">finder</code> métodos". Mike explicó.</a></p>
+
+  <p class="p">"Excellent, Shawn. As <a class="indexterm">you can see, the testing behavior of the React component becomes very easy with the <code class="literal">TestUtils.Simulate</code> and <code class="literal">finder</code> methods." Mike explained.</a></p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note12">Note</a></h3><p class="it"><a>Tené en cuenta que no hemos añadido una prueba para cargar de forma asíncrona los libros de la biblioteca API abierta, ya que está fuera del alcance de este capítulo.</a></p>
+
+  <p class="p">Note that we have not added a test to asynchronously load the books from Open Library API as it is out of the scope of this chapter.</p></div></div></div><div class="section" title="Shallow rendering"><div class="titlepage"><div><div><h2 class="title"><a id="ch07lvl2sec13">Shallow rendering</a></h2></div></div></div><p class="it"><a>"Shawn, TestUtils también proporciona una forma más para probar los componentes de manera aislada usando el bajo </a><a id="id212" class="indexterm">renderizado. Representación superficial nos permite dibujar el componente de nivel superior y afirmar los hechos sobre el valor de retorno de la que es renderizado método. Es no hace que los childs componentes o crear instancias de ellos. por lo tanto, nuestras pruebas no se ven afectados por el comportamiento de los componentes de los childs. representación superficial además, no requiere un DOM, a diferencia de los métodos anteriores, en la que el componente renderizados en un DOM individual," explica Mike.</a></p>
+
+  <p class="p">"Shawn, TestUtils also provides one more way to test the components in an isolated fashion using the Shallow <a class="indexterm">rendering. Shallow rendering allows us render the top-level component and assert the facts about the return value of it's render method. It does not render children components or instantiate them. Therefore, our tests are not affected by the behavior of the children components. Shallow rendering also does not require a DOM, unlike the previous methods, where we rendered the component in a detached DOM," Mike explained.</a></p><div class="informalexample"><pre class="programlisting"><a class="indexterm">let renderer = TestUtils.createRenderer();</a></pre></div><p class="it"><a class="indexterm">"Esto crea un objeto de procesador de poca profundidad, en la que vamos a hacer que el componente que queremos probar. Renderizador superficial tiene un método similar al render <code class="literal">ReactDOM.render</code>, que podes ser utilizado para hacer el componente".</a></p>
+
+  <p class="p">"This creates a shallow renderer object, in which we will render the component that we want to test. Shallow renderer has a render method similar to <code class="literal">ReactDOM.render</code>, which can be used to render the component."</p><div class="informalexample"><pre class="programlisting">let renderer = TestUtils.createRenderer();
+let result = renderer.render(&lt;App /&gt;);</pre></div><p class="it"><a class="indexterm">"Después de render método se </a><a id="id213" class="indexterm">llama, hay que llamar <code class="literal">renderer.getRenderedOutput</code>, que devuelve la salida superficialmente rendido de hacer que el componente. Podemos empezar afirmando hechos sobre el componente en la salida del <code class="literal">getRenderedOutput</code>".</a></p>
+
+<p class="p">"After render method is <a class="indexterm">called, we should call <code class="literal">renderer.getRenderedOutput</code>, which returns the shallowly rendered output of rendering the component. We can start asserting facts about the component on the output of <code class="literal">getRenderedOutput</code>."</a></p><p class="it"><a class="indexterm">"Vamos a ver la salida que obtenemos de <code class="literal">getRenderedOutput</code>".</a></p>
+
+<p class="p">"Let's see the output we get from <code class="literal">getRenderedOutput</code>."</p><div class="informalexample"><pre class="programlisting">let renderer = TestUtils.createRenderer();
+let result = renderer.render(&lt;App /&gt;);
+result = renderer.getRenderOutput();
+console.log(result);
+
+// Output of console.log(result)
+
+Object {
+  '$$typeof': Symbol(react.element),
+  type: 'div',
+  key: null,
+  ref: null,
+  props: 
+   Object {
+     className: 'container',
+     children: Array [ [Object], undefined ] },
+  _owner: null,
+  _store: Object {} }</pre></div><p class="it"><a class="indexterm">"Como se podes ver, con base en el resultado representado, podemos afirmar los hechos sobre los apoyos de la componente de corriente. Sin embargo, si queremos probar nada de componente childs, tenemos que llegar explícitamente a ellos a través <code class="literal">this.props.children[0].props.children[1].props.children</code>."</a></p>
+
+  <p class="p">"As you can see, based on the rendered output, we can assert the facts about props of the current component. However, if we want to test anything about children component, we need to explicitly reach out to them through <code class="literal">this.props.children[0].props.children[1].props.children</code>."</p><p class="it"><a class="indexterm">"Esto hace que sea difícil de probar el comportamiento de los componentes de los childs que utilizan la representación superficial. Sin embargo, es útil para probar pequeños componentes de forma aislada, ya que no se vea afectado por el componente childs debido a la representación superficial", dijo Mike.</a></p>
+
+  <p class="p">"This makes it hard to test the behavior of the children components using shallow rendering. However, it's useful for testing small components in an isolated way as it does not get affected by children component due to shallow rendering," said Mike.</p></div></div>
+</body></html>

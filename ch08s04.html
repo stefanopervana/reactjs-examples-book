@@ -1,0 +1,348 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>DOM operations performed by React</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="DOM operations performed by React"><div class="titlepage"><div><div><h1 class="title"><a id="ch08lvl1sec66">DOM operations performed by React</a></h1></div></div></div><p class="it"><a><font class="">"Shawn, el </font></a><font class=""><a id="id219" class="indexterm"><font class="">PERF complemento podes mostrarnos qué operaciones DOM </font></a><font class=""><a id="id220" class="indexterm"><font class="">se realizaron por React. Vamos a ver qué manipulaciones React hizo con el DOM para representar la lista de libros de Dan Brown." dijo Mike.</font></a></font></font></p><font class=""><font class=""><font class="">
+
+
+<p class="p">"Shawn, the <a class="indexterm">PERF add-on can show us which DOM operations </a><a class="indexterm">were performed by React. Let's see what manipulations React did to the DOM to render the list of books by Dan Brown." said Mike.</a></p><div class="mediaobject"><a class="indexterm"><img src="graphics/4730_08_05.jpg" alt="DOM operations performed by React"/></a></div><p class="it"><a class="indexterm">"El <code class="literal">Perf.printDOM()</code> método nos las manipulaciones de DOM hechas por React dice. Se ha hecho sólo dos set <code class="literal">innerHTML</code> llamadas. El primero es hacer que el control de giro y la segunda es para hacer la lista de filas. En el medio, vemos una llamada a eliminar, que debe será cuando el spinner fue retirado de la página ".</a></p>
+
+
+<p class="p">"The <code class="literal">Perf.printDOM()</code> method tells us the DOM manipulations made by React. It has made only two set <code class="literal">innerHTML</code> calls. First one is to render the spinner and second one is to render the list of rows. In between, we see a call to remove, which must be when the spinner was removed from the page."</p><p class="it"><a class="indexterm">"Wow, este método parece muy práctico, ya que nos podes decir si React de alguna manera está haciendo algunas manipulaciones de DOM adicionales." dijo Shawn.</a></p>
+
+
+<p class="p">"Wow, this method looks very handy as it can tell us if React is somehow doing some extra DOM manipulations." said Shawn.</p><p class="it"><a class="indexterm">"Sí, pero </a><a id="id221" class="indexterm">hay más herramientas con el fin de analizar el </a><a id="id222" class="indexterm">rendimiento. Vamos a ver cuánto tiempo React requiere para representar cada componente. Esto se podes lograr usando <code class="literal">Perf.printInclusive()</code>." explica Mike.</a></p>
+
+
+<p class="p">"Yes, but <a class="indexterm">there are more tools for the purpose analyzing the </a><a class="indexterm">performance. Let's see how much time does React require to render each component. This can be achieved using <code class="literal">Perf.printInclusive()</code>." explained Mike.</a></p><div class="section" title="Time taken to render all the components"><div class="titlepage"><div><div><h2 class="title"><a id="ch08lvl2sec14">Time taken to render all the components</a></h2></div></div></div><div class="mediaobject"><a><img src="graphics/4730_08_06.jpg" alt="Time taken to render all the components"/></a></div><p class="it"><a>"Este método </a><a id="id223" class="indexterm">imprime el tiempo total necesario para hacer que todos los componentes. Esto también incluye el tiempo necesario para procesar los apoyos y configurar el estado inicial y las llamadas a <code class="literal">componentDidMount</code> y <code class="literal">componentWillMount</code>."</a></p>
+
+
+<p class="p">"This method <a class="indexterm">prints the overall time taken to render all the components. This also included the time required to process props and set up initial state and calls to <code class="literal">componentDidMount</code> and <code class="literal">componentWillMount</code>."</a></p><p class="it"><a class="indexterm">"Por lo tanto, si tenemos alguna operación que requiere mucho tiempo en uno de estos hooks, tendrá un impacto en el resultado que se muestra por la <code class="literal">printInclusive</code> función, ¿verdad?" Pidió a Shawn.</a></p>
+
+
+<p class="p">"Therefore, if we have some time-intensive operation in one of these hooks, it will impact the output shown by the <code class="literal">printInclusive</code> function, right?" Shawn asked.</p><p class="it"><a class="indexterm">"Exactamente. Aunque el PERF add-on proporcionado otro método- <code class="literal">printExclusive()</code>-que imprime el tiempo para dejar sin tomado estos hooks, que se utilizan para montar aplicaciones."</a></p>
+
+
+<p class="p">"Exactly. Though the PERF add-on provided another method—<code class="literal">printExclusive()</code>—that prints the time to taken render without these hooks, which are used to mount apps."</p><div class="mediaobject"><img src="graphics/4730_08_07.jpg" alt="Time taken to render all the components"/></div><p class="it"><a class="indexterm">"Pero Mike, estos métodos no son tan útiles para detectar el rendimiento de React. Me da la </a><a id="id224" class="indexterm">visión de conjunto sobre lo que pasó todas las cosas, pero no me dice cómo optimizar la cual parte." Shawn se le preguntó.</a></p>
+
+
+<p class="p">"But Mike, these methods are not that helpful for detecting the performance of React. I get the <a class="indexterm">overall picture about what all things happened, but it does not tell me how to optimize which part." asked Shawn.</a></p></div><div class="section" title="Time wasted by React"><div class="titlepage"><div><div><h2 class="title"><a id="ch08lvl2sec15">Time wasted by React</a></h2></div></div></div><p class="it"><a>"Shawn, el PERF complemento podes también decirnos cuánto tiempo se desperdicia por React y dónde. Es </a><a id="id225" class="indexterm">útil en la determinación de las partes de nuestra aplicación que se podes optimizar aún más." dijo Mike.</a></p>
+
+
+<p class="p">"Shawn, the PERF add-on can also tell us how much time was wasted by React and where. It is <a class="indexterm">helpful in determining the parts of our app that we can optimize further." said Mike.</a></p><p class="it"><a class="indexterm">"Lo que es tiempo perdido?"</a></p>
+
+
+<p class="p">"What is wasted time?"</p><p class="it"><a class="indexterm">"Cuando React vuelve a renderizar un árbol de componentes, algunos componentes no podes cambiar de su representación anterior. Sin embargo, si se vuelven de nuevo, a continuación, React ha perdido el tiempo en la renderización de la misma salida. El PERF complemento podes realizar un seguimiento de todos los childs tiempo y nos da un resumen de cómo React la pérdida de tiempo haciendo que el mismo resultado que antes. Vamos a ver esto en acción ". dijo Mike.</a></p>
+
+
+<p class="p">"When React re-renders a component tree, some components may not change from their previous representation. However, if they are rendered again, then React has wasted time in rendering the same output. The PERF add-on can keep track of all such time and give us a summary of how React wasted time rendering the same output as before. Let's see this in action." said Mike.</p><div class="mediaobject"><img src="graphics/4730_08_08.jpg" alt="Time wasted by React"/></div><p class="it"><a class="indexterm">"El PERF add-on nos dice que es una pérdida de tiempo en volver a representar el <code class="literal">Form</code> componente dos veces, pero nada se ha cambiado en el componente de forma, por lo tanto, que acaba de volver a representar todo como está." explica Mike.</a></p>
+
+
+<p class="p">"The PERF add-on tells us that it wasted time in re-rendering the <code class="literal">Form</code> component twice, but nothing was changed in the Form component, therefore, it just re-rendered everything as it is." explained Mike.</p><p class="it"><a class="indexterm">"Vamos a ver el <code class="literal">Form</code> componente de entender por qué está sucediendo."</a></p>
+
+
+<p class="p">"Let's see the <code class="literal">Form</code> component to understand why it is happening."</p><div class="informalexample"><pre class="programlisting">// src/Form.js
+
+import React from 'react';
+
+export default React.createClass({
+  getInitialState() {
+    return { searchTerm: '' };
+  },
+
+  _submitForm() {
+    this.props.performSearch(this.state.searchTerm);
+  },
+
+  render() {
+    return (
+      &lt;div className="row" style={this.props.style}&gt;
+        &lt;div&gt;
+          &lt;div className="input-group"&gt;
+            &lt;input type="text"
+                   className="form-control input-lg"
+                   placeholder="Search books..."
+                   onChange={(event) =&gt; { this.setState({searchTerm: event.target.value}) }}/&gt;
+            &lt;span className="input-group-btn"&gt;
+              &lt;button className="btn btn-primary btn-lg"
+                      type="button"
+                      onClick={this._submitForm}&gt;
+                Go!
+              &lt;/button&gt;
+            &lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    )
+  }
+})</pre></div><p class="it"><a class="indexterm">"Shawn, el <code class="literal">Form</code> componente no depende de estado o apoyos para su renderización. Se hace la misma salida, independientemente del estado y de los apoyos. Sin embargo, actualizamos su estado cuando un usuario introduce un carácter en el cuadro de entrada. Debido a esto, React hará volver a hacerla. Nada es en realidad </a><a id="id226" class="indexterm">cambió en la re-renderizados de salida. por lo tanto, el PERF complemento se queja de la pérdida de tiempo." Mike explicó.</a></p>
+
+
+<p class="p">"Shawn, the <code class="literal">Form</code> component does not depend on state or props for its rendering. It renders the same output irrespective of state and props. However, we update its state when a user enters a character in the input box. Due to this, React will re-render it. Nothing is actually <a class="indexterm">changed in the re-rendered output. Therefore, the PERF add-on is complaining about the wasted time." Mike explained.</a></p><p class="it"><a class="indexterm">"Esta información es útil, pero esto parece un desperdicio insignificante, ¿verdad?" pidió a Shawn.</a></p>
+
+
+<p class="p">"This is useful information, but this looks like an insignificant wastage, right?" Shawn asked.</p><p class="it"><a class="indexterm">"De acuerdo. Vamos a hacer algunos cambios para que yo te puedo mostrar cómo React, literalmente, podes perder mucho tiempo en volver a hacer que la misma salida cuando no debería hacerlo." dijo Mike.</a></p>
+
+
+<p class="p">"Agree. Let's make some changes so that I can show you how React can literally waste a lot of time re-rendering the same output when it shouldn't." said Mike.</p><p class="it"><a class="indexterm">"En la actualidad, sólo se muestran los primeros resultados 100 de búsqueda devueltos por la API Open Library. Vamos a cambiar nuestro código para mostrar todos los resultados en la misma página."</a></p>
+
+
+<p class="p">"Currently, we only show the first 100 search results returned by the Open Library API. Let's change our code to show all the results on same page."</p><div class="informalexample"><pre class="programlisting">// src/App.js
+getInitialState() {
+    return { books: [],
+             totalBooks: 0,
+             offset: 100,
+             searching: false,
+             sorting: 'asc',
+             page: 1,
+             searchTerm: '',
+             totalPages: 1
+    };
+  }</pre></div><p class="it"><a class="indexterm">"He introducido un nuevo estado para sostener el término de búsqueda, el número total de páginas a buscarlo a la Biblioteca Abierta, y el número de página actual han recuperado."</a></p>
+
+
+  <p class="p">"I have introduced a new state to hold the search term, total number of pages to fetch from the Open Library, and current page number being fetched."</p><p class="it"><a class="indexterm">"Ahora, queremos obtener todos los resultados de la API, por defecto, en la misma página. El API nos devuelve el número total de libros que se encuentran a una consulta en el <code class="literal">numFounds</code> atributo. En base a esto, </a><a id="id227" class="indexterm">hay que encontrar el número total de páginas que hay que buscarlo a la API ".</a></p>
+
+
+  <p class="p">"Now, we want to fetch all the results from the API, by default, on the same page. The API returns us the total number of books found for a query in the <code class="literal">numFounds</code> attribute. Based on this, we <a class="indexterm">need to find the total number of pages that we need to fetch from the API."</a></p><p class="it"><a class="indexterm">"Además, cada vez que un máximo de 100 registros se devuelven que hemos almacenado en <code class="literal">state.offset</code> ya."</a></p>
+
+
+  <p class="p">"Also, each time maximum 100 records are returned that we have stored in <code class="literal">state.offset</code> already."</p><div class="informalexample"><pre class="programlisting">totalPages = response.numFound / this.state.offset + 1;</pre></div><p class="it"><a class="indexterm">"Una vez que el número total de páginas, tenemos que seguí preguntando por los resultados de búsqueda de la página siguiente hasta que todas las páginas se recuperan. Usted quiere tratar de conseguí este trabajo?" preguntó Mike.</a></p>
+
+
+  <p class="p">"Once we get the total number of pages, we need to keep asking for the search results for the next page until all the pages are fetched. You want to try and get this working?" asked Mike.</p><p class="it"><a class="indexterm">"Por supuesto." dijo Shawn.</a></p>
+
+
+  <p class="p">"Sure." said Shawn.</p><div class="informalexample"><pre class="programlisting"> // src/App.js  
+
+ // Called when user hits "Go" button.
+ _performSearch(searchTerm) {
+    this.setState({searching: true, searchTerm: searchTerm});
+    this._searchOpenLibrary(searchTerm);
+  },
+
+  _searchOpenLibrary(searchTerm) {
+    let openlibraryURI = `https://openlibrary.org/search.json?q=${searchTerm}&amp;page=${this.state.page}`;
+    this._fetchData(openlibraryURI).then(this._updateState);
+  },
+
+  // called with the response received from open library API
+  _updateState(response) {
+    let jsonResponse = response;
+    let newBooks = this.state.books.concat(jsonResponse.docs);
+    let totalPages = jsonResponse.numFound / this.state.offset + 1;
+    let nextPage = this.state.page + 1;
+
+    this.setState({
+      books: newBooks,
+      totalBooks: jsonResponse.numFound,
+      page: nextPage,
+      totalPages: totalPages
+    } this._searchAgain);
+  },
+
+     // Keep searching until all pages are fetched.
+  _searchAgain() {
+    if (this.state.page &gt; this.state.totalPages) {
+      this.setState({searching: false});
+    } else {
+      this._searchOpenLibrary(this.state.searchTerm);
+    }
+  }</pre></div><p class="it"><a class="indexterm">"He cambiado la URL de la API para incluir el parámetro de página. Cada vez que se recibe la respuesta de la API, que se actualice el estado con una nueva página. También actualizamos <code class="literal">this.state.books</code> para incluir los libros recién descabellada. Entonces, la <code class="literal">_searchAgain</code> función se </a><a id="id228" class="indexterm">llama en la devolución de llamada de la <code class="literal">this.setState</code> llamada para que sea el valor correcto de la página siguiente que se estableció por la <code class="literal">this.setState</code> llamada ". explica Shawn.</a></p>
+
+
+  <p class="p">"I changed the API URL to include the page parameter. Each time the response is received from API, we update the state with a new page. We also update <code class="literal">this.state.books</code> to include the newly fetched books. Then, the <code class="literal">_searchAgain</code> function gets <a class="indexterm">called in the callback of the <code class="literal">this.setState</code> call so that it is the correct value of the next page that was set by the <code class="literal">this.setState</code> call." explains Shawn.</a></p><p class="it"><a class="indexterm">"Agradable, es un punto importante recordar que no debe llamar a la <code class="literal">_searchAgain</code> función fuera de la <code class="literal">this.setState()</code> llamada, ya que podes quedar ejecutada antes <code class="literal">setState()</code> se haya terminado.</a></p>
+
+
+  <p class="p">"Nice, it's an important point to remember not to call the <code class="literal">_searchAgain</code> function outside of the <code class="literal">this.setState()</code> call as it may get executed before <code class="literal">setState()</code> is finished.</p><p class="it"><a class="indexterm">Porque si lo llamamos exterior, la <code class="literal">_searchAgain</code> función podes utilizar un valor incorrecto de <code class="literal">this.state.page</code>. Sin embargo, a medida que ha pasado la <code class="literal">_searchAgain</code> función de devolución de llamada en el que <code class="literal">setState</code>, no hay posibilidad de que esto suceda." Dijo Mike.</a></p>
+
+
+  <p class="p">Because if we call it outside, the <code class="literal">_searchAgain</code> function may use an incorrect value of <code class="literal">this.state.page</code>. However, as you have passed the <code class="literal">_searchAgain</code> function in the callback to <code class="literal">setState</code>, there is no chance this will happen." said Mike.</p><p class="it"><a class="indexterm">"La <code class="literal">_searchAgain</code> función de sólo sigue ir a buscar los resultados hasta que se completen todas las páginas. De esta manera, vamos a mostrar todos los resultados de búsqueda en la página, no sólo la primera 100." Shawn informado.</a></p>
+
+
+  <p class="p">"The <code class="literal">_searchAgain</code> function just keeps fetching the results until all the pages are completed. In this way, we will display all the search results on the page, not just the first 100." informed Shawn.</p><p class="it"><a class="indexterm">"Eso es lo que quería. Buen trabajo. Voy a limpiar el método Render para que spinner siempre se mostrará en la parte inferior." dijo Mike.</a></p>
+
+
+  <p class="p">"That's what I wanted. Good job. Let me cleanup the render method so that spinner will always be displayed at the bottom." said Mike.</p><div class="informalexample"><pre class="programlisting">// src/App.js
+render() {
+    let style = {paddingTop: '5%'};
+    return (
+      &lt;div className='container'&gt;
+        &lt;Header style={style}&gt;&lt;/Header&gt;
+        &lt;Form style={style}
+              performSearch={this._performSearch}&gt;
+        &lt;/Form&gt;
+
+        {this.state.totalBooks &gt; 0 ?
+         &lt;BookList
+             searchCount={this.state.totalBooks}
+             _sortByTitle={this._sortByTitle}&gt;
+           {this._renderBooks()}
+         &lt;/BookList&gt;
+       : null }
+
+        { this.state.searching ? &lt;Spinner /&gt; : null }
+      &lt;/div&gt;
+    );
+  }</pre></div><p class="it"><a class="indexterm">"Esto se asegurará de que la ruleta se mostrará hasta que se muestren todos los resultados. OK, todo hecho. Ahora vamos a medir el rendimiento de nuevo." dijo Mike.</a></p>
+
+
+  <p class="p">"This will make sure that the spinner will be displayed until all the results are displayed. OK, all done. Now let's measure the performance again." said Mike.</p><div class="mediaobject"><img src="graphics/4730_08_09.jpg" alt="Time wasted by React"/></div><p class="it"><a class="indexterm">"Wow, la pérdida de tiempo ha aumentado mucho! Dio a conocer Dan Brown libros nuevos o que? Tanto </a><a id="id229" class="indexterm">tiempo extra que lo que vimos la última vez?" dijo Shawn.</a></p>
+
+
+  <p class="p">"Wow, the wasted time has increased a lot! Did Dan Brown release new books or what? So much <a class="indexterm">extra time than what we saw last time?" said Shawn.</a></p><p class="it"><a class="indexterm">"Jaja, no creo que se dio a conocer nuevos libros en este momento. Siempre que los libros en la página siguiente se recuperan, los añadimos a los libros existentes y empezar a ir a buscar libros de la página siguiente. Sin embargo, los libros renderizados por las páginas anteriores no se cambian en absoluto. Como estamos manteniendo todos nuestro estado en el más alto nivel <code class="literal">App</code> de componentes, siempre que su estado cambia, todo el árbol de componentes bajo <code class="literal">App</code> consigue volver a prestar. por lo tanto, <code class="literal">BookList</code> se rinde de nuevo. a su vez, todos <code class="literal">BookRows</code> sean impuestos de nuevo. esto da como resultado una cantidad significativa de tiempo de conseguí perdido en la renderización de los mismos <code class="literal">BookRow</code> componentes para las páginas anteriores y otra vez ". dijo Mike.</a></p>
+
+
+  <p class="p">"Haha, I don't think that he released new books just now. Whenever the books on next page are fetched, we add them to the existing books and start fetching books from the next page. However, the books rendered for the previous pages are not changed at all. As we are keeping all of our state in the top-level <code class="literal">App</code> component, whenever its state changes, the whole component tree under <code class="literal">App</code> gets re-rendered. Therefore, <code class="literal">BookList</code> is rendered again. In turn, all <code class="literal">BookRows</code> are rendered again. This results in a significant amount of time getting wasted in rendering the same <code class="literal">BookRow</code> components for the previous pages again and again." said Mike.</p><p class="it"><a class="indexterm">"De modo que cada vez que traiga libros de una nueva página, todos los libros, entre los que ya se encuentran en la página, obtener re-renderizados de nuevo? Creo que acaba de anexar nuevas filas de libros a la lista existente es mejor en este caso." dijo Shawn.</a></p>
+
+
+  <p class="p">"So each time we fetch books from a new page, all books, including the existing ones already present on page, get re-rendered again? I think just appending new book rows to the existing list is better in this case." said Shawn.</p><p class="it"><a class="indexterm">"No se preocupe. Nos podes deshacerse de este derroche innecesario de tiempo. React nos proporciona un gancho </a><a id="id230" class="indexterm">para cortocircuitar el proceso de volver a hacer. Es <code class="literal">shouldComponentUpdate</code>".</a></p>
+
+
+  <p class="p">"Don't worry. We can easily get rid of this unnecessary wastage of time. React provides us a hook <a class="indexterm">for short-circuiting the re-render process. It's <code class="literal">shouldComponentUpdate</code>."</a></p></div><div class="section" title="The shouldComponentUpdate hook"><div class="titlepage"><div><div><h2 class="title"><a id="ch08lvl2sec16">The shouldComponentUpdate hook</a></h2></div></div></div><p class="it"><a>"Shawn, <code class="literal">shouldComponentUpdate</code> es un gancho que dice React si se debe volver a representar un componente o no. No se llama para la representación inicial del componente. Sin embargo, cada vez que </a><a id="id231" class="indexterm">un componente se va a recibir </a><a id="id232" class="indexterm">nuevo estado o apoyos, <code class="literal">shouldComponentUpdate</code> que se llama antes de eso. Si el valor de retorno de esta función es cierto, entonces React vuelve a renderizar el componente. sin embargo, si el valor de retorno es <code class="literal">false</code>, entonces React no vuelva a dibujar el componente hasta la próxima vez que se llama. el <code class="literal">componentWillUpdate</code> y <code class="literal">componentDidUpdate</code> tampoco serán llamados hooks de este caso." Mike explicó.</a></p>
+
+
+  <p class="p">"Shawn, <code class="literal">shouldComponentUpdate</code> is a hook that tells React whether to re-render a component or not. It's not called for initial rendering of the component. However, whenever <a class="indexterm">a component is going to receive </a><a class="indexterm">new state or props, <code class="literal">shouldComponentUpdate</code> is called before that. If the return value of this function is true, then React re-renders the component. However, if the return value is <code class="literal">false</code>, then React does not re-render the component until the next time it is called. The <code class="literal">componentWillUpdate</code> and <code class="literal">componentDidUpdate</code> hooks will also not be called in this case." Mike explained.</a></p><p class="it"><a class="indexterm">"Niza. Entonces ¿por qué nuestros residuos código de tanto tiempo? Debe React no utilizar este gancho para optimizarlo y no volver a hacer los mismos <code class="literal">BookRow</code> componentes en repetidas ocasiones?" Pidió a Shawn.</a></p>
+
+
+  <p class="p">"Nice. Then why did our code waste so much time? Should React not use this hook to optimize it and not re-render the same <code class="literal">BookRow</code> components repeatedly?" Shawn asked.</p><p class="it"><a class="indexterm">"De manera predeterminada, <code class="literal">shouldComponentUpdate</code> siempre devuelve verdadero. React hace esto para evitar errores sutiles. Podemos tener estado mutable o apoyos en nuestro código que podes hacer <code class="literal">shouldComponentUpdate</code> para volver falsos positivos. Se podes devolver false cuando debería devolver cierto, lo que resulta en el componente no estar re-renderizados cuando debería. por lo tanto, React lugares la responsabilidad de implementar <code class="literal">shouldComponentUpdate</code> en la mano del desarrollador ". dijo Mike.</a></p>
+
+
+  <p class="p">"By default, <code class="literal">shouldComponentUpdate</code> always returns true. React does this to avoid subtle bugs. We can have mutable state or props in our code that can make <code class="literal">shouldComponentUpdate</code> to return false positives. It may return false when it should return true, resulting in the component not being re-rendered when it should. Therefore, React places the responsibility of implementing <code class="literal">shouldComponentUpdate</code> in the developer's hand." said Mike.</p><p class="it"><a class="indexterm">"Vamos a tratar de usar <code class="literal">shouldComponentUpdate</code> a nosotros mismos con el fin de reducir la pérdida de tiempo en volver a prestar los mismos <code class="literal">BookRow</code> componentes." Mike añadió.</a></p>
+
+
+  <p class="p">"Let's try to use <code class="literal">shouldComponentUpdate</code> ourselves in order to reduce the time wasted in re-rendering the same <code class="literal">BookRow</code> components." Mike added.</p><p class="it"><a class="indexterm">"Este es nuestro <code class="literal">BookRow</code> componente a partir de ahora:"</a></p>
+
+
+  <p class="p">"This is our <code class="literal">BookRow</code> component as of now:"</p><div class="informalexample"><pre class="programlisting">// src/BookRow.js
+
+import React from 'react';
+
+export default React.createClass({
+  render() {
+    return(
+      &lt;tr style={this.props.style}&gt;
+        &lt;td&gt;&lt;h4&gt;#{this.props.index}&lt;/h4&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;h4&gt;{this.props.title}&lt;/h4&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;h4&gt;{(this.props.author_name || []).join(', ')}&lt;/h4&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;h4&gt;{this.props.edition_count}&lt;/h4&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    );
+  }
+});</pre></div><p class="it"><a class="indexterm">"Vamos a añadir <code class="literal">shouldComponentUpdate</code> para reducir innecesarias re-renderización".</a></p>
+
+
+<p class="p">"Let's add <code class="literal">shouldComponentUpdate</code> to reduce unnecessary re-rendering."</p><div class="informalexample"><pre class="programlisting">// src/BookRow.js
+
+import React from 'react';
+
+export default React.createClass({
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.title !== this.props.title ||
+           nextProps.author_name !== this.props.author_name ||
+           nextProps.edition_count !== this.props.edition_count;
+  },
+
+  render() {
+    return(
+      &lt;tr style={this.props.style}&gt;
+        &lt;td&gt;&lt;h4&gt;#{this.props.index}&lt;/h4&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;h4&gt;{this.props.title}&lt;/h4&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;h4&gt;{(this.props.author_name || []).join(', ')}&lt;/h4&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;h4&gt;{this.props.edition_count}&lt;/h4&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    );
+  }
+});</pre></div><p class="it"><a class="indexterm">El <code class="literal">shouldComponentUpdate</code> gancho consigue <code class="literal">nextProps</code> y <code class="literal">nextState</code> como argumentos y podemos </a><a id="id233" class="indexterm">compararlos con el actual </a><a id="id234" class="indexterm">estado o apoyos para tomar una decisión si se debe devolver verdadero o falso.</a></p>
+
+
+<p class="p">The <code class="literal">shouldComponentUpdate</code> hook gets <code class="literal">nextProps</code> and <code class="literal">nextState</code> as arguments and we can <a class="indexterm">compare them with the current </a><a class="indexterm">state or props to make a decision whether to return true or false.</a></p><p class="it"><a class="indexterm">"Aquí, estamos comprobando si el título, nombre del autor, o el recuento de edición se cambia o no. Si cualquiera de estos atributos se cambian, entonces vamos a volver <code class="literal">true</code>. Sin embargo, si todos ellos son sin cambios, para luego retornar <code class="literal">false</code>. Por lo tanto, si ninguno de los props se cambian, no conseguíá re-renderizados el componente. a medida que el <code class="literal">BookRow</code> componente sólo depende de los apoyos, no tenemos que preocuparnos por el cambio de estado en absoluto ". Mike añadido.</a></p>
+
+
+<p class="p">"Here, we are checking whether the title, author name, or edition count is changed or not. If any of these attributes are changed, then we will return <code class="literal">true</code>. However, if all of them are unchanged, then we will return <code class="literal">false</code>. Therefore, if none of the props are changed, the component will not get re-rendered. As the <code class="literal">BookRow</code> component only depends on props, we don't have to worry about the state change at all." added Mike.</p><p class="it"><a class="indexterm">"Ahora, medir el rendimiento de nuevo y ver si tenemos algunas mejoras."</a></p>
+
+
+<p class="p">"Now, measure the performance again and see if we got some improvements."</p><div class="mediaobject"><img src="graphics/4730_08_10.jpg" alt="The shouldComponentUpdate hook"/></div><p class="it"><a class="indexterm">"Impresionante, nos </a><a id="id235" class="indexterm">deshicimos del tiempo </a><a id="id236" class="indexterm">pasado en el restablecimiento de la renderización de los <code class="literal">BookRow</code> componentes por completo. Sin embargo, todavía podemos mejorar mucho. Parece que también podemos deshacernos del tiempo dedicado a volver a representar la <code class="literal">Form</code> y <code class="literal">Header</code> componentes, en función del resultado anterior . están componentes estáticos. por lo tanto, no deben ser re-renderizados en absoluto. Shawn, que es su próximo reto ".</a></p>
+
+
+<p class="p">"Awesome, we <a class="indexterm">got rid of the time </a><a class="indexterm">spent in re-rendering the <code class="literal">BookRow</code> components completely. However, we can still improve a lot. Looks like we can also get rid of the time spent re-rendering the <code class="literal">Form</code> and <code class="literal">Header</code> components, based on the preceding result. They are static components. Therefore, they should not be re-rendered at all. Shawn, that's your next challenge."</a></p><p class="it"><a class="indexterm">"En eso."</a></p>
+
+
+<p class="p">"On it."</p><div class="informalexample"><pre class="programlisting">// src/Header.js
+
+import React from 'react';
+
+export default React.createClass({
+  shouldComponentUpdate(nextProps, nextState) {
+    return false;
+  },
+
+  render() {
+    return (
+      &lt;div className="row" style={this.props.style}&gt;
+        &lt;div className="col-lg-8 col-lg-offset-2"&gt;
+          &lt;h1&gt;Open Library | Search any book you want!&lt;/h1&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    )
+  }
+})
+
+// src/Form.js
+
+import React from 'react';
+
+export default React.createClass({
+  getInitialState() {
+    return { searchTerm: '' };
+  },
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return false;
+  },
+
+  _submitForm() {
+    this.props.performSearch(this.state.searchTerm);
+  },
+
+  render() {
+    return (
+      &lt;div className="row" style={this.props.style}&gt;
+        &lt;div&gt;
+          &lt;div className="input-group"&gt;
+            &lt;input type="text"
+                   className="form-control input-lg"
+                   placeholder="Search books..."
+                   onChange={(event) =&gt; { this.setState({searchTerm: event.target.value}) }}/&gt;
+            &lt;span className="input-group-btn"&gt;
+              &lt;button className="btn btn-primary btn-lg"
+                      type="button"
+                      onClick={this._submitForm}&gt;
+                Go!
+              &lt;/button&gt;
+            &lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    )
+  }
+})</pre></div><p class="it"><a class="indexterm">"Mike, que </a><a id="id237" class="indexterm">simplemente podes volver <code class="literal">false</code> a partir <code class="literal">shouldComponentUpdate</code> de <code class="literal">Header</code> y <code class="literal">Form</code> componentes, ya que no </a><a id="id238" class="indexterm">dependen de los estados o apoyos en absoluto para la representación!"</a></p>
+
+
+<p class="p">"Mike, we <a class="indexterm">can simply return <code class="literal">false</code> from <code class="literal">shouldComponentUpdate</code> for <code class="literal">Header</code> and <code class="literal">Form</code> components as they do not </a><a class="indexterm">depend on states or props at all for rendering!"</a></p><p class="it"><a class="indexterm">"Perfecto encontrar, Shawn. Tome nota de estos componentes estáticos que no depende de nada. Son blancos perfectos para simplemente decirle a React ni siquiera comparar su DOM virtuales, ya que no necesitan ser re-renderizados en absoluto." informó Mike.</a></p>
+
+
+<p class="p">"Perfect find, Shawn. Make a note of such static components that do not depend on anything. They are perfect targets for just telling React to not even compare their virtual DOM as they do not need to be re-rendered at all." informed Mike.</p><p class="it"><a class="indexterm">"Derecha. Voy a mantener un ojo en esas partes estáticas de la interfaz de usuario que se podes extraer en componentes más pequeños." dijo Shawn.</a></p>
+
+
+<p class="p">"Right. I will keep an eye on such static parts of UI that can be extracted into smaller components." said Shawn.</p><p class="it"><a class="indexterm">"Ahora vamos a ver si nos deshicimos de algunos más tiempo perdido después de hacer estas mejoras."</a></p>
+
+
+<p class="p">"Let's now see if we got rid of some more wasted time after doing these improvements."</p><div class="mediaobject"><img src="graphics/4730_08_11.jpg" alt="The shouldComponentUpdate hook"/></div><p class="it"><a class="indexterm">"Cool! Nos </a><a id="id239" class="indexterm">deshicimos de la pérdida de tiempo </a><a id="id240" class="indexterm">para re-renderización de la misma <code class="literal">Header</code> y de <code class="literal">Form</code> los componentes." dijo Mike.</a></p>
+
+
+<p class="p">"Cool! We <a class="indexterm">got rid of the time wasted </a><a class="indexterm">for re-rendering the same <code class="literal">Header</code> and <code class="literal">Form</code> components." said Mike.</a></p><p class="it"><a class="indexterm">"Impresionante! Permítanme tratar de deshacerse del tiempo empleado en <code class="literal">BookList</code> y <code class="literal">RowAlternator</code> también". Shawn informado.</a></p>
+
+
+<p class="p">"Awesome! Let me also try to get rid of the time spent on <code class="literal">BookList</code> and <code class="literal">RowAlternator</code> too." informed Shawn.</p><p class="it"><a class="indexterm">"Espera, Shawn. Antes de hacer esto, quiero hablar acerca de una alternativa a <code class="literal">shouldComponentUpdate</code>".</a></p>
+
+
+<p class="p">"Hold on, Shawn. Before doing this, I want to discuss about an alternative to <code class="literal">shouldComponentUpdate</code>."</p></div></font></font></font></div><font class=""><font class=""><font class="">
+</font></font></font></body></html>

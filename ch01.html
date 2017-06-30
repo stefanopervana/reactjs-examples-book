@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 1. Getting Started with React</title>
+
+<link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="chapter" title="Chapter 1. Getting Started with React"><div class="titlepage"><div><div><h1 class="title"><a id="ch01"></a>Chapter 1. Getting Started with React</h1></div></div></div>
+
+<p class="it"><a>En el último par de años el desarrollo web ha </a><a id="id0" class="indexterm">visto un enorme advenimiento de la <span class="strong"><strong>Single Page Application</strong></span> ( <span class="strong"><strong>SPA</strong></span> ). Al principio era simple-recargar una página completa para llevar a cabo un cambio en la pantalla o realizar una acción del usuario. El problema con esto era el gran tiempo de ida y vuelta de la solicitud completa para llegar al servidor web y la vuelta al cliente.</a></p>
+
+<p class="p">Web development has <a class="indexterm"></a>seen a huge advent of <span class="strong"><strong>Single Page Application</strong></span> (<span class="strong"><strong>SPA</strong></span>) in the past couple of years. Early development was simple—reload a complete page to perform a change in the display or perform a user action. The problem with this was a huge round-trip time for the complete request to reach the web server and back to the client.</p>
+
+<p class="it">Luego vino AJAX, que envió una solicitud al servidor, y podía actualizar partes de la página sin volver a cargar la página actual. Se mueve en la misma dirección, vimos la aparición de las SPAs.</p>
+
+<p class="p">Then came AJAX, which sent a request to the server, and could update parts of the page without reloading the current page. Moving in the same direction, we saw the emergence of the SPAs.</p>
+
+<p class="it">Encapsulando el contenido frontend pesado y entregandolo al navegador del cliente una sola vez, mientras se mantiene un pequeño canal para la comunicación con el servidor basado en cualquier evento; esto se suele completar con una API delgada en el servidor web.</p>
+
+<p class="p">Wrapping up the heavy frontend content and delivering it to the client browser just once, while maintaining a small channel for communication with the server based on any event; this is usually complemented by thin API on the web server.</p>
+
+<p class="it">El crecimiento en tales aplicaciones se ha complementado con las bibliotecas y los frameworks como Ext JS, KnockoutJS, BackboneJS, AngularJS, EmberJS JavaScript, y más recientemente, React y Polymer.</p>
+
+<p class="p">The growth in such apps has been complemented by JavaScript libraries and frameworks such as Ext JS, KnockoutJS, BackboneJS, AngularJS, EmberJS, and more recently, React and Polymer.</p>
+
+<p class="it">Vamos a echar un vistazo a cómo se acomoda React en este ecosistema e introducirnos a él en este capítulo.</p>
+
+<p class="p">Let's take a look at how React fits in this ecosystem and get introduced to it in this chapter.</p>
+
+<p class="it">En este capítulo, vamos a cubrir los siguientes temas:</p>
+
+<p class="p">In this chapter, we will cover the following topics:</p><div class="itemizedlist"><ul class="itemizedlist">
+<li class="it" style="list-style-type: disc">Que es React y por qué usamos React?</li>
+
+<li class="listitem" style="list-style-type: disc">What is React and why do we use React?</li>
+<li class="it" style="list-style-type: disc">Los flujos de datos en el componente</li>
+<li class="listitem" style="list-style-type: disc">Data flows in the component</li>
+<li class="it" style="list-style-type: disc">El componente muestra la vista sobre la base de estado del componente</li>
+
+<li class="listitem" style="list-style-type: disc">Component displays the view based on state of the component</li>
+<li class="it" style="list-style-type: disc">El componente define la visualización de la vista, con independencia de los datos contenidos, reduciendo así la dependencia y la complejidad del estado para la visualización</li>
+<li class="listitem" style="list-style-type: disc">Component defines display of the view, irrespective of data contained, thus reducing the dependency and complexity of state for display</li>
+<li class="it" style="list-style-type: disc">Las interacciones del usuario pueden cambiar el estado del componente desde los manipuladores</li>
+
+<li class="listitem" style="list-style-type: disc">User interactions may change state of component from handlers</li>
+<li class="it" style="list-style-type: disc">Los componentes son reutilizados y re-renderizados</li>
+<li class="listitem" style="list-style-type: disc">Components are reused and re-rendered</li></ul></div><div class="section" title="What is React?"><div class="titlepage"><div><div><h1 class="title"><a id="ch01lvl1sec07"></a>What is React?</h1></div></div></div>
+
+<p class="it"><a>ReactJS trata de resolver el </a><a id="id1" class="indexterm">problema de la capa <span class="emphasis"><em>Vista</em></span>. Puede muy bien ser definido y usado como la <span class="emphasis"><em>V</em></span> en cualquiera de los frameworks <span class="emphasis"><em>MVC</em></span>. No es pertinaz sobre la forma en que se debe utilizar. Se crean representaciones abstractas de vistas. Se descomponen partes de la vista de los <span class="emphasis"><em>componentes</em></span>. Estos componentes abarcan tanto la lógica para manejar la pantalla de vista y la vista en sí. Podes contener datos que se utilizan para representar el estado de la aplicación.</a></p>
+
+<p class="p">ReactJS tries to solve the <a class="indexterm"></a>problem from the <span class="emphasis"><em>View</em></span> layer. It can very well be defined and used as the <span class="emphasis"><em>V</em></span> in any of the <span class="emphasis"><em>MVC</em></span> frameworks. It's not opinionated about how it should be used. It creates abstract representations of views. It breaks down parts of the view in the <span class="emphasis"><em>Components</em></span>. These components encompass both the logic to handle the display of view and the view itself. It can contain data that it uses to render the state of the app.</p>
+
+<p class="it">Para evitar la complejidad de las interacciones y el posterior renderizado del procesamiento requerido, React realiza un procesamiento completo de la aplicación. Mantiene un simple flujo de trabajo.</p>
+
+<p class="p">To avoid complexity of interactions and subsequent render processing required, React does a full render of the application. It maintains a simple flow of work.</p>
+
+<p class="it">React se funda en la idea de que la manipulación del DOM es una operación costosa y debe ser minimizada. También reconoce la optimización de la manipulación del DOM por parte dará lugar a un montón de código <span class="emphasis"><em>boilerplate</em></span>, que es propenso a errores, aburrido, y repetitivo.</p>
+
+<p class="p">React is founded on the idea that DOM manipulation is an expensive operation and should be minimized. It also recognizes that optimizing DOM manipulation by hand will result in a lot of <span class="emphasis"><em>boilerplate</em></span> code, which is error-prone, boring, and repetitive.</p>
+
+<p class="it">React resuelve esto dandole al desarrollador un DOM virtual para renderizar en lugar del DOM real. Si encuentra diferencia entre el DOM real y el DOM virtual y lleva a cabo el número mínimo de operaciones DOM necesarias para alcanzar el nuevo estado.</p>
+
+<p class="p">React solves this by giving the developer a virtual DOM to render to instead of the actual DOM. It finds difference between the real DOM and virtual DOM and conducts the minimum number of DOM operations required to achieve the new state.</p>
+
+<p class="it">React también es declarativo. Cuando se cambia de datos, React golpea conceptualmente el botón de actualización para actualizar y conoce solamente las partes que han cambiado.</p>
+
+<p class="p">React is also declarative. When the data changes, React conceptually hits the refresh button and knows to only update the changed parts.</p>
+
+<p class="it">Este simple flujo de datos, unido a una lógica de visualización simple y muerta, hace que el desarrollo con ReactJS sea sencillo y facil de entender.</p>
+
+<p class="p">This simple flow of data, coupled with dead simple display logic, makes development with ReactJS straightforward and simple to understand.</p>
+
+<p class="it">¿Quién utiliza React? Si has utilizado cualquiera de los servicios como Facebook, Instagram, Netflix, Alibaba, Yahoo, E-Bay, Khan-Academy, AirBnB, Sony y Atlassian, Ya has encontrado y utilizado React en la Web.</p>
+
+<p class="p">Who uses React? If you've used any of the services such as Facebook, Instagram, Netflix, Alibaba, Yahoo, E-Bay, Khan-Academy, AirBnB, Sony, and Atlassian, you've already come across and used React on the Web.</p>
+
+<p class="it">En poco menos de un año, React ha conseguido una aceptación de las principales compañías de Internet en sus productos principales.</p>
+
+<p class="p">In just under a year, React has seen adoption from major Internet companies in their core products.</p>
+
+<p class="it">En su primera conferencia, también React anunció el desarrollo de React Native. React Native permite el desarrollo de aplicaciones móviles utilizando React. Transpila el código de React al código de la aplicación nativa, tal como Objective-C para aplicaciones de iOS.</p>
+
+<p class="p">In its first-ever conference, React also announced the development of React Native. React Native allows the development of mobile applications using React. It transpiles React code to the native application code, such as Objective-C for iOS applications.</p>
+
+<p class="it">En el momento de escribir esto, Facebook ya utiliza React Native en su aplicación Groups and Ads Manager app.</p>
+
+<p class="p">At the time of writing this, Facebook already uses React Native in its Groups and Ads Manager app.</p>
+
+<p class="it">En este libro, vamos a estar siguiendo una conversación entre dos desarrolladores, Mike y Shawn. Mike es un desarrollador senior de Adequate Consulting y Shawn acaba de incorporarse a la empresa. Mike será tutor de Shawn y programará en pareja con él.</p>
+
+<p class="p">In this book, we will be following a conversation between two developers, Mike and Shawn. Mike is a senior developer at Adequate Consulting and Shawn has just joined the company. Mike will be mentoring Shawn and conducting pair programming with him.</p></div></div></body></html>

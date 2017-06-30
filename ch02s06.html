@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>JavaScript expressions</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="JavaScript expressions"><div class="titlepage"><div><div><h1 class="title"><a id="ch02lvl1sec20"></a>JavaScript expressions</h1></div></div></div>
+
+<p class="it"><a>"Shawn, vamos a </a><a id="id49" class="indexterm">discutir un poco sobre cómo hemos hecho que la <code class="literal">Rows</code> e <code class="literal">Headings</code> etiqueta".</a></p>
+
+<p class="p">"Shawn, let's <a class="indexterm"></a>discuss a bit about how we have rendered the <code class="literal">Rows</code> and <code class="literal">Headings</code> tag."</p><div class="informalexample"><pre class="programlisting">render: function() {<br></br>
+    var headings = this.props.headings.map(function(name) {<br></br>
+      return(&lt;Heading heading = {name}/&gt;);<br></br>
+    });<br></br>
+<br></br>
+   return &lt;tr&gt;{headings}&lt;/tr&gt;;<br></br>
+  }</pre></div><p class="it"><a class="indexterm">"Estamos renderizando <code class="literal">{headings}</code>, que es una lista de los componentes React, directamente mediante su inclusión entre llaves como childs de la etiqueta <code class="literal">&lt;tr&gt;</code>. Estas expresiones que se utilizan para especificar el componentes childs se denominan child expressions."</a></p>
+
+  <p class="p">"We are rendering <code class="literal">{headings}</code>, which is a list of React components, directly by adding them in curly braces as children of the <code class="literal">&lt;tr&gt;</code> tag. These expressions that are used to specify the child components are called child expressions."</p>
+  <p class="it"><a class="indexterm">"Hay otra </a><a id="id50" class="indexterm">categoría de expresiones llamadas expresiones de JavaScript. Estas son simples expresiones utilizadas para introducir los Props o evaluar algún código JavaScript que puede ser utilizado como un valor de atributo."</a></p>
+
+  <p class="p">"There is another <a class="indexterm"></a>category of expressions called as JavaScript expressions. These are simple expressions used for passing props or evaluating some JavaScript code that can be used as an attribute value."</p><div class="informalexample"><pre class="programlisting">// Passing props as expressions<br></br>
+ReactDOM.render(&lt;App headings = {['When', 'Who', 'Description']} <br></br>
+                  data = {data} /&gt;, <br></br>
+                document.getElementById('container'));<br></br>
+<br></br>
+// Evaluating expressions<br></br>
+ReactDOM.render(&lt;App headings = {['When', 'Who', 'Description']} <br></br>
+                  data = {data.length &gt; 0 ? data : ''} /&gt;, <br></br>
+                document.getElementById('container'));</pre></div><p class="it"><a class="indexterm">"Cualquier cosa que está presente entre llaves es evaluada por JSX. Funciona tanto para expresiones de los childs, así como expresiones de JavaScript," añadió Mike.</a></p>
+
+                <p class="p">"Anything that is present in curly braces is evaluated by JSX. It works for both children expressions as well as JavaScript expressions," added Mike.</p><p class="it"><a class="indexterm">"Gracias por la explicación detallada. Tengo una consulta sin embargo. ¿Hay alguna manera de escribir comentarios en el código JSX? Quiero decir, tal vez no lo necesitamos todo el tiempo, pero saber cómo agregar comentarios puede ser útil ", preguntó Shawn.</a></p>
+
+                <p class="p">"Thanks for the detailed explanation. I have a query though. Is there any way to write comments in the JSX code? I mean, we may not need it all the time, but knowing how to add comments might be handy," Shawn asked.</p><p class="it"><a class="indexterm">"Recordá la regla de llaves. Los comentarios son simplemente expresiones de JavaScript. Cuando estamos en un elemento secundario, simplemente envolvé los comentarios en las llaves."</a></p>
+
+                <p class="p">"Remember the curly braces rule. Comments are simply just JavaScript expressions. When we are in a child element, just wrap the comments in the curly braces."</p><div class="informalexample"><pre class="programlisting">render: function() {<br></br>
+    return(&lt;th&gt; <br></br>
+             {/* This is a comment */}<br></br>
+             {this.props.heading}<br></br>
+           &lt;/th&gt;);<br></br>
+  }</pre></div><p class="it"><a class="indexterm">"También podes añadir comentarios en una etiqueta JSX. No hay necesidad de envolverlos en llaves en este caso," añadió Mike.</a></p>
+
+  <p class="p">"You can also add comments in a JSX tag. There is no need to wrap them in curly braces in this case," Mike added.</p><div class="informalexample"><pre class="programlisting">ReactDOM.render(&lt;App <br></br>
+                  /* Multi<br></br>
+                     Line <br></br>
+                     Comment<br></br>
+                  */<br></br>
+                  headings = {headings} <br></br>
+                  changeSets = {data} /&gt;, <br></br>
+                document.getElementById('container'));</pre></div></div></body></html>
